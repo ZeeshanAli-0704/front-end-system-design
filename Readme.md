@@ -14,9 +14,8 @@ Welcome to the **System Design with Zeeshan Ali** repository! This collection is
 
 * **[CSS CSSOM and DOM Rendering](./Concepts/CSS-CSSOM-and-DOM-Rendering-in-Browser.md)**: When you enter a URL or load a page, the **browser rendering pipeline** begins.
 
-* **[CSS CSSOM and DOM Rendering](./Concepts/Critical-Rendering-Path.md)**: The **Critical Rendering Path** refers to the sequence of steps the browser takes to convert your HTML, CSS, and JavaScript into **pixels rendered on the user’s screen**.
+* **[Critical Rendering Path](./Concepts/Critical-Rendering-Path.md)**: The **Critical Rendering Path** refers to the sequence of steps the browser takes to convert your HTML, CSS, and JavaScript into **pixels rendered on the user’s screen**.
 
-Critical-Rendering-Path.md
 
 ### CaseStudy
 
