@@ -311,3 +311,14 @@ That sentence alone signals **senior-level thinking**.
 
 ---
 
+
+
+More Details:
+
+Get all articles related to system design 
+Hastag: SystemDesignWithZeeshanAli
+
+
+[systemdesignwithzeeshanali](https://dev.to/t/systemdesignwithzeeshanali)
+
+Git: https://github.com/ZeeshanAli-0704/front-end-system-design

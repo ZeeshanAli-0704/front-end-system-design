@@ -25,3 +25,8 @@ Welcome to the **System Design with Zeeshan Ali** repository! This collection is
 
 * **[Web Worker, Shared Worker & Service Worker](./Concepts/Web_Worker_SharedWorker_and_Service_Worker.md)**: This blog builds a clear mental model, explains when to use which, dives into capabilities & limitations, and walks through real-world usage with code examples.
 
+* **[Modern Large Scale Reducer Design](./Concepts/Modern_Large_Scale_Reducer.md)**: Modern Application Enterprise Large Scale Reducer design
+
+* **[Redux Toolkit vs Zustand vs Jotai](./Concepts/Redux_Toolkit-vs-Zustand-vs-Jotai.md)**: Modern Application Enterprise Large Scale Reducer design
+
+
