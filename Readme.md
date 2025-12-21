@@ -25,8 +25,3 @@ Welcome to the **System Design with Zeeshan Ali** repository! This collection is
 
 * **[Web Worker, Shared Worker & Service Worker](./Concepts/Web_Worker_SharedWorker_and_Service_Worker.md)**: This blog builds a clear mental model, explains when to use which, dives into capabilities & limitations, and walks through real-world usage with code examples.
 
-
-
-### CaseStudy
-
-* **[FaceBook](./Case_Studies/Facebook/Frontend-System-Design-Facebook-News-Feed.md)**: Facebook System Design with components design, Data entity, Api's etc
