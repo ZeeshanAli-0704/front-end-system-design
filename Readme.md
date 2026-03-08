@@ -33,4 +33,16 @@ Welcome to the **System Design with Zeeshan Ali** repository! This collection is
 
 * **[Web Accessibility (A11y) Complete Guide](./Concepts/Web_Accessibility_A11y_Complete_Guide.md)**: A comprehensive guide to building inclusive web apps — WCAG standards, auditing, fixing issues, keyboard/screen reader testing, ARIA, accessible forms, SPAs, and CI/CD integration.
 
+* **[Rendering Patterns — CSR, SSR, SSG & Prerendering](./Concepts/Rendering-Patterns.md)**: A deep-dive into every rendering strategy — Client-Side Rendering, Server-Side Rendering, Universal/Isomorphic Rendering, Static Site Generation, and Prerendering — with request/response flows, code samples, comparison matrix, and a decision flowchart.
 
+* **[Optimization — Frontend Performance](./Concepts/Optimization.md)**: Hub page linking to all five asset optimization articles with a quick-reference performance metrics impact table (LCP, FCP, CLS, TTI, TTFB).
+
+  * **[Image Optimization](./Concepts/image-optimization.md)**: Image formats (JPEG, PNG, WebP, AVIF, SVG), responsive images (srcset, sizes), lazy loading, progressive images, compression (lossy vs lossless), Image CDN, art direction (`<picture>`), and placeholder strategies (LQIP, BlurHash, dominant color).
+
+  * **[Video Optimization](./Concepts/video-optimization.md)**: Progressive enhancement, video formats (WebM, MP4, AV1), poster images, removing audio, adaptive streaming (HLS/DASH), platform-based dimensions, and preloading strategy.
+
+  * **[Font Optimization](./Concepts/font-optimization.md)**: FOUT/FOIT issues, `font-display` strategy, WOFF2/WOFF formats, font preloading, subsetting, variable fonts, and Font Face Observer.
+
+  * **[CSS, JavaScript & UI Optimization](./Concepts/css-js-ui-optimization.md)**: Critical CSS, async/lazy CSS loading, JS async & defer, module loading & tree shaking, configurable UI (conditional rendering), and streaming UI rendering with React Suspense.
+
+  * **[Network Optimization](./Concepts/network-optimization.md)**: HTTP/2 & HTTP/3, resource hints (preload, prefetch, preconnect, dns-prefetch), caching strategies, Gzip/Brotli compression, CDN, bundle & code splitting, and Service Workers.
