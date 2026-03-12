@@ -8,6 +8,7 @@
 
 ### 1. [Image Optimization](image-optimization.md)
 - Image Formats (JPEG, PNG, WebP, AVIF, SVG)
+- Device Pixel Ratio (DPR)
 - Responsive Images (srcset, sizes)
 - Lazy Loading Images
 - Progressive and Interlaced Images
@@ -15,6 +16,8 @@
 - Image CDN and Transformation
 - Art Direction (Picture Element)
 - Placeholder Strategies (LQIP, BlurHash, Dominant Color)
+- CSS Sprite Images
+- Adaptive Media Loading
 
 ### 2. [Video Optimization](video-optimization.md)
 - Progressive Enhancement for Video
