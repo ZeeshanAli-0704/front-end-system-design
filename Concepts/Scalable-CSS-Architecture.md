@@ -15,7 +15,7 @@ This guide covers **what CSS architecture is**, **why it matters**, **when to ch
 
 <a id="top"></a>
 
-## 📚 Table of Contents
+## Table of Contents
 
 - [What Is CSS Architecture and Why It Matters](#what-is-css-architecture-and-why-it-matters)
 - [The Core Problem CSS Was Never Designed for Components](#the-core-problem-css-was-never-designed-for-components)
@@ -45,7 +45,7 @@ This guide covers **what CSS architecture is**, **why it matters**, **when to ch
 
 ---
 
-## 🔹 What Is CSS Architecture and Why It Matters
+## What Is CSS Architecture and Why It Matters
 
 **CSS Architecture** is a set of conventions, patterns, and tools that define **how styles are organized, named, scoped, and maintained** across a codebase. It's the difference between CSS that "works" and CSS that **scales**.
 
@@ -96,7 +96,7 @@ A CSS architecture enforces:
 
 ---
 
-## 🔹 The Core Problem CSS Was Never Designed for Components
+## The Core Problem CSS Was Never Designed for Components
 
 CSS was created in 1996 for **styling documents**, not building **component-based applications**. Understanding this historical gap explains why we need architecture.
 
@@ -143,7 +143,7 @@ CSS was created in 1996 for **styling documents**, not building **component-base
 
 ---
 
-## 🔹 When CSS Architecture Becomes Critical
+## When CSS Architecture Becomes Critical
 
 ### You Need a CSS Architecture When...
 
@@ -171,7 +171,7 @@ CSS was created in 1996 for **styling documents**, not building **component-base
 
 ---
 
-## 🔹 CSS Architecture Strategies Overview
+## CSS Architecture Strategies Overview
 
 Before diving deep, here's the landscape:
 
@@ -190,7 +190,7 @@ Before diving deep, here's the landscape:
 
 ---
 
-## 🔹 BEM Block Element Modifier
+## BEM Block Element Modifier
 
 **BEM** (by Yandex) is one of the most battle-tested CSS naming conventions. It enforces **modularity and reusability** through a strict naming pattern.
 
@@ -299,7 +299,7 @@ Before diving deep, here's the landscape:
 
 ---
 
-## 🔹 SMACSS Scalable and Modular Architecture for CSS
+## SMACSS Scalable and Modular Architecture for CSS
 
 **SMACSS** (by Jonathan Snook) organizes CSS into **five categories**, each with a clear purpose. It's a folder strategy more than a naming convention.
 
@@ -390,7 +390,7 @@ body { font-family: system-ui, sans-serif; line-height: 1.6; }
 
 ---
 
-## 🔹 OOCSS Object Oriented CSS
+## OOCSS Object Oriented CSS
 
 **OOCSS** (by Nicole Sullivan) promotes **reusability** through two core principles:
 
@@ -448,7 +448,7 @@ The heading style works **anywhere**, not just inside `.sidebar`.
 
 ---
 
-## 🔹 CSS Modules
+## CSS Modules
 
 **CSS Modules** automatically scope styles to a specific component at **build time**, generating unique class names to prevent conflicts.
 
@@ -548,7 +548,7 @@ function Button({ variant, disabled, children }) {
 
 ---
 
-## 🔹 CSS in JS Styled Components and Emotion
+## CSS in JS Styled Components and Emotion
 
 CSS-in-JS brings **dynamic styling**, **co-location**, and **automatic scoping** by defining styles in JavaScript.
 
@@ -682,7 +682,7 @@ Component Render → Parse CSS template → Generate class → Inject <style> �
 
 ---
 
-## 🔹 Tailwind CSS Utility First Approach
+## Tailwind CSS Utility First Approach
 
 Tailwind CSS flips the CSS paradigm — instead of writing custom styles, you compose **pre-built utility classes** directly in markup.
 
@@ -811,7 +811,7 @@ src/
 
 ---
 
-## 🔹 Vanilla Extract and Zero Runtime CSS in TS
+## Vanilla Extract and Zero Runtime CSS in TS
 
 **Vanilla Extract** is a modern, **type-safe**, **zero-runtime** CSS-in-TypeScript solution. It generates static CSS at build time while giving you the DX of CSS-in-JS.
 
@@ -898,7 +898,7 @@ export const darkTheme = createTheme(vars, {
 
 ---
 
-## 🔹 CSS Layers and Modern Native Cascade Control
+## CSS Layers and Modern Native Cascade Control
 
 **CSS `@layer`** (2022 — all modern browsers support it) gives you **explicit control over the cascade** without relying on specificity or source order.
 
@@ -974,7 +974,7 @@ Tailwind v3.3+ uses `@layer` internally:
 
 ---
 
-## 🔹 Design Tokens and Theming
+## Design Tokens and Theming
 
 Large-scale design systems (Google Material, Salesforce Lightning, Microsoft Fluent) rely on **design tokens** — the single source of truth for all style values.
 
@@ -1125,7 +1125,7 @@ tokens.json (source of truth)
 
 ---
 
-## 🔹 CSS Custom Properties vs Preprocessor Variables
+## CSS Custom Properties vs Preprocessor Variables
 
 | Feature                      | CSS Custom Properties (`var()`)        | Sass/LESS Variables (`$var`)           |
 | ---------------------------- | -------------------------------------- | -------------------------------------- |
@@ -1160,7 +1160,7 @@ tokens.json (source of truth)
 
 ---
 
-## 🔹 Pros vs Cons of Every CSS Strategy
+## Pros vs Cons of Every CSS Strategy
 
 | Strategy                      | ✅ Pros                                                              | ❌ Cons                                                         | Performance    | Team Scale  |
 | ----------------------------- | -------------------------------------------------------------------- | --------------------------------------------------------------- | -------------- | ----------- |
@@ -1178,7 +1178,7 @@ tokens.json (source of truth)
 
 ---
 
-## 🔹 How to Choose the Right CSS Architecture
+## How to Choose the Right CSS Architecture
 
 ### Decision Matrix
 
@@ -1211,7 +1211,7 @@ tokens.json (source of truth)
 
 ---
 
-## 🔹 How to Migrate from Messy CSS to a Scalable Architecture
+## How to Migrate from Messy CSS to a Scalable Architecture
 
 ### Step 1: Audit Current State
 
@@ -1287,7 +1287,7 @@ npx purgecss --css dist/styles.css --content 'src/**/*.{html,jsx,tsx,vue}'
 
 ---
 
-## 🔹 Performance Implications of CSS Strategies
+## Performance Implications of CSS Strategies
 
 | Strategy              | CSS File Size      | CSSOM Parse Speed | Runtime Cost | Flash Risk (FOUC) | SSR Compatibility |
 | --------------------- | ------------------ | ----------------- | ------------ | ------------------ | ----------------- |
@@ -1329,7 +1329,7 @@ npx purgecss --css dist/styles.css --content 'src/**/*.{html,jsx,tsx,vue}'
 
 ---
 
-## 🔹 How to Audit and Debug CSS at Scale
+## How to Audit and Debug CSS at Scale
 
 ### Tools for CSS Analysis
 
@@ -1394,7 +1394,7 @@ jobs:
 
 ---
 
-## 🔹 Best Practices for Scalable CSS
+## Best Practices for Scalable CSS
 
 ### Organization
 
@@ -1450,7 +1450,7 @@ jobs:
 
 ---
 
-## 🔹 CSS Architecture Checklist
+## CSS Architecture Checklist
 
 ### Setup & Foundation
 - [ ] CSS architecture chosen and documented for the team
@@ -1499,7 +1499,7 @@ jobs:
 
 ---
 
-## 🔹 Key Interview Takeaways
+## Key Interview Takeaways
 
 | Topic                                  | What You Should Know                                                                                                                 |
 | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
@@ -1523,7 +1523,7 @@ jobs:
 
 ---
 
-## 🔹 Further Reading and Resources
+## Further Reading and Resources
 
 | Resource                                    | Link                                                        |
 | ------------------------------------------- | ----------------------------------------------------------- |

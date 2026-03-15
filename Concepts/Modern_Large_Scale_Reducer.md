@@ -7,7 +7,7 @@
 
 <a id="top"></a>
 
-## 📚 Table of Contents
+## Table of Contents
 
 - [The Problem](#the-problem)
 - [The Office Building Analogy](#the-office-building-analogy)
@@ -35,7 +35,7 @@
 
 ---
 
-## 🔹 The Problem
+## The Problem
 
 When your app is small, one reducer file works fine. When it grows to **200+ screens with multiple teams**, that same file becomes:
 
@@ -50,7 +50,7 @@ When your app is small, one reducer file works fine. When it grows to **200+ scr
 
 ---
 
-## 🔹 The Office Building Analogy
+## The Office Building Analogy
 
 | Real World              | State Concept        | Purpose                            |
 | ----------------------- | -------------------- | ---------------------------------- |
@@ -67,7 +67,7 @@ When your app is small, one reducer file works fine. When it grows to **200+ scr
 
 ---
 
-## 🔹 Core Principles
+## Core Principles
 
 | #  | Principle                    | One-Liner                                                      |
 | -- | ---------------------------- | -------------------------------------------------------------- |
@@ -84,7 +84,7 @@ When your app is small, one reducer file works fine. When it grows to **200+ scr
 
 ---
 
-## 🔹 Step by Step Process
+## Step by Step Process
 
 | Step | What to Do                              | Key Question to Ask                                          |
 | ---- | --------------------------------------- | ------------------------------------------------------------ |
@@ -105,7 +105,7 @@ When your app is small, one reducer file works fine. When it grows to **200+ scr
 
 ---
 
-## 🔹 Folder Structure
+## Folder Structure
 
 ```
 /src
@@ -139,7 +139,7 @@ When your app is small, one reducer file works fine. When it grows to **200+ scr
 
 ---
 
-## 🔹 Skeleton Code Store Setup
+## Skeleton Code Store Setup
 
 ### `app/store.js`
 
@@ -177,7 +177,7 @@ export default combineReducers({
 
 ---
 
-## 🔹 Skeleton Code Feature Slice
+## Skeleton Code Feature Slice
 
 ### `features/users/slices/usersSlice.js`
 
@@ -221,7 +221,7 @@ Each feature behaves like a **mini-application**:
 
 ---
 
-## 🔹 Skeleton Code Multiple Slices per Feature
+## Skeleton Code Multiple Slices per Feature
 
 Large features **should** have multiple slices:
 
@@ -255,7 +255,7 @@ export default combineReducers({
 
 ---
 
-## 🔹 Skeleton Code Final State Shape
+## Skeleton Code Final State Shape
 
 ```js
 {
@@ -278,7 +278,7 @@ Clean. Predictable. Scalable.
 
 ---
 
-## 🔹 What State Goes Where
+## What State Goes Where
 
 | State Type         | Where It Belongs             | Examples                                   |
 | ------------------ | ---------------------------- | ------------------------------------------ |
@@ -296,7 +296,7 @@ Clean. Predictable. Scalable.
 
 ---
 
-## 🔹 Normalize Your Data
+## Normalize Your Data
 
 | Approach       | Find by ID | Update One | Good For                   |
 | -------------- | ---------- | ---------- | -------------------------- |
@@ -321,7 +321,7 @@ Clean. Predictable. Scalable.
 
 ---
 
-## 🔹 Selectors How to Read State
+## Selectors How to Read State
 
 | Level                | What                                   | Memoized? |
 | -------------------- | -------------------------------------- | --------- |
@@ -339,7 +339,7 @@ Clean. Predictable. Scalable.
 
 ---
 
-## 🔹 How Features Should Communicate
+## How Features Should Communicate
 
 | Pattern                    | How                                              | When                                |
 | -------------------------- | ------------------------------------------------ | ----------------------------------- |
@@ -352,7 +352,7 @@ Clean. Predictable. Scalable.
 
 ---
 
-## 🔹 When to Split a Slice
+## When to Split a Slice
 
 | Signal                                   | Action                              |
 | ---------------------------------------- | ----------------------------------- |
@@ -368,7 +368,7 @@ The root reducer sees one entry per feature. It doesn't know about the internal 
 
 ---
 
-## 🔹 Async Data Strategy
+## Async Data Strategy
 
 | Pattern                | Best For                           | Caching | Auto Refetch |
 | ---------------------- | ---------------------------------- | ------- | ------------ |
@@ -385,7 +385,7 @@ The root reducer sees one entry per feature. It doesn't know about the internal 
 
 ---
 
-## 🔹 Enterprise Rules
+## Enterprise Rules
 
 | Rule                                          | Why                                                |
 | --------------------------------------------- | -------------------------------------------------- |
@@ -403,7 +403,7 @@ The root reducer sees one entry per feature. It doesn't know about the internal 
 
 ---
 
-## 🔹 Migrating Legacy State
+## Migrating Legacy State
 
 | Step | Action                              | Details                                          |
 | ---- | ----------------------------------- | ------------------------------------------------ |
@@ -420,7 +420,7 @@ The root reducer sees one entry per feature. It doesn't know about the internal 
 
 ---
 
-## 🔹 Strategy Comparison
+## Strategy Comparison
 
 | Strategy               | Best For                       | Boilerplate | Learning Curve |
 | ---------------------- | ------------------------------ | ----------- | -------------- |
@@ -436,7 +436,7 @@ The root reducer sees one entry per feature. It doesn't know about the internal 
 
 ---
 
-## 🔹 Checklist
+## Checklist
 
 - [ ] State domains identified and mapped to feature folders
 - [ ] State classified (server / client / form / URL / derived / local)
@@ -456,7 +456,7 @@ The root reducer sees one entry per feature. It doesn't know about the internal 
 
 ---
 
-## 🔹 Interview Takeaways
+## Interview Takeaways
 
 | Topic                       | Key Point                                                                        |
 | --------------------------- | -------------------------------------------------------------------------------- |
@@ -474,7 +474,7 @@ The root reducer sees one entry per feature. It doesn't know about the internal 
 
 ---
 
-## 🔹 Further Reading
+## Further Reading
 
 | Resource                            | Link                                                              |
 | ----------------------------------- | ----------------------------------------------------------------- |

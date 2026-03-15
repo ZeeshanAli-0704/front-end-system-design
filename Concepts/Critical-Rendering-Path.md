@@ -12,7 +12,7 @@ This guide covers **what CRP is**, **why it matters**, **when to optimize**, **h
 
 <a id="top"></a>
 
-## 📚 Table of Contents
+## Table of Contents
 
 - [What is the Critical Rendering Path](#what-is-the-critical-rendering-path)
 - [Why CRP Optimization Matters](#why-crp-optimization-matters)
@@ -46,7 +46,7 @@ This guide covers **what CRP is**, **why it matters**, **when to optimize**, **h
 
 ---
 
-## 🔹 What is the Critical Rendering Path
+## What is the Critical Rendering Path
 
 The **Critical Rendering Path** refers to the sequence of steps the browser takes to convert your HTML, CSS, and JavaScript into **pixels rendered on the user's screen**.
 
@@ -62,7 +62,7 @@ So, **optimizing the CRP = optimizing perceived performance** (Time to First Pai
 
 ---
 
-## 🔹 Why CRP Optimization Matters
+## Why CRP Optimization Matters
 
 ### The Business Case
 
@@ -95,7 +95,7 @@ So, **optimizing the CRP = optimizing perceived performance** (Time to First Pai
 
 ---
 
-## 🔹 When to Optimize the CRP
+## When to Optimize the CRP
 
 ### You Should Optimize CRP When...
 
@@ -121,7 +121,7 @@ So, **optimizing the CRP = optimizing perceived performance** (Time to First Pai
 
 ---
 
-## 🧩 The Rendering Flow High Level
+## The Rendering Flow High Level
 
 Let's break down the 6 steps the browser follows to render a page:
 
@@ -190,7 +190,7 @@ HTML Download → DOM Construction → CSSOM Construction → Render Tree → La
 
 ---
 
-## ⚙️ The Critical Part of the Path
+## The Critical Part of the Path
 
 Only **resources** that are **required for the first visible paint** are part of the **critical path**.
 
@@ -219,7 +219,7 @@ Your goal is to:
 
 ---
 
-## 🚦 How the Browser Blocks Rendering
+## How the Browser Blocks Rendering
 
 Rendering is **blocked** by two types of resources:
 
@@ -267,7 +267,7 @@ HTML Parsing ────┐
 
 ---
 
-## 🔹 Key Performance Metrics Tied to CRP
+## Key Performance Metrics Tied to CRP
 
 Understanding which metrics CRP affects helps you prioritize optimizations:
 
@@ -296,7 +296,7 @@ Font display strategy        → Improves FCP, CLS
 
 ---
 
-## 🧭 CRP Optimization Techniques Deep Dive
+## CRP Optimization Techniques Deep Dive
 
 Here's the exhaustive deep-dive — each technique includes **what it does, how to implement it, when to use it, and trade-offs**.
 
@@ -820,7 +820,7 @@ function ProductList() {
 
 ---
 
-## 🔹 Pros vs Cons of Each Optimization Technique
+## Pros vs Cons of Each Optimization Technique
 
 | Technique                    | ✅ Pros                                                        | ❌ Cons / Trade-offs                                         | Complexity |
 | ---------------------------- | -------------------------------------------------------------- | ------------------------------------------------------------ | ---------- |
@@ -845,7 +845,7 @@ function ProductList() {
 
 ---
 
-## 📊 Example CRP Timeline Visualization
+## Example CRP Timeline Visualization
 
 ```mermaid
 sequenceDiagram
@@ -873,7 +873,7 @@ sequenceDiagram
 
 ---
 
-## 🧩 Example Before vs After Optimization
+## Example Before vs After Optimization
 
 ### ❌ Before
 
@@ -1072,7 +1072,7 @@ Only after both **DOM + CSSOM** are ready does the **render tree** form and **pa
 
 ---
 
-## 🔹 CRP Optimization in React Next Angular and Vue
+## CRP Optimization in React Next Angular and Vue
 
 ### React (Client-Side Rendered)
 
@@ -1234,7 +1234,7 @@ const { data: product } = await useFetch(`/api/products/${route.params.id}`);
 
 ---
 
-## 🔹 How to Measure and Audit CRP Performance
+## How to Measure and Audit CRP Performance
 
 ### Browser Tools
 
@@ -1303,7 +1303,7 @@ Chrome DevTools → Performance tab → CPU throttling:
 
 ---
 
-## 🔹 Best Steps to Follow A Prioritized Optimization Workflow
+## Best Steps to Follow A Prioritized Optimization Workflow
 
 Follow this **step-by-step workflow** when optimizing CRP for an existing application:
 
@@ -1425,7 +1425,7 @@ jobs:
 
 ---
 
-## 🔹 CRP Optimization Checklist
+## CRP Optimization Checklist
 
 Use this checklist before every production deploy:
 
@@ -1479,7 +1479,7 @@ Use this checklist before every production deploy:
 
 ---
 
-## ⚡ Key Interview Takeaways
+## Key Interview Takeaways
 
 | Topic                                | What You Should Know                                                                                                            |
 | ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------- |
@@ -1501,7 +1501,7 @@ Use this checklist before every production deploy:
 
 ---
 
-## 🔹 Further Reading and Resources
+## Further Reading and Resources
 
 | Resource                                  | Link                                                           |
 | ----------------------------------------- | -------------------------------------------------------------- |

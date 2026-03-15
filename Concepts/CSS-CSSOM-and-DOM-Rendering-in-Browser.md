@@ -15,7 +15,7 @@ This guide covers **what DOM and CSSOM are**, **why the rendering pipeline matte
 
 <a id="top"></a>
 
-## 📚 Table of Contents
+## Table of Contents
 
 - [What Are DOM CSSOM and the Render Tree](#what-are-dom-cssom-and-the-render-tree)
 - [Why Understanding Browser Rendering Matters](#why-understanding-browser-rendering-matters)
@@ -46,7 +46,7 @@ This guide covers **what DOM and CSSOM are**, **why the rendering pipeline matte
 
 ---
 
-## 🔹 What Are DOM CSSOM and the Render Tree
+## What Are DOM CSSOM and the Render Tree
 
 ### DOM (Document Object Model)
 
@@ -145,7 +145,7 @@ Render Tree (visible nodes only):
 
 ---
 
-## 🔹 Why Understanding Browser Rendering Matters
+## Why Understanding Browser Rendering Matters
 
 ### The Performance Case
 
@@ -177,7 +177,7 @@ Render Tree (visible nodes only):
 
 ---
 
-## 🔹 When Rendering Becomes a Bottleneck
+## When Rendering Becomes a Bottleneck
 
 ### Symptoms of Rendering Problems
 
@@ -208,7 +208,7 @@ Render Tree (visible nodes only):
 
 ---
 
-## 🔹 The Complete Rendering Pipeline Step by Step
+## The Complete Rendering Pipeline Step by Step
 
 Here's the full journey from URL to pixels, with **what happens**, **why it matters**, and **what can go wrong** at each step.
 
@@ -499,7 +499,7 @@ Layer 3 (fixed header) ┘
 
 ---
 
-## 🔹 How CSS Blocks Rendering and How to Fix It
+## How CSS Blocks Rendering and How to Fix It
 
 ### The Problem
 
@@ -565,7 +565,7 @@ main.css ──── download ──── parse ──── discover @import
 
 ---
 
-## 🔹 How JavaScript Interacts with DOM and CSSOM
+## How JavaScript Interacts with DOM and CSSOM
 
 JavaScript is the most **disruptive force** in the rendering pipeline. It can read, modify, and even completely replace the DOM and CSSOM.
 
@@ -655,7 +655,7 @@ element.style.display = 'block'; // 1 reflow (show)
 
 ---
 
-## 🔹 Reflow vs Repaint Deep Dive
+## Reflow vs Repaint Deep Dive
 
 Understanding when the browser **re-runs** parts of the rendering pipeline after the initial load is critical for runtime performance.
 
@@ -736,7 +736,7 @@ function updateWidths() {
 
 ---
 
-## 🔹 The Virtual DOM vs Real DOM
+## The Virtual DOM vs Real DOM
 
 Modern frameworks avoid direct DOM manipulation overhead by using abstraction layers.
 
@@ -792,7 +792,7 @@ function Counter({ count }) {
 
 ---
 
-## 🔹 Progressive Rendering and Streaming
+## Progressive Rendering and Streaming
 
 ### What Is Progressive Rendering?
 
@@ -853,7 +853,7 @@ Chunk 3: <script>replace #reviews with actual content</script>   ← Browser upd
 
 ---
 
-## 🔹 Pros vs Cons of Rendering Strategies
+## Pros vs Cons of Rendering Strategies
 
 | Strategy                        | ✅ Pros                                                     | ❌ Cons                                                   | Best For                             |
 | ------------------------------- | ----------------------------------------------------------- | --------------------------------------------------------- | ------------------------------------ |
@@ -871,7 +871,7 @@ Chunk 3: <script>replace #reviews with actual content</script>   ← Browser upd
 
 ---
 
-## 🔹 How to Debug and Audit Rendering Performance
+## How to Debug and Audit Rendering Performance
 
 ### Chrome DevTools — Performance Panel
 
@@ -966,7 +966,7 @@ new PerformanceObserver((list) => {
 
 ---
 
-## 🔹 CSS Containment and content-visibility
+## CSS Containment and content-visibility
 
 Modern browsers provide two powerful CSS properties that let you **limit the scope of rendering work** — directly reducing the cost of layout, paint, and style recalculation.
 
@@ -1071,7 +1071,7 @@ When `content-visibility: auto` kicks in for an off-screen element, the browser 
 
 ---
 
-## 🔹 Best Practices for Efficient DOM and CSS Rendering
+## Best Practices for Efficient DOM and CSS Rendering
 
 ### DOM Best Practices
 
@@ -1153,7 +1153,7 @@ requestAnimationFrame(animate);
 
 ---
 
-## 🔹 Framework Specific Rendering Behavior
+## Framework Specific Rendering Behavior
 
 ### React
 
@@ -1283,7 +1283,7 @@ $: doubled = count * 2;
 
 ---
 
-## 🔹 Rendering Optimization Checklist
+## Rendering Optimization Checklist
 
 ### Initial Load (CRP)
 - [ ] Critical CSS is inlined in `<head>`
@@ -1328,7 +1328,7 @@ $: doubled = count * 2;
 
 ---
 
-## 🔹 Key Interview Takeaways
+## Key Interview Takeaways
 
 | Topic                                    | What You Should Know                                                                                                    |
 | ---------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
@@ -1352,7 +1352,7 @@ $: doubled = count * 2;
 
 ---
 
-## 🔹 Further Reading and Resources
+## Further Reading and Resources
 
 | Resource                                          | Link                                                                      |
 | ------------------------------------------------- | ------------------------------------------------------------------------- |

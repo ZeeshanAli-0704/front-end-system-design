@@ -13,7 +13,7 @@ This guide covers **what each library does**, **why their mental models differ**
 
 <a id="top"></a>
 
-## 📚 Table of Contents
+## Table of Contents
 
 - [Why This Comparison Matters](#why-this-comparison-matters)
 - [Mental Models The Core Difference](#mental-models-the-core-difference)
@@ -39,7 +39,7 @@ This guide covers **what each library does**, **why their mental models differ**
 
 ---
 
-## 🔹 Why This Comparison Matters
+## Why This Comparison Matters
 
 ### The State Management Problem
 
@@ -70,7 +70,7 @@ Understanding **when and why** to choose each paradigm is a core frontend archit
 
 ---
 
-## 🔹 Mental Models The Core Difference
+## Mental Models The Core Difference
 
 Think of state management like organizing information in different ways:
 
@@ -86,7 +86,7 @@ Think of state management like organizing information in different ways:
 
 ---
 
-## 🔹 High Level Architecture
+## High Level Architecture
 
 ### Redux Toolkit — Unidirectional Data Flow
 
@@ -110,7 +110,7 @@ State is defined as small independent **atoms** → Components subscribe to indi
 
 ---
 
-## 🔹 Redux Toolkit RTK Overview
+## Redux Toolkit RTK Overview
 
 ### What It Is
 
@@ -164,7 +164,7 @@ Redux Toolkit (RTK) is the **official, opinionated way** to use Redux. Created b
 
 ---
 
-## 🔹 Zustand Overview
+## Zustand Overview
 
 ### What It Is
 
@@ -216,7 +216,7 @@ No reducers. No actions. No dispatch. No provider. No ceremony.
 
 ---
 
-## 🔹 Jotai Overview
+## Jotai Overview
 
 ### What It Is
 
@@ -274,7 +274,7 @@ Jotai's dependency graph is **automatic** — when a derived atom reads another 
 
 ---
 
-## 🔹 Side by Side Feature Comparison
+## Side by Side Feature Comparison
 
 | Feature                     | Redux Toolkit              | Zustand                   | Jotai                       |
 | --------------------------- | -------------------------- | ------------------------- | --------------------------- |
@@ -301,7 +301,7 @@ Jotai's dependency graph is **automatic** — when a derived atom reads another 
 
 ---
 
-## 🔹 Performance and Re render Behavior
+## Performance and Re render Behavior
 
 Understanding re-render behavior is critical — unnecessary re-renders are the **#1 performance problem** in React apps.
 
@@ -340,7 +340,7 @@ Consider an app with `users`, `cart`, and `ui` state. A user adds an item to the
 
 ---
 
-## 🔹 Middleware and DevTools
+## Middleware and DevTools
 
 ### Redux Toolkit — Strongest Ecosystem
 
@@ -392,7 +392,7 @@ Consider an app with `users`, `cart`, and `ui` state. A user adds an item to the
 
 ---
 
-## 🔹 TypeScript Support
+## TypeScript Support
 
 | Aspect                    | Redux Toolkit                     | Zustand                          | Jotai                          |
 | ------------------------- | --------------------------------- | -------------------------------- | ------------------------------ |
@@ -407,7 +407,7 @@ Consider an app with `users`, `cart`, and `ui` state. A user adds an item to the
 
 ---
 
-## 🔹 SSR and Next.js Compatibility
+## SSR and Next.js Compatibility
 
 Server-Side Rendering introduces unique challenges: state must be **initialized on the server**, **serialized**, and **hydrated on the client** without leaking between requests.
 
@@ -426,7 +426,7 @@ Server-Side Rendering introduces unique challenges: state must be **initialized 
 
 ---
 
-## 🔹 Scalability and Team Collaboration
+## Scalability and Team Collaboration
 
 ### Redux Toolkit — Enterprise Grade
 
@@ -468,7 +468,7 @@ Server-Side Rendering introduces unique challenges: state must be **initialized 
 
 ---
 
-## 🔹 How to Choose Decision Frameworks
+## How to Choose Decision Frameworks
 
 ### Decision Flowchart
 
@@ -533,7 +533,7 @@ Before choosing a library, **classify what kind of state you actually have**:
 
 ---
 
-## 🔹 Real World Use Case Mapping
+## Real World Use Case Mapping
 
 | Scenario                              | Best Choice       | Why                                                                                           |
 | ------------------------------------- | ----------------- | --------------------------------------------------------------------------------------------- |
@@ -554,7 +554,7 @@ Before choosing a library, **classify what kind of state you actually have**:
 
 ---
 
-## 🔹 Migration Guidance
+## Migration Guidance
 
 ### When to Migrate
 
@@ -579,7 +579,7 @@ Before choosing a library, **classify what kind of state you actually have**:
 
 ---
 
-## 🔹 Best Practices
+## Best Practices
 
 ### General State Management
 
@@ -626,7 +626,7 @@ Before choosing a library, **classify what kind of state you actually have**:
 
 ---
 
-## 🔹 State Management Checklist
+## State Management Checklist
 
 ### Before Choosing a Library
 
@@ -659,7 +659,7 @@ Before choosing a library, **classify what kind of state you actually have**:
 
 ---
 
-## 🔹 Key Interview Takeaways
+## Key Interview Takeaways
 
 ### "Compare Redux Toolkit, Zustand, and Jotai"
 
@@ -689,7 +689,7 @@ Before choosing a library, **classify what kind of state you actually have**:
 
 ---
 
-## 🔹 Further Reading and Resources
+## Further Reading and Resources
 
 | Resource                                                                 | Type          |
 | ------------------------------------------------------------------------ | ------------- |
