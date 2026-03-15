@@ -4,26 +4,22 @@
 
 ---
 
-<a id="top"></a>
-
 ## Table of Contents
 
-- [Why Event Handling Matters at Scale](#why-event-handling-matters-at-scale)
-- [DOM Event Model Capture Target Bubble](#dom-event-model-capture-target-bubble)
-- [Event Delegation The Scalable Pattern](#event-delegation-the-scalable-pattern)
-- [Debounce Throttle requestIdleCallback](#debounce-throttle-requestidlecallback)
-- [Custom Event Bus Pub Sub for Decoupled Communication](#custom-event-bus-pub-sub-for-decoupled-communication)
-- [AbortController for Cancellable Requests](#abortcontroller-for-cancellable-requests)
-- [Memory Leaks Detection Diagnosis and Prevention](#memory-leaks-detection-diagnosis-and-prevention)
-- [Combining Patterns Real World Architectures](#combining-patterns-real-world-architectures)
-- [Comparison Tables](#comparison-tables)
-- [Interview Questions and Answers](#interview-questions-and-answers)
-- [Summary Key Takeaways](#summary-key-takeaways)
-[⬆ Back to Top](#top)
+1. [Why Event Handling Matters at Scale](#1-why-event-handling-matters-at-scale)
+2. [DOM Event Model, Capture, Target, Bubble](#2-dom-event-model-capture-target-bubble)
+3. [Event Delegation, The Scalable Pattern](#3-event-delegation-the-scalable-pattern)
+4. [Debounce, Throttle, requestIdleCallback](#4-debounce-throttle-requestidlecallback)
+5. [Custom Event Bus / Pub Sub](#5-custom-event-bus--pub-sub-for-decoupled-communication)
+6. [AbortController for Cancellable Requests](#6-abortcontroller-for-cancellable-requests)
+7. [Memory Leaks, Detection, Diagnosis and Prevention](#7-memory-leaks-detection-diagnosis-and-prevention)
+8. [Combining Patterns, Real World Architectures](#8-combining-patterns-real-world-architectures)
+9. [Comparison Tables](#9-comparison-tables)
+10. [Interview Questions and Answers](#10-interview-questions-and-answers)
 
 ---
 
-## Why Event Handling Matters at Scale
+## 1. Why Event Handling Matters at Scale
 
 Modern frontend apps handle **thousands of events per second**: clicks, scrolls, key presses, network responses, resize, intersection observations, web socket messages, etc.
 
@@ -72,11 +68,9 @@ Naive event handling leads to:
 
 **How to read this diagram:** A user action enters at the top. Each layer processes or filters the event before passing it down. The DOM layer catches it, the rate-limit layer controls frequency, the event bus broadcasts it to multiple consumers, and the async layer handles network calls with cancellation support. Each layer is independent — you can use any combination.
 
-[⬆ Back to Top](#top)
-
 ---
 
-## DOM Event Model Capture Target Bubble
+## 2. DOM Event Model, Capture, Target, Bubble
 
 ### 2.1 The Three Phases
 
@@ -177,11 +171,9 @@ event.isTrusted      // true = real user action, false = script-dispatched
 event.composedPath() // Full path from target to window (crosses Shadow DOM)
 ```
 
-[⬆ Back to Top](#top)
-
 ---
 
-## Event Delegation The Scalable Pattern
+## 3. Event Delegation — The Scalable Pattern
 
 ### 3.1 The Problem
 
@@ -273,11 +265,9 @@ React 17+:  All events delegated to the React root container
 
 You write per-component handlers (`onClick`), but React attaches a **single listener** at the root and routes events using its Synthetic Event system. If you use vanilla `addEventListener` inside `useEffect`, you must manage delegation yourself.
 
-[⬆ Back to Top](#top)
-
 ---
 
-## Debounce Throttle requestIdleCallback
+## 4. Debounce, Throttle, requestIdleCallback
 
 ### 4.1 Mental Model, The Core Difference
 
@@ -521,11 +511,9 @@ requestIdleCallback((deadline) => {
 | `setTimeout(fn, 0)` | Next task (≥4ms) | Yielding to event loop |
 | `requestIdleCallback` | Browser idle time | Analytics, prefetch, non-urgent DOM |
 
-[⬆ Back to Top](#top)
-
 ---
 
-## Custom Event Bus Pub Sub for Decoupled Communication
+## 5. Custom Event Bus / Pub Sub for Decoupled Communication
 
 ### 5.1 What is Pub/Sub?
 
@@ -781,11 +769,9 @@ channel2.postMessage({ type: 'auth:logout', reason: 'session_expired' });
 | **Ordering issues** — subscriber added after publisher fires | Use `once()` + replay/cache pattern for initialization events |
 | **Debugging difficulty** — "where did this event come from?" | Add a `debug: true` flag that logs all events with stack traces |
 
-[⬆ Back to Top](#top)
-
 ---
 
-## AbortController for Cancellable Requests
+## 6. AbortController for Cancellable Requests
 
 ### 6.1 The Problem: Stale and Zombie Requests
 
@@ -884,7 +870,7 @@ input.addEventListener('input', async (e) => {
 });
 ```
 
-### 6.5 Built in Timeouts
+### 6.5 Built-in Timeouts
 
 ```js
 // Abort if request takes longer than 5 seconds
@@ -1071,11 +1057,9 @@ const search = createSearch(renderResults, 300);
 document.getElementById('search').addEventListener('input', (e) => search(e.target.value));
 ```
 
-[⬆ Back to Top](#top)
-
 ---
 
-## Memory Leaks Detection Diagnosis and Prevention
+## 7. Memory Leaks, Detection, Diagnosis and Prevention
 
 ### 7.1 What is a Memory Leak?
 
@@ -1309,11 +1293,9 @@ useEffect(() => {
 | Time per event handler | < 5ms | Offload to `requestIdleCallback` or Worker |
 | JS Heap growth per navigation | ~0 (should return to baseline) | Heap snapshot comparison after navigating away |
 
-[⬆ Back to Top](#top)
-
 ---
 
-## Combining Patterns Real World Architectures
+## 8. Combining Patterns, Real World Architectures
 
 ### 8.1 E Commerce: Cart Events + Delegation + Abort
 
@@ -1388,11 +1370,9 @@ form.addEventListener('input', () => {
 });
 ```
 
-[⬆ Back to Top](#top)
-
 ---
 
-## Comparison Tables
+## 9. Comparison Tables
 
 ### Event Rate Limiting Techniques
 
@@ -1413,11 +1393,9 @@ form.addEventListener('input', () => {
 | Event Bus / Pub-Sub | Loose | App-wide | Cross-module events |
 | BroadcastChannel | Loose | Cross-tab | Tab sync |
 
-[⬆ Back to Top](#top)
-
 ---
 
-## Interview Questions and Answers
+## 10. Interview Questions and Answers
 
 ### Q1: What is event delegation and why is it useful?
 
@@ -1512,7 +1490,7 @@ async function search(query) {
 
 ---
 
-### Q10: Real time dashboard with 100+ WebSocket messages/sec, how?
+### Q10: Real-time dashboard with 100+ WebSocket messages/sec — how?
 
 **A:**
 1. **Throttle DOM updates** — batch messages, update UI at most every 100-200ms via `requestAnimationFrame`
@@ -1521,11 +1499,9 @@ async function search(query) {
 4. **Virtual list** for message history — only render visible items
 5. **Web Worker** for data processing — aggregate in worker, post computed results to main thread
 
-[⬆ Back to Top](#top)
-
 ---
 
-## Summary Key Takeaways
+## Summary, Key Takeaways
 
 | Concept | One-Liner |
 |---|---|
@@ -1538,18 +1514,3 @@ async function search(query) {
 | **AbortController** | Cancel fetch, listeners, streams — prevent race conditions & leaks |
 | **Memory Leaks** | Always clean up listeners, timers, subscriptions. Detect with heap snapshots. |
 | **Cleanup** | AbortController.abort() + returned unsubscribe functions |
-
-[⬆ Back to Top](#top)
-
----
-
-More Details:
-
-Get all articles related to system design
-Hashtag: SystemDesignWithZeeshanAli
-
-[systemdesignwithzeeshanali](https://dev.to/t/systemdesignwithzeeshanali)
-
-Git: https://github.com/ZeeshanAli-0704/front-end-system-design
-
-[⬆ Back to Top](#top)
