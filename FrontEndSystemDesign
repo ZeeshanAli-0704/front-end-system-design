@@ -1,192 +1,188 @@
+# Frontend System Design — Complete Guide
 
-#	Topic	File
-1	Critical Rendering Path	Critical-Rendering-Path.md
-2	DOM, CSSOM & Browser Rendering Pipeline	CSS-CSSOM-and-DOM-Rendering-in-Browser.md
-3	CSS/JS/UI Optimization	css-js-ui-optimization.md
-4	Font Optimization	font-optimization.md
-5	Image Optimization	image-optimization.md
-6	Video Optimization	video-optimization.md
-7	Network Optimization (HTTP/2-3, Caching, CDN, Compression, Code Splitting)	network-optimization.md
-8	Rendering Patterns (CSR, SSR, SSG, ISR, Prerendering)	Rendering-Patterns.md
-9	Scalable CSS Architecture (BEM, CSS Modules, Tailwind, CSS-in-JS, Design Tokens)	Scalable-CSS-Architecture.md
-10	Modern Large-Scale Reducer Design	Modern_Large_Scale_Reducer.md
-11	Redux Toolkit vs Zustand vs Jotai	Redux_Toolkit-vs-Zustand-vs-Jotai.md
-12	Web Accessibility (A11y)	Web_Accessibility_A11y_Complete_Guide.md
-13	Web Worker, Shared Worker & Service Worker	Web_Worker_SharedWorker_and_Service_Worker.md
-14	Asset Optimization Index	Optimization.md
-15	Authentication Flows (Session, JWT, OAuth 2.0, SSO, PKCE)	Authentication_Flows.md
-16	Frontend Security (XSS, CSRF, CORS, CSP, Clickjacking, Secure Cookies)	Frontend_Security.md
-17	Performance Monitoring & Observability (Core Web Vitals, RUM, Error Tracking, Budgets, Lighthouse CI)	Performance_Monitoring_and_Observability.md
-18	Offline Support & PWAs (Service Workers, Cache Strategies, IndexedDB, Background Sync, Push)	Offline_Support_and_PWA.md
-19	Event Handling & Pub/Sub Patterns (Delegation, Debounce, Throttle, AbortController)	Event_Handling_and_PubSub_Patterns.md
-20	Micro-Frontends & Module Federation (Monolith vs MFE, Hosting, Cross-Communication, Webpack MF)	Micro_Frontends_and_Module_Federation.md
-21	Logging, Analytics & Feature Flags (Event Tracking, A/B Testing, LaunchDarkly, Unleash, Error Tracking, Log Pipelines)	Logging_Analytics_and_Feature_Flags.md
+> A comprehensive collection of frontend system design concepts, patterns, and interview-ready guides.
 
+---
 
-Missing Concepts from a Frontend System Design Perspective
-1. Communication Protocols & Real-Time Data
-REST vs GraphQL vs gRPC-Web — trade-offs, pagination (cursor vs offset), schema design
-WebSockets vs SSE (Server-Sent Events) vs Long Polling — when to use which
-Real-time data synchronization (Operational Transforms, CRDTs)
-2. API Design & Data Layer
-API Gateway / BFF (Backend-for-Frontend) pattern
-Client-side data fetching strategies (React Query / TanStack Query, SWR, Apollo Client)
-Optimistic updates, stale-while-revalidate, cache invalidation
-API error handling, retry strategies, exponential backoff
-Pagination patterns (infinite scroll, cursor-based, offset-based)
-3. Authentication & Security
-Authentication flows (OAuth 2.0, JWT, Session-based, SSO)
-XSS, CSRF, Clickjacking — attack vectors & prevention
-Content Security Policy (CSP)
-CORS deep dive
-Secure cookie handling (HttpOnly, SameSite, Secure flags)
-Input sanitization & output encoding
-4. Component Architecture & Design Systems
-Component design principles (Compound Components, Render Props, HOCs, Hooks patterns)
-Design system architecture (tokens, primitives, composites)
-Micro-frontends — Module Federation, Single-SPA, architecture trade-offs
-Monorepo strategies (Nx, Turborepo) for large-scale frontends
-Storybook-driven development & component documentation
-5. Routing & Navigation
-Client-side routing (History API, Hash routing)
-Dynamic/nested routing patterns
-Route-based code splitting & prefetching
-Deep linking & universal links
-Navigation guards & auth-protected routes
-6. State Management (broader)
-Server state vs client state vs URL state — when to use what
-State machines (XState) for complex UI flows
-URL as state (query params, search params management)
-Form state management (React Hook Form, Formik patterns)
-7. Performance Monitoring & Observability
-Core Web Vitals deep dive (LCP, FID/INP, CLS) — measurement & improvement
-Real User Monitoring (RUM) vs Synthetic monitoring
-Error tracking & logging (Sentry, LogRocket)
-Performance budgets — setting & enforcing
-Lighthouse CI / automated performance regression detection
-8. Testing Strategy
-Testing pyramid for frontend (Unit → Integration → E2E)
-Visual regression testing (Chromatic, Percy)
-Accessibility testing automation (axe-core, pa11y)
-Component testing (Testing Library philosophy)
-Contract testing for API boundaries
-Performance testing (Lighthouse CI in CI/CD)
-9. Build Tools & Bundling
-Webpack vs Vite vs Turbopack vs esbuild — trade-offs
-Tree shaking, dead code elimination deep dive
-Module systems (ESM vs CJS) and their impact
-Build optimization (parallelization, caching, incremental builds)
-Source maps — strategies for production debugging
-10. Internationalization (i18n) & Localization (l10n)
-i18n architecture (ICU message format, namespace-based loading)
-RTL (right-to-left) layout support
-Locale-aware formatting (dates, numbers, currencies)
-Dynamic language loading & bundle impact
-Pluralization, gender, and context-aware translations
-11. Offline Support & Progressive Web Apps (PWAs)
-Offline-first architecture patterns
-Cache strategies (Cache First, Network First, Stale-While-Revalidate)
-IndexedDB for client-side storage
-Background Sync & Push Notifications
-App Shell architecture
-Installability & Web App Manifest
-12. Error Handling & Resilience
-Error boundaries (React/framework-level)
-Graceful degradation vs progressive enhancement
-Circuit breaker pattern on the frontend
-Fallback UIs, skeleton screens, empty states
-Retry logic & dead letter queues for failed operations
-13. SEO for SPAs & Modern Apps
-SEO challenges in client-rendered apps
-Meta tag management (React Helmet, Next.js Head)
-Structured data (JSON-LD, Schema.org)
-Sitemap generation & robots.txt strategy
-Open Graph / Twitter Card meta for social sharing
-14. CI/CD & Deployment for Frontend
-Frontend deployment strategies (Blue-Green, Canary, Feature Flags)
-Static hosting (Vercel, Netlify, S3+CloudFront) architecture
-Preview deployments / per-PR environments
-Asset versioning & cache busting strategies
-Rollback strategies
-15. Virtualization & Handling Large Data Sets
-List virtualization (react-window, react-virtuoso, tanstack-virtual)
-Infinite scrolling implementation patterns
-Large table rendering (column virtualization, sticky headers)
-Canvas-based rendering for extreme data sets
-16. Animation & Interaction Design
-CSS animations vs JS animations vs Web Animations API
-requestAnimationFrame & frame budgets (16ms)
-GPU-accelerated properties (transform, opacity)
-Layout thrashing avoidance
-Gesture handling (touch, drag, swipe)
-Animation libraries trade-offs (Framer Motion, GSAP, Lottie)
-17. Event Handling & Pub/Sub Patterns
-Event delegation & bubbling strategies
-Debounce, throttle, requestIdleCallback
-Custom event bus / pub-sub for decoupled communication
-AbortController for cancellable requests
-18. Client-Side Storage
-localStorage vs sessionStorage vs IndexedDB vs Cookies — when to use which
-Storage quotas & eviction policies
-Encryption of client-side data
-Cross-tab communication (BroadcastChannel, storage events)
-19. Logging, Analytics & Feature Flags
-Analytics architecture (event tracking, funnel tracking)
-A/B testing infrastructure on the frontend
-Feature flag systems (LaunchDarkly, Unleash) & their design
-Session replay & heatmaps architecture
-20. Responsive & Adaptive Design
-Mobile-first vs desktop-first strategies
-Container queries vs media queries
-Adaptive loading (network-aware, device-aware)
-Responsive typography (clamp, fluid type scales)
+<a id="top"></a>
 
+## Table of Contents
 
+- [Published Articles](#published-articles)
+- [Upcoming Topics](#upcoming-topics)
+- [Article Improvement Notes](#article-improvement-notes)
 
+[⬆ Back to Top](#top)
 
+---
 
+## Published Articles
 
+| # | Topic | File |
+|---|-------|------|
+| 1 | Critical Rendering Path | [Critical-Rendering-Path.md](Concepts/Critical-Rendering-Path.md) |
+| 2 | DOM, CSSOM and Browser Rendering Pipeline | [CSS-CSSOM-and-DOM-Rendering-in-Browser.md](Concepts/CSS-CSSOM-and-DOM-Rendering-in-Browser.md) |
+| 3 | CSS, JS, UI Optimization | [css-js-ui-optimization.md](Concepts/css-js-ui-optimization.md) |
+| 4 | Font Optimization | [font-optimization.md](Concepts/font-optimization.md) |
+| 5 | Image Optimization | [image-optimization.md](Concepts/image-optimization.md) |
+| 6 | Video Optimization | [video-optimization.md](Concepts/video-optimization.md) |
+| 7 | Network Optimization (HTTP 2 and 3, Caching, CDN, Compression, Code Splitting) | [network-optimization.md](Concepts/network-optimization.md) |
+| 8 | Rendering Patterns (CSR, SSR, SSG, ISR, Prerendering) | [Rendering-Patterns.md](Concepts/Rendering-Patterns.md) |
+| 9 | Scalable CSS Architecture (BEM, CSS Modules, Tailwind, CSS in JS, Design Tokens) | [Scalable-CSS-Architecture.md](Concepts/Scalable-CSS-Architecture.md) |
+| 10 | Modern Large Scale Reducer Design | [Modern_Large_Scale_Reducer.md](Concepts/Modern_Large_Scale_Reducer.md) |
+| 11 | Redux Toolkit vs Zustand vs Jotai | [Redux_Toolkit-vs-Zustand-vs-Jotai.md](Concepts/Redux_Toolkit-vs-Zustand-vs-Jotai.md) |
+| 12 | Web Accessibility (A11y) | [Web_Accessibility_A11y_Complete_Guide.md](Concepts/Web_Accessibility_A11y_Complete_Guide.md) |
+| 13 | Web Worker, Shared Worker and Service Worker | [Web_Worker_SharedWorker_and_Service_Worker.md](Concepts/Web_Worker_SharedWorker_and_Service_Worker.md) |
+| 14 | Asset Optimization Index | [Optimization.md](Concepts/Optimization.md) |
+| 15 | Authentication Flows (Session, JWT, OAuth 2.0, SSO, PKCE) | [Authentication_Flows.md](Concepts/Authentication_Flows.md) |
+| 16 | Frontend Security (XSS, CSRF, CORS, CSP, Clickjacking, Secure Cookies) | [Frontend_Security.md](Concepts/Frontend_Security.md) |
+| 17 | Performance Monitoring and Observability (Core Web Vitals, RUM, Error Tracking, Budgets) | [Performance_Monitoring_and_Observability.md](Concepts/Performance_Monitoring_and_Observability.md) |
+| 18 | Offline Support and PWAs (Service Workers, Cache Strategies, IndexedDB, Background Sync, Push) | [Offline_Support_and_PWA.md](Concepts/Offline_Support_and_PWA.md) |
+| 19 | Event Handling and Pub Sub Patterns (Delegation, Debounce, Throttle, AbortController) | [Event_Handling_and_PubSub_Patterns.md](Concepts/Event_Handling_and_PubSub_Patterns.md) |
+| 20 | Micro Frontends and Module Federation (Monolith vs MFE, Hosting, Cross Communication, Webpack MF) | [Micro_Frontends_and_Module_Federation.md](Concepts/Micro_Frontends_and_Module_Federation.md) |
+| 21 | Logging, Analytics and Feature Flags (Event Tracking, A B Testing, LaunchDarkly, Unleash, Error Tracking) | [Logging_Analytics_and_Feature_Flags.md](Concepts/Logging_Analytics_and_Feature_Flags.md) |
+| 22 | Communication Protocols and Real Time Data (HTTP, Polling, WebSockets, SSE, WebRTC, gRPC Web) | [Communication_Protocols_and_Real-Time_Data.md](Concepts/Communication_Protocols_and_Real-Time_Data.md) |
+| 23 | Pagination Patterns (Offset, Cursor, Keyset, Infinite Scroll, Virtual Scroll) | [Pagination_Patterns.md](Concepts/Pagination_Patterns.md) |
+| 24 | Virtualization and Handling Large Data Sets | [Virtualization_and_Large_Data_Sets.md](Concepts/Virtualization_and_Large_Data_Sets.md) |
+| 25 | Browser Caching for Web Apps | [Browser_Caching_Web_apps.md](Concepts/Browser_Caching_Web_apps.md) |
+| 26 | Evolution of the Web HTTP Protocol | [Evolution_the_Web_HTTP_Protocol.md](Concepts/Evolution_the_Web_HTTP_Protocol.md) |
 
+[⬆ Back to Top](#top)
 
+---
 
-Axios interceptor code	Syntax error in export	export { api, setAccessToken: (t) => (accessToken = t) } — this is invalid JS. Should be export { api }; export const setAccessToken = (t) => (accessToken = t); or use export default
+## Upcoming Topics
 
+### API Design and Data Layer
+- API Gateway, BFF (Backend for Frontend) pattern
+- Client side data fetching strategies (React Query, TanStack Query, SWR, Apollo Client)
+- Optimistic updates, stale while revalidate, cache invalidation
+- API error handling, retry strategies, exponential backoff
 
+### Component Architecture and Design Systems
+- Component design principles (Compound Components, Render Props, HOCs, Hooks patterns)
+- Design system architecture (tokens, primitives, composites)
+- Monorepo strategies (Nx, Turborepo) for large scale frontends
+- Storybook driven development and component documentation
 
-13. network-optimization.md
-Line Area	Issue	Details
-HTTP/3 Server Push	States "Yes" for HTTP/3 Server Push	HTTP/3 does NOT support Server Push. The QUIC RFC explicitly removed Server Push support. While technically the HTTP/3 spec defines it, Chrome removed support for Server Push (H2 and H3) in Chrome 106. This should be noted.
+### Routing and Navigation
+- Client side routing (History API, Hash routing)
+- Dynamic and nested routing patterns
+- Route based code splitting and prefetching
+- Deep linking and universal links
+- Navigation guards and auth protected routes
 
+### State Management (Broader)
+- Server state vs client state vs URL state
+- State machines (XState) for complex UI flows
+- URL as state (query params, search params management)
+- Form state management (React Hook Form, Formik patterns)
 
+### Testing Strategy
+- Testing pyramid for frontend (Unit, Integration, E2E)
+- Visual regression testing (Chromatic, Percy)
+- Accessibility testing automation (axe core, pa11y)
+- Component testing (Testing Library philosophy)
+- Contract testing for API boundaries
+- Performance testing (Lighthouse CI in CI CD)
 
-Critical-Rendering-Path.md
-content-visibility: auto — A powerful CSS property that lets the browser skip rendering off-screen content. Very relevant to CRP optimization.
+### Build Tools and Bundling
+- Webpack vs Vite vs Turbopack vs esbuild
+- Tree shaking, dead code elimination deep dive
+- Module systems (ESM vs CJS) and their impact
+- Build optimization (parallelization, caching, incremental builds)
+- Source maps strategies for production debugging
 
+### Internationalization (i18n) and Localization (l10n)
+- i18n architecture (ICU message format, namespace based loading)
+- RTL (right to left) layout support
+- Locale aware formatting (dates, numbers, currencies)
+- Dynamic language loading and bundle impact
+- Pluralization, gender, and context aware translations
 
+### Error Handling and Resilience
+- Error boundaries (React and framework level)
+- Graceful degradation vs progressive enhancement
+- Circuit breaker pattern on the frontend
+- Fallback UIs, skeleton screens, empty states
+- Retry logic and dead letter queues for failed operations
 
-CSS-CSSOM-and-DOM-Rendering-in-Browser.md
-Heavy overlap with CRP article — Consider adding a cross-reference note at the top explaining how the two articles relate. CRP focuses on optimization; this one focuses on the rendering mechanics.
-content-visibility and CSS containment (contain property) — Modern browser rendering optimizations missing.
+### SEO for SPAs and Modern Apps
+- SEO challenges in client rendered apps
+- Meta tag management (React Helmet, Next.js Head)
+- Structured data (JSON LD, Schema.org)
+- Sitemap generation and robots.txt strategy
+- Open Graph and Twitter Card meta for social sharing
 
+### CI CD and Deployment for Frontend
+- Frontend deployment strategies (Blue Green, Canary, Feature Flags)
+- Static hosting (Vercel, Netlify, S3 and CloudFront) architecture
+- Preview deployments and per PR environments
+- Asset versioning and cache busting strategies
+- Rollback strategies
 
-css-js-ui-optimization.md
-@import vs <link> penalty — Not mentioned that @import in CSS creates sequential downloads.
-PurgeCSS / dead CSS elimination — Only mentioned in CRP article but not here where it fits naturally.
+### Animation and Interaction Design
+- CSS animations vs JS animations vs Web Animations API
+- requestAnimationFrame and frame budgets (16ms)
+- GPU accelerated properties (transform, opacity)
+- Layout thrashing avoidance
+- Gesture handling (touch, drag, swipe)
+- Animation libraries tradeoffs (Framer Motion, GSAP, Lottie)
 
+### Client Side Storage
+- localStorage vs sessionStorage vs IndexedDB vs Cookies
+- Storage quotas and eviction policies
+- Encryption of client side data
+- Cross tab communication (BroadcastChannel, storage events)
 
-image-optimization.md
-fetchpriority attribute — Mentioned briefly but not with a dedicated section. Very important for LCP.
+### Responsive and Adaptive Design
+- Mobile first vs desktop first strategies
+- Container queries vs media queries
+- Adaptive loading (network aware, device aware)
+- Responsive typography (clamp, fluid type scales)
 
+[⬆ Back to Top](#top)
 
+---
 
-network-optimization.md
-103 Early Hints — A new HTTP status code that allows servers to send preload/preconnect hints before the full response. Important for TTFB optimization.
-stale-while-revalidate directive — Mentioned in a table row but not explained with examples.
+## Article Improvement Notes
 
+### Critical-Rendering-Path.md
+- `content-visibility: auto` — A powerful CSS property that lets the browser skip rendering off screen content. Very relevant to CRP optimization.
 
+### CSS-CSSOM-and-DOM-Rendering-in-Browser.md
+- Heavy overlap with CRP article — Consider adding a cross reference note at the top explaining how the two articles relate. CRP focuses on optimization; this one focuses on the rendering mechanics.
+- `content-visibility` and CSS containment (`contain` property) — Modern browser rendering optimizations missing.
 
-video-optimization.md
-DASH (Dynamic Adaptive Streaming over HTTP) — HLS is covered but DASH is only mentioned in passing. Should at least note the difference.
-Intersection Observer for lazy video loading — Load video only when scrolled into view.
-<video> accessibility — Captions (<track>), aria-label, keyboard controls. Not mentioned at all.
-Video compression comparison table — File size savings per codec at equivalent quality.
+### css-js-ui-optimization.md
+- `@import` vs `<link>` penalty — Not mentioned that `@import` in CSS creates sequential downloads.
+- PurgeCSS and dead CSS elimination — Only mentioned in CRP article but not here where it fits naturally.
+
+### image-optimization.md
+- `fetchpriority` attribute — Mentioned briefly but not with a dedicated section. Very important for LCP.
+
+### network-optimization.md
+- HTTP/3 Server Push — States "Yes" for HTTP/3 Server Push. HTTP/3 does NOT support Server Push. Chrome removed support in Chrome 106. This should be corrected.
+- 103 Early Hints — A new HTTP status code that allows servers to send preload and preconnect hints before the full response. Important for TTFB optimization.
+- `stale-while-revalidate` directive — Mentioned in a table row but not explained with examples.
+
+### video-optimization.md
+- DASH (Dynamic Adaptive Streaming over HTTP) — HLS is covered but DASH is only mentioned in passing. Should at least note the difference.
+- Intersection Observer for lazy video loading — Load video only when scrolled into view.
+- `<video>` accessibility — Captions (`<track>`), `aria-label`, keyboard controls. Not mentioned at all.
+- Video compression comparison table — File size savings per codec at equivalent quality.
+
+[⬆ Back to Top](#top)
+
+---
+
+More Details:
+
+Get all articles related to system design
+Hashtag: SystemDesignWithZeeshanAli
+
+[systemdesignwithzeeshanali](https://dev.to/t/systemdesignwithzeeshanali)
+
+Git: https://github.com/ZeeshanAli-0704/front-end-system-design
+
+[⬆ Back to Top](#top)
