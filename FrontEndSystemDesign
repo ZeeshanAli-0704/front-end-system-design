@@ -20,17 +20,17 @@
 
 | # | Topic | File |
 |---|-------|------|
-| 1 | Critical Rendering Path | [Critical-Rendering-Path.md](Concepts/Critical-Rendering-Path.md) |
-| 2 | DOM, CSSOM and Browser Rendering Pipeline | [CSS-CSSOM-and-DOM-Rendering-in-Browser.md](Concepts/CSS-CSSOM-and-DOM-Rendering-in-Browser.md) |
-| 3 | CSS, JS, UI Optimization | [css-js-ui-optimization.md](Concepts/css-js-ui-optimization.md) |
-| 4 | Font Optimization | [font-optimization.md](Concepts/font-optimization.md) |
-| 5 | Image Optimization | [image-optimization.md](Concepts/image-optimization.md) |
-| 6 | Video Optimization | [video-optimization.md](Concepts/video-optimization.md) |
-| 7 | Network Optimization (HTTP 2 and 3, Caching, CDN, Compression, Code Splitting) | [network-optimization.md](Concepts/network-optimization.md) |
-| 8 | Rendering Patterns (CSR, SSR, SSG, ISR, Prerendering) | [Rendering-Patterns.md](Concepts/Rendering-Patterns.md) |
-| 9 | Scalable CSS Architecture (BEM, CSS Modules, Tailwind, CSS in JS, Design Tokens) | [Scalable-CSS-Architecture.md](Concepts/Scalable-CSS-Architecture.md) |
+| 1 | Critical Rendering Path | [Critical_Rendering_Path.md](Concepts/Critical_Rendering_Path.md) |
+| 2 | DOM, CSSOM and Browser Rendering Pipeline | [CSS_CSSOM_and_DOM_Rendering_in_Browser.md](Concepts/CSS_CSSOM_and_DOM_Rendering_in_Browser.md) |
+| 3 | CSS, JS, UI Optimization | [CSS_JS_UI_Optimization.md](Concepts/CSS_JS_UI_Optimization.md) |
+| 4 | Font Optimization | [Font_Optimization.md](Concepts/Font_Optimization.md) |
+| 5 | Image Optimization | [Image_Optimization.md](Concepts/Image_Optimization.md) |
+| 6 | Video Optimization | [Video_Optimization.md](Concepts/Video_Optimization.md) |
+| 7 | Network Optimization (HTTP 2 and 3, Caching, CDN, Compression, Code Splitting) | [Network_Optimization.md](Concepts/Network_Optimization.md) |
+| 8 | Rendering Patterns (CSR, SSR, SSG, ISR, Prerendering) | [Rendering_Patterns.md](Concepts/Rendering_Patterns.md) |
+| 9 | Scalable CSS Architecture (BEM, CSS Modules, Tailwind, CSS in JS, Design Tokens) | [Scalable_CSS_Architecture.md](Concepts/Scalable_CSS_Architecture.md) |
 | 10 | Modern Large Scale Reducer Design | [Modern_Large_Scale_Reducer.md](Concepts/Modern_Large_Scale_Reducer.md) |
-| 11 | Redux Toolkit vs Zustand vs Jotai | [Redux_Toolkit-vs-Zustand-vs-Jotai.md](Concepts/Redux_Toolkit-vs-Zustand-vs-Jotai.md) |
+| 11 | Redux Toolkit vs Zustand vs Jotai | [Redux_Toolkit_vs_Zustand_vs_Jotai.md](Concepts/Redux_Toolkit_vs_Zustand_vs_Jotai.md) |
 | 12 | Web Accessibility (A11y) | [Web_Accessibility_A11y_Complete_Guide.md](Concepts/Web_Accessibility_A11y_Complete_Guide.md) |
 | 13 | Web Worker, Shared Worker and Service Worker | [Web_Worker_SharedWorker_and_Service_Worker.md](Concepts/Web_Worker_SharedWorker_and_Service_Worker.md) |
 | 14 | Asset Optimization Index | [Optimization.md](Concepts/Optimization.md) |
@@ -41,10 +41,10 @@
 | 19 | Event Handling and Pub Sub Patterns (Delegation, Debounce, Throttle, AbortController) | [Event_Handling_and_PubSub_Patterns.md](Concepts/Event_Handling_and_PubSub_Patterns.md) |
 | 20 | Micro Frontends and Module Federation (Monolith vs MFE, Hosting, Cross Communication, Webpack MF) | [Micro_Frontends_and_Module_Federation.md](Concepts/Micro_Frontends_and_Module_Federation.md) |
 | 21 | Logging, Analytics and Feature Flags (Event Tracking, A B Testing, LaunchDarkly, Unleash, Error Tracking) | [Logging_Analytics_and_Feature_Flags.md](Concepts/Logging_Analytics_and_Feature_Flags.md) |
-| 22 | Communication Protocols and Real Time Data (HTTP, Polling, WebSockets, SSE, WebRTC, gRPC Web) | [Communication_Protocols_and_Real-Time_Data.md](Concepts/Communication_Protocols_and_Real-Time_Data.md) |
+| 22 | Communication Protocols and Real Time Data (HTTP, Polling, WebSockets, SSE, WebRTC, gRPC Web) | [Communication_Protocols_and_Real_Time_Data.md](Concepts/Communication_Protocols_and_Real_Time_Data.md) |
 | 23 | Pagination Patterns (Offset, Cursor, Keyset, Infinite Scroll, Virtual Scroll) | [Pagination_Patterns.md](Concepts/Pagination_Patterns.md) |
 | 24 | Virtualization and Handling Large Data Sets | [Virtualization_and_Large_Data_Sets.md](Concepts/Virtualization_and_Large_Data_Sets.md) |
-| 25 | Browser Caching for Web Apps | [Browser_Caching_Web_apps.md](Concepts/Browser_Caching_Web_apps.md) |
+| 25 | Browser Caching for Web Apps | [Browser_Caching_Web_Apps.md](Concepts/Browser_Caching_Web_Apps.md) |
 | 26 | Evolution of the Web HTTP Protocol | [Evolution_the_Web_HTTP_Protocol.md](Concepts/Evolution_the_Web_HTTP_Protocol.md) |
 
 [⬆ Back to Top](#top)

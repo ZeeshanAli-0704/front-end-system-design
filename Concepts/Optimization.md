@@ -6,7 +6,7 @@
 
 ## Articles
 
-### 1. [Image Optimization](image-optimization.md)
+### 1. [Image Optimization](Image_Optimization.md)
 - Image Formats (JPEG, PNG, WebP, AVIF, SVG)
 - Device Pixel Ratio (DPR)
 - Responsive Images (srcset, sizes)
@@ -19,7 +19,7 @@
 - CSS Sprite Images
 - Adaptive Media Loading
 
-### 2. [Video Optimization](video-optimization.md)
+### 2. [Video Optimization](Video_Optimization.md)
 - Progressive Enhancement for Video
 - Video Formats (WebM, MP4)
 - Progressive Poster Images
@@ -28,14 +28,14 @@
 - Platform-Based Video Dimensions
 - Video Preloading Strategy
 
-### 3. [Font Optimization](font-optimization.md)
+### 3. [Font Optimization](Font_Optimization.md)
 - Common Font Loading Issues (FOUT, FOIT)
 - Font Display Strategy
 - Font Format Optimization (WOFF2, WOFF)
 - Font Preloading
 - Font Face Observer
 
-### 4. [CSS, JavaScript & UI Optimization](css-js-ui-optimization.md)
+### 4. [CSS, JavaScript & UI Optimization](CSS_JS_UI_Optimization.md)
 - Critical CSS Rendering
 - Non-Critical CSS (Async Loading)
 - Lazy Loading CSS (Media-Based)
@@ -45,7 +45,7 @@
 - Configurable UI (Conditional Rendering)
 - Streaming UI Rendering
 
-### 5. [Network Optimization](network-optimization.md)
+### 5. [Network Optimization](Network_Optimization.md)
 - HTTP/2 and HTTP/3
 - Resource Hints (preload, prefetch, preconnect, dns-prefetch)
 - Caching Strategies

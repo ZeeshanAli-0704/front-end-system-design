@@ -35,9 +35,9 @@
 
 | # | Case Study | Description |
 |---|-----------|-------------|
-| 1 | [Facebook News Feed](./Case_Studies/Facebook/Frontend-System-Design-Facebook-News-Feed.md) | Facebook News Feed Design, Components, API, Data Model |
-| 2 | [Pinterest](./Case_Studies/Pinterest/Frontend-System-Design-Pinterest.md) | Pinterest Design, Components, API, Data Model |
-| 3 | [TypeHead / AutoComplete](./Case_Studies/TypeHead) | Auto complete backend and frontend design, LLD, HLD, UI usage |
+| 1 | [Facebook News Feed](./Case_Studies/Facebook/Frontend_System_Design_Facebook_News_Feed.md) | Facebook News Feed Design, Components, API, Data Model |
+| 2 | [Pinterest](./Case_Studies/Pinterest/Frontend_System_Design_Pinterest.md) | Pinterest Design, Components, API, Data Model |
+| 3 | [Typeahead / Autocomplete](./Case_Studies/Typeahead) | Autocomplete backend and frontend design, LLD, HLD, UI usage |
 
 [⬆ Back to Top](#top)
 
@@ -49,8 +49,8 @@
 
 | # | Topic | Description |
 |---|-------|-------------|
-| 1 | [Critical Rendering Path](./Concepts/Critical-Rendering-Path.md) | The sequence of steps the browser takes to convert HTML, CSS, and JS into pixels. Covers CRP optimization techniques, resource hints, inline critical CSS, defer JS, and performance metrics. |
-| 2 | [DOM, CSSOM and Browser Rendering Pipeline](./Concepts/CSS-CSSOM-and-DOM-Rendering-in-Browser.md) | How browsers build the DOM, CSSOM, and Render Tree. Full rendering pipeline (parse, layout, paint, composite), reflow vs repaint, Virtual DOM, progressive rendering, and debugging tools. |
+| 1 | [Critical Rendering Path](./Concepts/Critical_Rendering_Path.md) | The sequence of steps the browser takes to convert HTML, CSS, and JS into pixels. Covers CRP optimization techniques, resource hints, inline critical CSS, defer JS, and performance metrics. |
+| 2 | [DOM, CSSOM and Browser Rendering Pipeline](./Concepts/CSS_CSSOM_and_DOM_Rendering_in_Browser.md) | How browsers build the DOM, CSSOM, and Render Tree. Full rendering pipeline (parse, layout, paint, composite), reflow vs repaint, Virtual DOM, progressive rendering, and debugging tools. |
 
 [⬆ Back to Top](#top)
 
@@ -59,11 +59,11 @@
 | # | Topic | Description |
 |---|-------|-------------|
 | 3 | [Optimization Index](./Concepts/Optimization.md) | Hub page linking to all asset optimization articles with a quick reference performance metrics impact table (LCP, FCP, CLS, TTI, TTFB). |
-| 4 | [Image Optimization](./Concepts/image-optimization.md) | Image formats (JPEG, PNG, WebP, AVIF, SVG), responsive images (srcset, sizes), lazy loading, compression, Image CDN, art direction, and placeholder strategies (LQIP, BlurHash). |
-| 5 | [Video Optimization](./Concepts/video-optimization.md) | Progressive enhancement, video formats (WebM, MP4, AV1), poster images, adaptive streaming (HLS, DASH), platform based dimensions, preloading, and accessibility. |
-| 6 | [Font Optimization](./Concepts/font-optimization.md) | FOUT and FOIT issues, font display strategy, WOFF2 and WOFF formats, font preloading, subsetting, variable fonts, and Font Face Observer. |
-| 7 | [CSS, JS and UI Optimization](./Concepts/css-js-ui-optimization.md) | Critical CSS, async and lazy CSS loading, JS async and defer, module loading and tree shaking, configurable UI, streaming UI rendering with React Suspense. |
-| 8 | [Network Optimization](./Concepts/network-optimization.md) | HTTP 2 and HTTP 3, resource hints (preload, prefetch, preconnect), caching strategies, Gzip and Brotli compression, CDN, bundle and code splitting, Service Workers, 103 Early Hints, stale while revalidate. |
+| 4 | [Image Optimization](./Concepts/Image_Optimization.md) | Image formats (JPEG, PNG, WebP, AVIF, SVG), responsive images (srcset, sizes), lazy loading, compression, Image CDN, art direction, and placeholder strategies (LQIP, BlurHash). |
+| 5 | [Video Optimization](./Concepts/Video_Optimization.md) | Progressive enhancement, video formats (WebM, MP4, AV1), poster images, adaptive streaming (HLS, DASH), platform based dimensions, preloading, and accessibility. |
+| 6 | [Font Optimization](./Concepts/Font_Optimization.md) | FOUT and FOIT issues, font display strategy, WOFF2 and WOFF formats, font preloading, subsetting, variable fonts, and Font Face Observer. |
+| 7 | [CSS, JS and UI Optimization](./Concepts/CSS_JS_UI_Optimization.md) | Critical CSS, async and lazy CSS loading, JS async and defer, module loading and tree shaking, configurable UI, streaming UI rendering with React Suspense. |
+| 8 | [Network Optimization](./Concepts/Network_Optimization.md) | HTTP 2 and HTTP 3, resource hints (preload, prefetch, preconnect), caching strategies, Gzip and Brotli compression, CDN, bundle and code splitting, Service Workers, 103 Early Hints, stale while revalidate. |
 
 [⬆ Back to Top](#top)
 
@@ -71,8 +71,8 @@
 
 | # | Topic | Description |
 |---|-------|-------------|
-| 9 | [Rendering Patterns](./Concepts/Rendering-Patterns.md) | CSR, SSR, Universal Isomorphic Rendering, SSG, ISR, Prerendering, React Server Components, Streaming SSR with request response flows, comparison matrix, and decision flowchart. |
-| 10 | [Scalable CSS Architecture](./Concepts/Scalable-CSS-Architecture.md) | BEM, SMACSS, OOCSS, CSS Modules, CSS in JS, Tailwind, Vanilla Extract, CSS layers, design tokens, theming, migration strategies, performance, and auditing. |
+| 9 | [Rendering Patterns](./Concepts/Rendering_Patterns.md) | CSR, SSR, Universal Isomorphic Rendering, SSG, ISR, Prerendering, React Server Components, Streaming SSR with request response flows, comparison matrix, and decision flowchart. |
+| 10 | [Scalable CSS Architecture](./Concepts/Scalable_CSS_Architecture.md) | BEM, SMACSS, OOCSS, CSS Modules, CSS in JS, Tailwind, Vanilla Extract, CSS layers, design tokens, theming, migration strategies, performance, and auditing. |
 
 [⬆ Back to Top](#top)
 
@@ -81,7 +81,7 @@
 | # | Topic | Description |
 |---|-------|-------------|
 | 11 | [Modern Large Scale Reducer Design](./Concepts/Modern_Large_Scale_Reducer.md) | Scalable state architecture with feature sliced design, Redux Toolkit slices, RTK Query, normalized state, memoized selectors, async patterns, and cross feature communication. |
-| 12 | [Redux Toolkit vs Zustand vs Jotai](./Concepts/Redux_Toolkit-vs-Zustand-vs-Jotai.md) | Mental models (centralized vs hook based vs atomic), side by side feature comparison, performance and re render behavior, middleware, DevTools, TypeScript, SSR support, and decision frameworks. |
+| 12 | [Redux Toolkit vs Zustand vs Jotai](./Concepts/Redux_Toolkit_vs_Zustand_vs_Jotai.md) | Mental models (centralized vs hook based vs atomic), side by side feature comparison, performance and re render behavior, middleware, DevTools, TypeScript, SSR support, and decision frameworks. |
 
 [⬆ Back to Top](#top)
 
@@ -89,9 +89,9 @@
 
 | # | Topic | Description |
 |---|-------|-------------|
-| 13 | [Communication Protocols and Real Time Data](./Concepts/Communication_Protocols_and_Real-Time_Data.md) | HTTP, Short Polling, Long Polling, SSE, WebSockets, WebRTC, gRPC Web, GraphQL Subscriptions, microservice communication patterns, comparison table, and decision flowchart. |
+| 13 | [Communication Protocols and Real Time Data](./Concepts/Communication_Protocols_and_Real_Time_Data.md) | HTTP, Short Polling, Long Polling, SSE, WebSockets, WebRTC, gRPC Web, GraphQL Subscriptions, microservice communication patterns, comparison table, and decision flowchart. |
 | 14 | [Pagination Patterns](./Concepts/Pagination_Patterns.md) | Offset based, Cursor based, Keyset, Page number pagination. Frontend patterns: Infinite Scroll, Load More, Virtual Scroll. Real world architecture examples and edge cases. |
-| 15 | [Browser Caching for Web Apps](./Concepts/Browser_Caching_Web_apps.md) | Cache Control headers, content hashed filenames, deployment order, CDN best practices, Service Worker caching, ETags, and a deployment checklist. |
+| 15 | [Browser Caching for Web Apps](./Concepts/Browser_Caching_Web_Apps.md) | Cache Control headers, content hashed filenames, deployment order, CDN best practices, Service Worker caching, ETags, and a deployment checklist. |
 | 16 | [Evolution of the Web HTTP Protocol](./Concepts/Evolution_the_Web_HTTP_Protocol.md) | Comparing HTTP 1.1, HTTP 2, and HTTP 3. Head of line blocking, multiplexing, QUIC, 0 RTT handshake, and connection migration. |
 
 [⬆ Back to Top](#top)
@@ -158,6 +158,17 @@
 ---
 
 ## Contributing
+
+### File Naming Convention
+
+All files and folders in this repository follow **Snake_Case** — each word is capitalized and separated by underscores.
+
+| Rule | Example |
+|------|---------|
+| Capitalize each word | `Image_Optimization.md` |
+| Separate words with underscores | `Critical_Rendering_Path.md` |
+| Acronyms stay uppercase | `CSS_JS_UI_Optimization.md` |
+| Connectors (`and`, `in`, `the`, `vs`) stay lowercase | `Redux_Toolkit_vs_Zustand_vs_Jotai.md` |
 
 Feel free to open issues or submit pull requests if you find any errors or want to suggest improvements.
 
