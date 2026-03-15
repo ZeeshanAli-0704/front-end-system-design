@@ -11,6 +11,8 @@ This guide covers **why accessibility matters**, **how to audit and check it**, 
 
 ---
 
+<a id="top"></a>
+
 ## 📚 Table of Contents
 
 - [Why Accessibility Matters](#why-accessibility-matters)
@@ -33,6 +35,8 @@ This guide covers **why accessibility matters**, **how to audit and check it**, 
 - [Accessibility Testing Checklist](#accessibility-testing-checklist)
 - [Key Interview Takeaways](#key-interview-takeaways)
 - [Further Reading and Resources](#further-reading-and-resources)
+
+[⬆ Back to Top](#top)
 
 ---
 
@@ -59,6 +63,8 @@ Over **1 billion people worldwide** live with some form of disability. That's ro
 
 > 💡 In 2025, over **4,000+ accessibility-related lawsuits** were filed in the US alone. Companies like Domino's, Nike, and Beyoncé's website have all faced legal action.
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## 🔹 Understanding WCAG Standards
@@ -83,6 +89,8 @@ Over **1 billion people worldwide** live with some form of disability. That's ro
 | **AAA**| Highest — gold standard (not always feasible)      | Color contrast ratio ≥ 7:1, sign language videos |
 
 > 🎯 **Most organizations aim for WCAG 2.1 Level AA** — this is the most commonly required level by law.
+
+[⬆ Back to Top](#top)
 
 ---
 
@@ -116,6 +124,8 @@ WCAG is built on **four foundational principles** known as **POUR**:
 - Ensure compatibility with **current and future** assistive technologies
 - Use **ARIA** when native semantics are insufficient
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## 🔹 Common Accessibility Issues in Web Apps
@@ -132,6 +142,8 @@ Here are the **most frequently found** accessibility violations (based on WebAIM
 | 6    | Empty table headers               | ~24%       | Data tables become impossible to navigate    |
 
 > ⚠️ These 6 issues alone account for **96%+ of all detected errors** across the top 1 million home pages.
+
+[⬆ Back to Top](#top)
 
 ---
 
@@ -191,6 +203,8 @@ The single most impactful thing you can do for accessibility is write **proper, 
 
 > 💡 **Rule of Thumb**: If a native HTML element can do the job, prefer it over a `<div>` + ARIA. The first rule of ARIA is: **Don't use ARIA if you can use native HTML.**
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## 🔹 ARIA Roles States and Properties
@@ -248,6 +262,8 @@ The single most impactful thing you can do for accessibility is write **proper, 
 
 > ⚠️ **Warning**: Incorrect ARIA is worse than no ARIA at all. A `<div role="button">` without keyboard handling misleads assistive tech users into thinking it's interactive when it's not.
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## 🔹 Keyboard Accessibility
@@ -303,6 +319,8 @@ The single most impactful thing you can do for accessibility is write **proper, 
 | `0`            | Follows natural DOM order                              | Custom interactive widgets           |
 | `-1`           | Focusable via JS, not via Tab key                      | Focus management (modals, errors)    |
 | `1+`           | ❌ Forces order — unpredictable and fragile             | **Never use**                        |
+
+[⬆ Back to Top](#top)
 
 ---
 
@@ -403,6 +421,8 @@ function trapFocus(modalElement) {
 }
 ```
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## 🔹 Color Contrast and Visual Design
@@ -437,6 +457,8 @@ function trapFocus(modalElement) {
 | **Colour Contrast Analyser** | Desktop   | Free app by TPGi                                   |
 | **Chrome DevTools**      | Browser       | Inspect element → Color picker shows ratio          |
 | **Stark (Figma Plugin)** | Design Tool   | Check contrast during the design phase              |
+
+[⬆ Back to Top](#top)
 
 ---
 
@@ -516,6 +538,8 @@ function validateEmail(input) {
 | Group related fields               | `<fieldset>` + `<legend>`                            |
 | Autocomplete hints are provided    | `autocomplete="email"`, `autocomplete="given-name"`  |
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## 🔹 Accessible Images and Media
@@ -565,6 +589,8 @@ function validateEmail(input) {
 </audio>
 <a href="/transcript/episode-42">Read the transcript</a>
 ```
+
+[⬆ Back to Top](#top)
 
 ---
 
@@ -629,6 +655,8 @@ useEffect(() => {
 }
 ```
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## 🔹 Accessible Modals Dialogs and Popups
@@ -671,6 +699,8 @@ If building custom modals, ensure you handle:
 | Background content is inert          | `aria-hidden="true"` on content behind modal or `inert` attribute |
 | Focus returns on close               | Save trigger reference, restore focus after closing         |
 | Announced as a dialog                | `role="dialog"` + `aria-labelledby`                        |
+
+[⬆ Back to Top](#top)
 
 ---
 
@@ -726,6 +756,8 @@ button, a, input[type="checkbox"], input[type="radio"] {
   }
 }
 ```
+
+[⬆ Back to Top](#top)
 
 ---
 
@@ -863,6 +895,8 @@ jobs:
 }
 ```
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## 🔹 How to Fix Accessibility Issues Step by Step
@@ -910,6 +944,8 @@ npx pa11y https://yoursite.com
 - Add `jest-axe` tests for every component
 - Add Pa11y or axe-core to your CI pipeline
 - Schedule quarterly manual audits
+
+[⬆ Back to Top](#top)
 
 ---
 
@@ -1020,6 +1056,8 @@ async function onNavigate() {
 <!-- { "extends": ["plugin:vuejs-accessibility/recommended"] } -->
 ```
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## 🔹 Accessibility Testing Checklist
@@ -1079,6 +1117,8 @@ Use this checklist for every component and page before release:
 }
 ```
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## 🔹 Key Interview Takeaways
@@ -1096,6 +1136,8 @@ Use this checklist for every component and page before release:
 | **Testing**               | Automated (axe, Lighthouse) catches ~30-40%; manual + screen reader testing is essential     |
 | **SPAs**                  | Announce route changes, manage focus on navigation                                           |
 | **CI/CD**                 | Integrate axe-core or Pa11y into your pipeline to prevent regressions                        |
+
+[⬆ Back to Top](#top)
 
 ---
 
@@ -1129,3 +1171,5 @@ Hastag: SystemDesignWithZeeshanAli
 [systemdesignwithzeeshanali](https://dev.to/t/systemdesignwithzeeshanali)
 
 Git: https://github.com/ZeeshanAli-0704/front-end-system-design
+
+[⬆ Back to Top](#top)

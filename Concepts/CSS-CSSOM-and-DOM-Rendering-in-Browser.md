@@ -9,7 +9,11 @@ Most developers write HTML and CSS daily without truly understanding **how the b
 
 This guide covers **what DOM and CSSOM are**, **why the rendering pipeline matters**, **how each stage works internally**, **when things go wrong (and how to fix them)**, and **best practices** for building performant UIs.
 
+> **See also:** [Critical Rendering Path (CRP) Guide](Critical-Rendering-Path.md) — focuses on **optimizing** the rendering pipeline (inline critical CSS, defer JS, resource hints, etc.). This article focuses on **understanding the rendering mechanics** themselves — how the DOM, CSSOM, Render Tree, Layout, Paint, and Composite stages work internally.
+
 ---
+
+<a id="top"></a>
 
 ## 📚 Table of Contents
 
@@ -31,11 +35,14 @@ This guide covers **what DOM and CSSOM are**, **why the rendering pipeline matte
 - [Progressive Rendering and Streaming](#progressive-rendering-and-streaming)
 - [Pros vs Cons of Rendering Strategies](#pros-vs-cons-of-rendering-strategies)
 - [How to Debug and Audit Rendering Performance](#how-to-debug-and-audit-rendering-performance)
+- [CSS Containment and content-visibility](#css-containment-and-content-visibility)
 - [Best Practices for Efficient DOM and CSS Rendering](#best-practices-for-efficient-dom-and-css-rendering)
 - [Framework Specific Rendering Behavior](#framework-specific-rendering-behavior)
 - [Rendering Optimization Checklist](#rendering-optimization-checklist)
 - [Key Interview Takeaways](#key-interview-takeaways)
 - [Further Reading and Resources](#further-reading-and-resources)
+
+[⬆ Back to Top](#top)
 
 ---
 
@@ -134,6 +141,8 @@ Render Tree (visible nodes only):
 | `::before` / `::after`       | ❌       | ✅               | ✅            | ✅        |
 | Content off-screen           | ✅       | ✅               | ✅            | ❌ (clipped) |
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## 🔹 Why Understanding Browser Rendering Matters
@@ -164,6 +173,8 @@ Render Tree (visible nodes only):
 | Tech Lead / Architect    | Design systems that scale without rendering regressions           |
 | Interview Candidate      | DOM/CSSOM/rendering is a **top-3 frontend interview topic**       |
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## 🔹 When Rendering Becomes a Bottleneck
@@ -192,6 +203,8 @@ Render Tree (visible nodes only):
 ✅ Users on mobile/3G report slow experience
 ✅ DevTools Performance tab shows long "Layout" or "Recalculate Style" blocks
 ```
+
+[⬆ Back to Top](#top)
 
 ---
 
@@ -482,6 +495,8 @@ Layer 3 (fixed header) ┘
 | **Paint**      | Layout output        | Pixel layers         | Triggered by visual changes   | Expensive  |
 | **Composite**  | Painted layers       | Final screen pixels  | GPU (fast)                    | Cheap      |
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## 🔹 How CSS Blocks Rendering and How to Fix It
@@ -545,6 +560,8 @@ main.css ──── download ──── parse ──── discover @import
 <link rel="stylesheet" href="mobile.css" media="(max-width: 768px)">
 <link rel="stylesheet" href="print.css" media="print">
 ```
+
+[⬆ Back to Top](#top)
 
 ---
 
@@ -634,6 +651,8 @@ element.style.display = 'none'; // 1 reflow (hide)
 element.style.display = 'block'; // 1 reflow (show)
 ```
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## 🔹 Reflow vs Repaint Deep Dive
@@ -713,6 +732,8 @@ function updateWidths() {
 }
 ```
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## 🔹 The Virtual DOM vs Real DOM
@@ -766,6 +787,8 @@ function Counter({ count }) {
 // 1st render: document.createElement('div') → set className → set textContent
 // 2nd render: only update textContent (if className unchanged)
 ```
+
+[⬆ Back to Top](#top)
 
 ---
 
@@ -826,6 +849,8 @@ Chunk 3: <script>replace #reviews with actual content</script>   ← Browser upd
 | **Lazy loading**            | Defers off-screen content                         | Below-the-fold images/components   |
 | **`content-visibility: auto`** | Browser skips rendering off-screen sections    | Long pages with many sections      |
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## 🔹 Pros vs Cons of Rendering Strategies
@@ -841,6 +866,8 @@ Chunk 3: <script>replace #reviews with actual content</script>   ← Browser upd
 | **Inline Critical CSS**         | Instant first paint, no extra request                       | Increases HTML size, maintenance overhead                 | Above-the-fold content               |
 | **Virtual DOM**                 | Declarative code, batched updates, predictable              | Memory overhead, diffing cost, not always fastest         | Complex interactive UIs              |
 | **Direct DOM**                  | Zero overhead, maximum control                              | Imperative code, easy to cause thrashing                  | Simple widgets, micro-interactions   |
+
+[⬆ Back to Top](#top)
 
 ---
 
@@ -935,6 +962,113 @@ new PerformanceObserver((list) => {
 | **WebPageTest**                  | Filmstrip view, waterfall, video              | Comparing before/after optimizations   |
 | **Performance API / PerformanceObserver** | Programmatic real-user metrics        | Production monitoring (RUM)            |
 
+[⬆ Back to Top](#top)
+
+---
+
+## 🔹 CSS Containment and content-visibility
+
+Modern browsers provide two powerful CSS properties that let you **limit the scope of rendering work** — directly reducing the cost of layout, paint, and style recalculation.
+
+### CSS Containment (`contain`)
+
+The `contain` property tells the browser that **an element's internals are independent from the rest of the page**. This allows the browser to optimize by skipping work on unrelated parts of the DOM when something inside the contained element changes.
+
+```css
+/* Tell browser: this element's layout/paint is self-contained */
+.widget {
+  contain: layout paint;
+}
+```
+
+**How it helps the rendering pipeline:**
+
+Without `contain`, when an element's size changes, the browser may recalculate layout for the **entire page**. With `contain: layout`, the browser knows the change is **scoped** — it only recalculates layout within that container.
+
+```
+Without contain:
+  Element changes height
+  → Reflow cascades to siblings, parent, grandparent...
+  → Entire page layout recalculated
+
+With contain: layout:
+  Element changes height
+  → Reflow is contained to this element's subtree ONLY
+  → Rest of the page is untouched
+```
+
+**`contain` values:**
+
+| Value | What It Isolates | Effect |
+| ----- | ---------------- | ------ |
+| `layout` | Element's layout is independent | Reflow inside doesn't affect outside |
+| `paint` | Element's paint is clipped to its bounds | Content outside bounds is not painted |
+| `size` | Element's size is independent of children | Browser doesn't need to check children to determine size |
+| `style` | Counters and other style properties are scoped | Prevents counter leaking across components |
+| `content` | Shorthand for `layout paint style` | Most common for components |
+| `strict` | Shorthand for `layout paint size style` | Maximum isolation (requires explicit sizing) |
+
+**Practical usage:**
+
+```css
+/* Each card in a list — layout changes in one card don't affect others */
+.card {
+  contain: content;
+}
+
+/* Sidebar widget — fully isolated from main content */
+.sidebar-widget {
+  contain: strict;
+  width: 300px;
+  height: auto;
+}
+
+/* Chat messages — each message is independent */
+.message {
+  contain: layout paint;
+}
+```
+
+### `content-visibility` — The High-Impact Optimization
+
+`content-visibility: auto` builds on CSS containment to deliver an even bigger optimization: the browser completely **skips rendering** (style, layout, paint) for elements that are **off-screen**.
+
+```css
+.section {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 500px; /* Estimated height for correct scrollbar */
+}
+```
+
+**Impact on the rendering pipeline:**
+
+| Pipeline Stage | Without `content-visibility` | With `content-visibility: auto` |
+| -------------- | ----------------------------- | ------------------------------- |
+| **Style Calc** | All 10,000 elements | Only visible elements |
+| **Layout** | All 10,000 elements | Only visible elements |
+| **Paint** | All elements in painted layers | Only visible elements |
+| **Memory** | Full render tree in memory | Skipped elements use minimal memory |
+
+**The internally applied containment:**
+
+When `content-visibility: auto` kicks in for an off-screen element, the browser **automatically applies** `contain: layout style paint size` — the strictest containment. This means:
+- Layout changes inside the element never affect the rest of the page
+- The element's paint is completely skipped
+- The element's size is determined by `contain-intrinsic-size`, not its children
+
+**When to use each:**
+
+| Property | Use When |
+| -------- | -------- |
+| `contain: content` | Widget/card components that change independently |
+| `contain: strict` | Fixed-size containers (sidebars, ads, embedded widgets) |
+| `content-visibility: auto` | Long pages with many below-the-fold sections |
+| `content-visibility: hidden` | Tab panels, collapsed accordions (content exists but is hidden) |
+
+**Browser support:** `contain` — Chrome 52+, Firefox 69+, Safari 15.4+, Edge 79+. `content-visibility` — Chrome 85+, Edge 85+, Firefox 125+, Safari 18+.
+
+[⬆ Back to Top](#top)
+
 ---
 
 ## 🔹 Best Practices for Efficient DOM and CSS Rendering
@@ -1014,6 +1148,8 @@ function animate() {
 }
 requestAnimationFrame(animate);
 ```
+
+[⬆ Back to Top](#top)
 
 ---
 
@@ -1143,6 +1279,8 @@ $: doubled = count * 2;
 // if (count changed) { textNode.data = count * 2; }
 ```
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## 🔹 Rendering Optimization Checklist
@@ -1186,6 +1324,8 @@ $: doubled = count * 2;
 - [ ] No layout shifts after initial load (CLS < 0.1)
 - [ ] PerformanceObserver tracking long tasks in production
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## 🔹 Key Interview Takeaways
@@ -1207,6 +1347,8 @@ $: doubled = count * 2;
 | **`display:none` vs `visibility:hidden`?** | `display:none`: removed from Render Tree, no space. `visibility:hidden`: IN Render Tree, takes space, just invisible.  |
 | **Preload scanner?**                     | Secondary parser that scans ahead during script blocking to discover and fetch resources early.                          |
 | **How to measure rendering?**            | DevTools Performance tab, Rendering drawer (paint flashing), Layers panel, PerformanceObserver API.                     |
+
+[⬆ Back to Top](#top)
 
 ---
 
@@ -1240,3 +1382,5 @@ Hastag: SystemDesignWithZeeshanAli
 [systemdesignwithzeeshanali](https://dev.to/t/systemdesignwithzeeshanali)
 
 Git: https://github.com/ZeeshanAli-0704/front-end-system-design
+
+[⬆ Back to Top](#top)

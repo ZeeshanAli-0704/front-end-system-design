@@ -1,4 +1,3 @@
-
 # ⚡ Critical Rendering Path (CRP) — A Complete Guide to Browser Rendering & Performance Optimization
 
 > *"Performance is not a feature — it's the foundation. A millisecond delay in rendering is a lifetime in user perception."*
@@ -10,6 +9,8 @@ If you've ever wondered why your beautifully designed page shows a blank white s
 This guide covers **what CRP is**, **why it matters**, **when to optimize**, **how each technique works**, the **pros and cons** of each approach, and the **best practices** every frontend engineer should follow.
 
 ---
+
+<a id="top"></a>
 
 ## 📚 Table of Contents
 
@@ -41,6 +42,8 @@ This guide covers **what CRP is**, **why it matters**, **when to optimize**, **h
 - [Key Interview Takeaways](#key-interview-takeaways)
 - [Further Reading and Resources](#further-reading-and-resources)
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## 🔹 What is the Critical Rendering Path
@@ -54,6 +57,8 @@ So, **optimizing the CRP = optimizing perceived performance** (Time to First Pai
 ### In One Sentence
 
 > The CRP is **everything the browser must do before it can show you the first pixel** — and optimizing it means removing or deferring anything that isn't essential for that first paint.
+
+[⬆ Back to Top](#top)
 
 ---
 
@@ -86,6 +91,8 @@ So, **optimizing the CRP = optimizing perceived performance** (Time to First Pai
 - **SEO teams**: Better Core Web Vitals = better search rankings
 - **DevOps**: Reduced server load, lower bandwidth costs
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## 🔹 When to Optimize the CRP
@@ -109,6 +116,8 @@ So, **optimizing the CRP = optimizing perceived performance** (Time to First Pai
 - All users are on fast networks with modern devices
 
 > 💡 **Rule of Thumb**: If your app is public-facing or used on mobile, CRP optimization is **not optional** — it's essential.
+
+[⬆ Back to Top](#top)
 
 ---
 
@@ -177,6 +186,8 @@ HTML Download → DOM Construction → CSSOM Construction → Render Tree → La
 | Paint            | Layout output    | Pixel layers        | Triggered by visual changes        |
 | Composite        | Painted layers   | Final screen output | GPU-accelerated (fast)             |
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## ⚙️ The Critical Part of the Path
@@ -203,6 +214,8 @@ Your goal is to:
 | `<script async>`            | ❌ No       | Non-blocking (but may execute before DOM is ready)      |
 | Images                      | ❌ No       | Don't block first paint (loaded progressively)           |
 | Fonts (by default)          | ⚠️ Partial | Can cause FOIT (Flash of Invisible Text) if not handled |
+
+[⬆ Back to Top](#top)
 
 ---
 
@@ -250,6 +263,8 @@ HTML Parsing ────┐
            Render Tree → Layout → Paint
 ```
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## 🔹 Key Performance Metrics Tied to CRP
@@ -276,6 +291,8 @@ Compress + CDN               → Improves all metrics
 Lazy-load images             → Improves LCP, CLS
 Font display strategy        → Improves FCP, CLS
 ```
+
+[⬆ Back to Top](#top)
 
 ---
 
@@ -650,6 +667,8 @@ for (let i = 0; i < items.length; i++) {
 
 #### Use `content-visibility` for Off-Screen Content
 
+`content-visibility: auto` is one of the most impactful single-property CSS optimizations available. It tells the browser: **"Don't bother rendering this element's content until it's close to the viewport."** The browser skips style calculation, layout, and paint for off-screen elements entirely — potentially saving **hundreds of milliseconds** on initial render for content-heavy pages.
+
 ```css
 /* ✅ Browser skips rendering for off-screen sections entirely */
 .below-the-fold-section {
@@ -657,6 +676,78 @@ for (let i = 0; i < items.length; i++) {
   contain-intrinsic-size: 0 500px; /* Estimated height for scrollbar accuracy */
 }
 ```
+
+**How it works:**
+
+```
+Without content-visibility:
+  Browser renders ALL sections on page load:
+  ┌──────────────┐
+  │  Section 1   │ ← Rendered ✅ (visible in viewport)
+  │  Section 2   │ ← Rendered ✅ (visible in viewport)
+  │  Section 3   │ ← Rendered ❌ (off-screen but STILL rendered!)
+  │  Section 4   │ ← Rendered ❌ (off-screen but STILL rendered!)
+  │  ...         │
+  │  Section 20  │ ← Rendered ❌ (off-screen but STILL rendered!)
+  └──────────────┘
+  Total rendering work: ALL 20 sections
+
+With content-visibility: auto:
+  Browser SKIPS off-screen sections:
+  ┌──────────────┐
+  │  Section 1   │ ← Rendered ✅ (visible)
+  │  Section 2   │ ← Rendered ✅ (visible)
+  │  Section 3   │ ← SKIPPED 🚀 (rendered when user scrolls near)
+  │  Section 4   │ ← SKIPPED 🚀
+  │  ...         │
+  │  Section 20  │ ← SKIPPED 🚀
+  └──────────────┘
+  Total rendering work: ONLY 2 sections (rest deferred)
+```
+
+**Why `contain-intrinsic-size` is needed:**
+
+When the browser skips rendering an element, it doesn't know the element's height. Without a size hint, the element collapses to 0px → the scrollbar jumps as sections render on scroll. `contain-intrinsic-size` provides an **estimated height** so the scrollbar behaves correctly.
+
+```css
+/* Modern syntax — auto keyword remembers measured size after first render */
+.section {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 500px; /* Uses 500px initially, then remembers actual size */
+}
+```
+
+**`content-visibility` values:**
+
+| Value    | Behavior                                                  | Use Case                              |
+| -------- | --------------------------------------------------------- | ------------------------------------- |
+| `visible`| Default — render normally                                 | No change                             |
+| `auto`   | Skip rendering when off-screen, render when near viewport | Long pages, below-the-fold content    |
+| `hidden` | Never render (like `display: none` but preserves layout)  | Tabs, collapsed accordion panels      |
+
+**Practical example — long article page:**
+
+```css
+/* Apply to each major section of the page */
+article section {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 300px;
+}
+
+/* Apply to footer and non-critical regions */
+.comments-section,
+.related-articles,
+footer {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 400px;
+}
+```
+
+**Real-world impact:** Google's own measurements showed `content-visibility: auto` can reduce rendering time by **up to 7x** on content-heavy pages. A blog page with 20 sections that takes 200ms to render might drop to under 30ms for initial paint.
+
+**Browser support:** Chrome 85+, Edge 85+, Firefox 125+, Safari 18+. For older browsers, the property is simply ignored — content renders normally.
+
+> ⚠️ **Gotcha:** Don't apply `content-visibility: auto` to above-the-fold content — the browser may briefly show a blank space before rendering it. Only use it for content **below** the initial viewport.
 
 ---
 
@@ -725,6 +816,8 @@ function ProductList() {
 }
 ```
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## 🔹 Pros vs Cons of Each Optimization Technique
@@ -747,6 +840,8 @@ function ProductList() {
 | `content-visibility: auto`   | Massive rendering perf gain for long pages                     | Can cause scrollbar jumps, `contain-intrinsic-size` needed   | Low        |
 | `will-change`                | GPU acceleration for animations                                | Excessive use wastes GPU memory                               | Low        |
 | Skeleton Screens             | Better perceived performance, reduces bounce                   | Still requires actual data to load                           | Low        |
+
+[⬆ Back to Top](#top)
 
 ---
 
@@ -773,6 +868,8 @@ sequenceDiagram
     Render->>Render: Layout → Paint → Composite
     Render-->>Browser: First Paint! 🎉
 ```
+
+[⬆ Back to Top](#top)
 
 ---
 
@@ -971,6 +1068,8 @@ Only after both **DOM + CSSOM** are ready does the **render tree** form and **pa
 | Perceived Load Time       | Early paint possible        | ✅ Great UX         |
 | Core Web Vitals (FCP/LCP) | Improved                    | ✅ Significant gain |
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## 🔹 CRP Optimization in React Next Angular and Vue
@@ -1131,6 +1230,8 @@ const { data: product } = await useFetch(`/api/products/${route.params.id}`);
 - `defineAsyncComponent` for lazy components
 - Vite-based — tree-shaking and chunk splitting by default
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## 🔹 How to Measure and Audit CRP Performance
@@ -1197,6 +1298,8 @@ Chrome DevTools → Performance tab → CPU throttling:
 ```
 
 > 💡 **Always test with throttling enabled**. Your dev machine on gigabit internet is NOT representative of your users' experience.
+
+[⬆ Back to Top](#top)
 
 ---
 
@@ -1318,6 +1421,8 @@ jobs:
 - **Quarterly audits** — re-evaluate with new browser features
 - **Team training** — ensure every developer understands CRP basics
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## 🔹 CRP Optimization Checklist
@@ -1370,6 +1475,8 @@ Use this checklist before every production deploy:
 - [ ] Real User Monitoring (RUM) collecting CWV data
 - [ ] Bundle size tracking on PRs
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## ⚡ Key Interview Takeaways
@@ -1389,6 +1496,8 @@ Use this checklist before every production deploy:
 | **CRP optimization order**          | 1) Defer JS, 2) Inline critical CSS, 3) Preconnect, 4) Preload LCP, 5) Code split, 6) Image optimize, 7) Compress+CDN.          |
 | **Metrics**                          | FCP < 1.8s, LCP < 2.5s, TTI < 3.8s, TBT < 200ms, CLS < 0.1                                                                    |
 | **Performance budgets**              | Set max bundle sizes and metric thresholds in CI. Fail builds that regress.                                                       |
+
+[⬆ Back to Top](#top)
 
 ---
 
@@ -1421,3 +1530,5 @@ Hastag: SystemDesignWithZeeshanAli
 [systemdesignwithzeeshanali](https://dev.to/t/systemdesignwithzeeshanali)
 
 Git: https://github.com/ZeeshanAli-0704/front-end-system-design
+
+[⬆ Back to Top](#top)

@@ -5,6 +5,8 @@
 
 ---
 
+<a id="top"></a>
+
 ## 📚 Table of Contents
 
 - [The Problem](#the-problem)
@@ -12,6 +14,7 @@
 - [Core Principles](#core-principles)
 - [Step by Step Process](#step-by-step-process)
 - [Folder Structure](#folder-structure)
+- [Skeleton Code Store Setup](#skeleton-code-store-setup)
 - [Skeleton Code Feature Slice](#skeleton-code-feature-slice)
 - [Skeleton Code Multiple Slices per Feature](#skeleton-code-multiple-slices-per-feature)
 - [Skeleton Code Final State Shape](#skeleton-code-final-state-shape)
@@ -28,6 +31,8 @@
 - [Interview Takeaways](#interview-takeaways)
 - [Further Reading](#further-reading)
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## 🔹 The Problem
@@ -40,6 +45,8 @@ When your app is small, one reducer file works fine. When it grows to **200+ scr
 - A place where changing "cart" logic breaks "orders"
 
 **Reducer architecture** solves this by giving every feature **its own state boundary**.
+
+[⬆ Back to Top](#top)
 
 ---
 
@@ -56,6 +63,8 @@ When your app is small, one reducer file works fine. When it grows to **200+ scr
 
 > **Golden Rule:** Files from one floor never mix with another floor. Each feature manages its own state.
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## 🔹 Core Principles
@@ -70,6 +79,8 @@ When your app is small, one reducer file works fine. When it grows to **200+ scr
 | 6  | Minimal Shared State         | Only auth, theme, and UI chrome belong in shared/              |
 | 7  | Namespace Actions            | `users/setList` not `SET_LIST`                                 |
 | 8  | Public API per Feature       | Features export only what others need via an index file        |
+
+[⬆ Back to Top](#top)
 
 ---
 
@@ -89,6 +100,8 @@ When your app is small, one reducer file works fine. When it grows to **200+ scr
 | 10   | **Split slices** when they grow too big | Is this slice > 300 lines or serving multiple screens?       |
 | 11   | **Code-split reducers** by route        | Does every page need every reducer loaded?                   |
 | 12   | **Document rules** for the team         | What conventions should every dev follow?                    |
+
+[⬆ Back to Top](#top)
 
 ---
 
@@ -121,6 +134,8 @@ When your app is small, one reducer file works fine. When it grows to **200+ scr
 ```
 
 **Why this works:** Adding a feature = adding a folder. Deleting a feature = deleting a folder. No other code touched.
+
+[⬆ Back to Top](#top)
 
 ---
 
@@ -157,6 +172,8 @@ export default combineReducers({
   ui: uiReducer,
 });
 ```
+
+[⬆ Back to Top](#top)
 
 ---
 
@@ -200,6 +217,8 @@ Each feature behaves like a **mini-application**:
  └── index.js
 ```
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## 🔹 Skeleton Code Multiple Slices per Feature
@@ -232,6 +251,8 @@ export default combineReducers({
 });
 ```
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## 🔹 Skeleton Code Final State Shape
@@ -253,6 +274,8 @@ export default combineReducers({
 
 Clean. Predictable. Scalable.
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## 🔹 What State Goes Where
@@ -268,6 +291,8 @@ Clean. Predictable. Scalable.
 | **Local UI**       | Component's own local state  | Hover, dropdown open, animation progress   |
 
 > 💡 **#1 Mistake:** Putting everything in the global store. If state doesn't need to be shared, keep it local.
+
+[⬆ Back to Top](#top)
 
 ---
 
@@ -292,6 +317,8 @@ Clean. Predictable. Scalable.
 
 **Normalize when:** List has 50+ items, items are updated individually, or same entity appears in multiple views.
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## 🔹 Selectors How to Read State
@@ -308,6 +335,8 @@ Clean. Predictable. Scalable.
 - Never create selectors inside render functions (kills memoization)
 - Minimize cross-feature selectors (breaks isolation)
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## 🔹 How Features Should Communicate
@@ -318,6 +347,8 @@ Clean. Predictable. Scalable.
 | ✅ **Read-only selectors** | Feature B reads Feature A's exported selector     | Orders page shows user names        |
 | ✅ **Listener middleware** | Middleware reacts to action and dispatches another | Order completed → refresh dashboard |
 | ❌ **Direct imports**      | Feature A imports Feature B's internal actions     | NEVER — breaks isolation            |
+
+[⬆ Back to Top](#top)
 
 ---
 
@@ -333,6 +364,8 @@ Clean. Predictable. Scalable.
 
 The root reducer sees one entry per feature. It doesn't know about the internal splits.
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## 🔹 Async Data Strategy
@@ -347,6 +380,8 @@ The root reducer sees one entry per feature. It doesn't know about the internal 
 - Separate server state from client state
 - Define loading/error per operation (not one global flag)
 - Plan cache invalidation — when does data go stale?
+
+[⬆ Back to Top](#top)
 
 ---
 
@@ -364,6 +399,8 @@ The root reducer sees one entry per feature. It doesn't know about the internal 
 | Normalize entity lists                        | O(1) lookups, no duplicate data                    |
 | Never store derived values                    | Compute in selectors to avoid stale data           |
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## 🔹 Migrating Legacy State
@@ -379,6 +416,8 @@ The root reducer sees one entry per feature. It doesn't know about the internal 
 
 > Never do a big-bang rewrite. Migrate incrementally.
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## 🔹 Strategy Comparison
@@ -392,6 +431,8 @@ The root reducer sees one entry per feature. It doesn't know about the internal 
 | **Jotai**              | Fine-grained reactivity        | Minimal     | Low            |
 | **NgRx** (Angular)     | Enterprise Angular              | High        | High           |
 | **Pinia** (Vue)        | Vue 3 apps                     | Low         | Low            |
+
+[⬆ Back to Top](#top)
 
 ---
 
@@ -411,6 +452,8 @@ The root reducer sees one entry per feature. It doesn't know about the internal 
 - [ ] DevTools configured for development
 - [ ] Architecture rules documented for the team
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## 🔹 Interview Takeaways
@@ -426,6 +469,8 @@ The root reducer sees one entry per feature. It doesn't know about the internal 
 | When to split slices        | > 300 lines, multiple screens, mixed concerns, different update frequencies.     |
 | Migration                   | Incremental. New features → modern. Bug-heavy old reducers → migrate first.      |
 | #1 mistake                  | Putting everything in the global store. If it's not shared, keep it local.       |
+
+[⬆ Back to Top](#top)
 
 ---
 
@@ -455,3 +500,5 @@ Hastag: SystemDesignWithZeeshanAli
 [systemdesignwithzeeshanali](https://dev.to/t/systemdesignwithzeeshanali)
 
 Git: https://github.com/ZeeshanAli-0704/front-end-system-design
+
+[⬆ Back to Top](#top)

@@ -2,21 +2,27 @@
 
 CSS and JavaScript are render-blocking resources by default. The browser cannot paint anything until CSS is parsed (CSSOM) and synchronous JS is executed. Optimizing how these resources load is critical for First Contentful Paint (FCP) and Time to Interactive (TTI).
 
+<a id="top"></a>
+
 ## Table of Contents
 
-- [1. Critical CSS Rendering](#1-critical-css-rendering)
-- [2. Non-Critical CSS (Async Loading)](#2-non-critical-css-async-loading)
-- [3. Lazy Loading CSS (Media-Based)](#3-lazy-loading-css-media-based)
-- [4. JS-Based CSS Loading](#4-js-based-css-loading)
-- [5. Async and Defer Strategy](#5-async-and-defer-strategy)
-- [6. Module Loading and Tree Shaking](#6-module-loading-and-tree-shaking)
-- [7. Configurable UI (Conditional Rendering)](#7-configurable-ui-conditional-rendering)
-- [8. Streaming UI Rendering](#8-streaming-ui-rendering)
+- [Critical CSS Rendering](#critical-css-rendering)
+- [Non Critical CSS (Async Loading)](#non-critical-css-async-loading)
+- [Lazy Loading CSS (Media Based)](#lazy-loading-css-media-based)
+- [JS Based CSS Loading](#js-based-css-loading)
+- [Async and Defer Strategy](#async-and-defer-strategy)
+- [Module Loading and Tree Shaking](#module-loading-and-tree-shaking)
+- [Configurable UI (Conditional Rendering)](#configurable-ui-conditional-rendering)
+- [Streaming UI Rendering](#streaming-ui-rendering)
+- [Avoiding import and Eliminating Dead CSS](#avoiding-import-and-eliminating-dead-css)
 - [Key Takeaways](#key-takeaways)
+
+
+[⬆ Back to Top](#top)
 
 ---
 
-## 1. Critical CSS Rendering
+## Critical CSS Rendering
 
 **Concept:**
 Extract only the CSS rules needed to render above-the-fold content and inline them directly in the HTML. The rest of the CSS loads asynchronously. This eliminates the render-blocking CSS download for initial paint.
@@ -88,9 +94,11 @@ critical.generate({
 - `penthouse` – Headless browser-based extraction
 - Next.js – Automatic CSS inlining for pages
 
+[⬆ Back to Top](#top)
+
 ---
 
-## 2. Non-Critical CSS (Async Loading)
+## Non Critical CSS (Async Loading)
 
 **Concept:**
 CSS that is not needed for the initial viewport (below-the-fold styles, modal styles, footer styles) should load without blocking rendering.
@@ -121,9 +129,11 @@ CSS that is not needed for the initial viewport (below-the-fold styles, modal st
 2. Browser still downloads it (lower priority)
 3. `onload` fires → `this.media='all'` applies it for all media types
 
+[⬆ Back to Top](#top)
+
 ---
 
-## 3. Lazy Loading CSS (Media-Based)
+## Lazy Loading CSS (Media Based)
 
 **Concept:**
 Load CSS files only under specific conditions using the `media` attribute. The browser downloads all stylesheets but only applies those whose media query matches.
@@ -165,9 +175,11 @@ Load CSS files only under specific conditions using the `media` attribute. The b
 <link rel="stylesheet" href="comments.css" media="print" onload="this.media='all'">
 ```
 
+[⬆ Back to Top](#top)
+
 ---
 
-## 4. JS-Based CSS Loading
+## JS Based CSS Loading
 
 **Concept:**
 Use JavaScript to load additional stylesheets after the initial page render. This gives complete programmatic control over when and which CSS files are loaded.
@@ -220,9 +232,11 @@ if (window.innerWidth > 1024) {
 - Avoid blocking page render with unused CSS
 - Can combine with feature detection and user interaction
 
+[⬆ Back to Top](#top)
+
 ---
 
-## 5. Async and Defer Strategy
+## Async and Defer Strategy
 
 **Concept:**
 By default, `<script>` tags block HTML parsing. The browser stops building the DOM, downloads the script, executes it, then resumes parsing. `async` and `defer` change this behavior.
@@ -286,9 +300,11 @@ Script execution                             ███
 | Critical polyfills | Normal (no attribute) |
 | A/B testing scripts | Normal (must run before render) |
 
+[⬆ Back to Top](#top)
+
 ---
 
-## 6. Module Loading and Tree Shaking
+## Module Loading and Tree Shaking
 
 **Concept:**
 ES Modules enable the browser (and bundlers) to understand dependency relationships between files. This unlocks tree shaking – the ability to remove unused code from the final bundle.
@@ -368,9 +384,11 @@ async function handleUserAction() {
 const HeavyComponent = React.lazy(() => import('./HeavyComponent'));
 ```
 
+[⬆ Back to Top](#top)
+
 ---
 
-## 7. Configurable UI (Conditional Rendering)
+## Configurable UI (Conditional Rendering)
 
 **Concept:**
 Render only the components and features that are actually needed for the current user, device, or context. Avoid rendering invisible or unnecessary UI elements that consume memory, CPU, and bandwidth.
@@ -449,9 +467,11 @@ function MediaSection() {
 - Reduced memory usage
 - Better experience on low-end devices
 
+[⬆ Back to Top](#top)
+
 ---
 
-## 8. Streaming UI Rendering
+## Streaming UI Rendering
 
 **Concept:**
 Instead of waiting for all data and components to be ready before showing anything, stream the UI in chunks. Show important sections first, then progressively fill in secondary content.
@@ -545,6 +565,138 @@ export default function ProductPage({ params }) {
 - Each section is independent – one slow section doesn't delay others
 - Skeleton screens provide visual structure immediately
 
+[⬆ Back to Top](#top)
+
+---
+
+## Avoiding import and Eliminating Dead CSS
+
+### The `@import` Penalty
+
+**Concept:**
+CSS `@import` rules create **sequential (waterfall) downloads** — each imported file must finish downloading before the next one begins. This is in contrast to multiple `<link>` tags which browsers download in **parallel**.
+
+**The problem:**
+
+```
+Using @import (sequential — slow):
+  main.css downloads (200ms)
+    → Parser finds @import 'typography.css'
+    → typography.css downloads (150ms)
+      → Parser finds @import 'colors.css'
+      → colors.css downloads (100ms)
+  Total: 200 + 150 + 100 = 450ms (waterfall!) ❌
+
+Using <link> tags (parallel — fast):
+  main.css    ─────  (200ms)
+  typography  ────   (150ms)   All downloaded simultaneously
+  colors      ───    (100ms)
+  Total: max(200, 150, 100) = 200ms ✅
+```
+
+**Example — what to avoid:**
+
+```css
+/* ❌ main.css — creates waterfall */
+@import url('reset.css');
+@import url('typography.css');
+@import url('components.css');
+```
+
+```html
+<!-- ✅ Use separate <link> tags instead — parallel downloads -->
+<link rel="stylesheet" href="reset.css">
+<link rel="stylesheet" href="typography.css">
+<link rel="stylesheet" href="components.css">
+```
+
+**When `@import` is acceptable:**
+- Inside a build-time preprocessor (Sass/Less `@import` compiles to a single file)
+- Inside PostCSS pipelines (resolved at build time, not runtime)
+- Never in production CSS that the browser parses directly
+
+### Dead CSS Elimination (PurgeCSS)
+
+**Concept:**
+Most production websites ship **30-90% unused CSS**. A typical project that imports a full CSS framework (Bootstrap, Tailwind base) may only use a fraction of its classes. Unused CSS:
+- Increases download size
+- Slows CSSOM construction (browser parses ALL rules, even unused ones)
+- Increases style recalculation cost
+
+**PurgeCSS** and similar tools analyze your HTML/JSX/template files and **remove any CSS selectors that are never referenced**.
+
+**Build-time integration (PostCSS):**
+
+```javascript
+// postcss.config.js
+const purgecss = require('@fullhuman/postcss-purgecss');
+
+module.exports = {
+  plugins: [
+    purgecss({
+      content: [
+        './src/**/*.html',
+        './src/**/*.jsx',
+        './src/**/*.tsx',
+        './src/**/*.vue',
+      ],
+      // Safelist classes that are dynamically generated
+      safelist: ['active', 'is-open', /^modal-/],
+    }),
+  ],
+};
+```
+
+**Webpack plugin:**
+
+```javascript
+const { PurgeCSSPlugin } = require('purgecss-webpack-plugin');
+const glob = require('glob-all');
+const path = require('path');
+
+module.exports = {
+  plugins: [
+    new PurgeCSSPlugin({
+      paths: glob.sync([
+        path.join(__dirname, 'src/**/*.{js,jsx,tsx,html}'),
+      ]),
+    }),
+  ],
+};
+```
+
+**Tailwind CSS** has PurgeCSS built-in — it scans your source files and only includes the utility classes you actually use:
+
+```javascript
+// tailwind.config.js
+module.exports = {
+  content: ['./src/**/*.{js,jsx,tsx,html}'],  // PurgeCSS scans these files
+  // ...
+};
+```
+
+**Tools for dead CSS detection and removal:**
+
+| Tool | Type | How It Works |
+|------|------|-------------|
+| **PurgeCSS** | Build-time | Scans HTML/JSX, removes unused selectors from CSS |
+| **Tailwind JIT** | Build-time | Generates only used utility classes (never includes unused) |
+| **Chrome Coverage Tab** | Dev tool | Shows % of each CSS file used on current page |
+| **UnCSS** | Build-time | Loads pages in headless browser, detects used CSS |
+| **cssnano** | Build-time | Minifies + optimizes CSS (removes whitespace, duplicate rules) |
+
+**Typical savings:**
+
+| Before | After PurgeCSS | Savings |
+|--------|---------------|--------|
+| Bootstrap 5 (190KB) | ~10KB (only used classes) | 95% |
+| Tailwind (3.5MB raw) | ~10-30KB (JIT mode) | 99% |
+| Custom CSS (100KB) | ~40-60KB | 40-60% |
+
+> **Best practice:** Integrate PurgeCSS (or equivalent) into your CI/CD pipeline so dead CSS is automatically removed on every build. Never rely on manual cleanup.
+
+[⬆ Back to Top](#top)
+
 ---
 
 ## Key Takeaways
@@ -580,3 +732,18 @@ export default function ProductPage({ params }) {
 | Streaming SSR | | ++ | | ++ | +++ |
 
 `+++` = Major impact, `++` = Moderate impact, `+` = Minor impact
+
+[⬆ Back to Top](#top)
+
+---
+
+More Details:
+
+Get all articles related to system design
+Hashtag: SystemDesignWithZeeshanAli
+
+[systemdesignwithzeeshanali](https://dev.to/t/systemdesignwithzeeshanali)
+
+Git: https://github.com/ZeeshanAli-0704/front-end-system-design
+
+[⬆ Back to Top](#top)

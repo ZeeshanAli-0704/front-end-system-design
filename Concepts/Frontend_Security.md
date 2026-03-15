@@ -6,26 +6,29 @@
 
 ---
 
+<a id="top"></a>
+
 ## Table of Contents
 
-1. [Security Attack Vectors & Prevention](#1-security-attack-vectors--prevention)
-   - 1.1 XSS (Cross-Site Scripting)
-   - 1.2 CSRF (Cross-Site Request Forgery)
-   - 1.3 Clickjacking
-2. [Content Security Policy (CSP)](#2-content-security-policy-csp)
-3. [CORS Deep Dive](#3-cors-deep-dive)
-4. [Secure Cookie Handling](#4-secure-cookie-handling)
-5. [Input Sanitization & Output Encoding](#5-input-sanitization--output-encoding)
-6. [JWT Security Considerations](#6-jwt-security-considerations)
-7. [Frontend Auth Architecture Patterns](#7-frontend-auth-architecture-patterns)
-8. [Iframe Security](#8-iframe-security)
-9. [Overall Frontend Security — Big Picture](#9-overall-frontend-security--big-picture)
-10. [Security Headers Checklist](#10-security-headers-checklist)
-11. [Interview Cheat Sheet](#11-interview-cheat-sheet)
+- [Security Attack Vectors and Prevention](#security-attack-vectors-and-prevention)
+  - XSS (Cross Site Scripting)
+  - CSRF (Cross Site Request Forgery)
+  - Clickjacking
+- [Content Security Policy (CSP)](#content-security-policy-csp)
+- [CORS Deep Dive](#cors-deep-dive)
+- [Secure Cookie Handling](#secure-cookie-handling)
+- [Input Sanitization and Output Encoding](#input-sanitization-and-output-encoding)
+- [JWT Security Considerations](#jwt-security-considerations)
+- [Frontend Auth Architecture Patterns](#frontend-auth-architecture-patterns)
+- [Iframe Security](#iframe-security)
+- [Overall Frontend Security Big Picture](#overall-frontend-security-big-picture)
+- [Security Headers Checklist](#security-headers-checklist)
+- [Interview Cheat Sheet](#interview-cheat-sheet)
+[⬆ Back to Top](#top)
 
 ---
 
-## 1. Security Attack Vectors & Prevention
+## Security Attack Vectors and Prevention
 
 ### 1.1 XSS (Cross-Site Scripting)
 
@@ -158,9 +161,11 @@ if (window.top !== window.self) {
 }
 ```
 
+[⬆ Back to Top](#top)
+
 ---
 
-## 2. Content Security Policy (CSP)
+## Content Security Policy (CSP)
 
 CSP is an HTTP header that tells the browser **what resources are allowed to load**, preventing XSS and data injection.
 
@@ -253,9 +258,11 @@ Content-Security-Policy-Report-Only:
 - `Report-Only` mode **logs** violations but doesn't block — great for testing before enforcing.
 - `report-uri` (or `report-to`) sends violation reports to your endpoint as JSON so you can identify issues before they break users.
 
+[⬆ Back to Top](#top)
+
 ---
 
-## 3. CORS Deep Dive
+## CORS Deep Dive
 
 ### Concept
 
@@ -350,9 +357,11 @@ app.use(
 | Not handling OPTIONS preflight | Browser blocks actual request |
 | Reflecting any `Origin` header as allowed | Same as `*` — defeats the purpose |
 
+[⬆ Back to Top](#top)
+
 ---
 
-## 4. Secure Cookie Handling
+## Secure Cookie Handling
 
 ```js
 res.cookie("session", token, {
@@ -398,9 +407,11 @@ Is it an auth cookie (session ID, token)?
   └── NO (preferences, UI state) → HttpOnly not required, but still use Secure
 ```
 
+[⬆ Back to Top](#top)
+
 ---
 
-## 5. Input Sanitization & Output Encoding
+## Input Sanitization and Output Encoding
 
 ### Rule of Thumb
 
@@ -453,9 +464,11 @@ const jsonSafe = JSON.stringify({ name: userInput });
 
 > **Golden Rule:** Always sanitize on the **backend**. Frontend sanitization is a bonus, not a replacement.
 
+[⬆ Back to Top](#top)
+
 ---
 
-## 6. JWT Security Considerations
+## JWT Security Considerations
 
 JWTs are widely used for authentication, but they come with unique security concerns. *(For JWT concepts and auth flows, see [Authentication Flows Guide](Authentication_Flows.md#3-jwt-json-web-token-authentication).)*
 
@@ -499,9 +512,11 @@ Refresh Token (long-lived: 7 days)
 
 **Refresh Token Rotation** — each time a refresh token is used, the server issues a **new** refresh token and invalidates the old one. If an attacker replays an already-used refresh token, the server knows it was stolen and revokes the entire token family.
 
+[⬆ Back to Top](#top)
+
 ---
 
-## 7. Frontend Auth Architecture Patterns
+## Frontend Auth Architecture Patterns
 
 ### Pattern 1: Auth Provider + Protected Routes (React)
 
@@ -616,7 +631,8 @@ api.interceptors.response.use(
   }
 );
 
-export { api, setAccessToken: (t) => (accessToken = t) };
+export { api };
+export const setAccessToken = (t) => { accessToken = t; };
 ```
 
 ### Pattern 3: Role-Based UI Rendering
@@ -656,9 +672,11 @@ function PostActions({ post }) {
 }
 ```
 
+[⬆ Back to Top](#top)
+
 ---
 
-## 8. Iframe Security
+## Iframe Security
 
 Iframes are powerful but introduce significant security risks. As a frontend engineer, you need to understand both **protecting your app from being iframed** and **protecting your app when embedding third-party iframes**.
 
@@ -813,9 +831,11 @@ Do you NEED an iframe?
                     + NO allow-top-navigation
 ```
 
+[⬆ Back to Top](#top)
+
 ---
 
-## 9. Overall Frontend Security — Big Picture
+## Overall Frontend Security Big Picture
 
 Frontend security is **defense in depth** — no single measure is enough. Here's how all the pieces fit together:
 
@@ -966,9 +986,11 @@ If you load scripts from a CDN, the CDN could be compromised. SRI ensures the br
   □ No mixed content (HTTP resources on HTTPS page)
 ```
 
+[⬆ Back to Top](#top)
+
 ---
 
-## 10. Security Headers Checklist
+## Security Headers Checklist
 
 Every production frontend app should ensure these headers are set by the server:
 
@@ -991,9 +1013,11 @@ Permissions-Policy: camera=(), microphone=(), geolocation=()
 | **Referrer-Policy** | Controls what URL info is sent to other sites | Leaking sensitive URL paths |
 | **Permissions-Policy** | Disables browser features you don't use | Malicious scripts accessing camera/mic |
 
+[⬆ Back to Top](#top)
+
 ---
 
-## 11. Interview Cheat Sheet
+## Interview Cheat Sheet
 
 ### Quick Answers for System Design Interviews
 
@@ -1029,3 +1053,18 @@ Permissions-Policy: camera=(), microphone=(), geolocation=()
 
 ---
 
+
+[⬆ Back to Top](#top)
+
+---
+
+More Details:
+
+Get all articles related to system design
+Hashtag: SystemDesignWithZeeshanAli
+
+[systemdesignwithzeeshanali](https://dev.to/t/systemdesignwithzeeshanali)
+
+Git: https://github.com/ZeeshanAli-0704/front-end-system-design
+
+[⬆ Back to Top](#top)

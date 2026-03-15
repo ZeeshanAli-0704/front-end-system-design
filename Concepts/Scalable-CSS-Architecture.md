@@ -13,6 +13,8 @@ This guide covers **what CSS architecture is**, **why it matters**, **when to ch
 
 ---
 
+<a id="top"></a>
+
 ## 📚 Table of Contents
 
 - [What Is CSS Architecture and Why It Matters](#what-is-css-architecture-and-why-it-matters)
@@ -38,6 +40,8 @@ This guide covers **what CSS architecture is**, **why it matters**, **when to ch
 - [CSS Architecture Checklist](#css-architecture-checklist)
 - [Key Interview Takeaways](#key-interview-takeaways)
 - [Further Reading and Resources](#further-reading-and-resources)
+
+[⬆ Back to Top](#top)
 
 ---
 
@@ -88,6 +92,8 @@ A CSS architecture enforces:
 | **Bug rate**                        | CSS regressions are the #1 visual defect in large codebases   |
 | **Design consistency**              | Without tokens/variables, colors and spacing drift over time  |
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## 🔹 The Core Problem CSS Was Never Designed for Components
@@ -133,6 +139,8 @@ CSS was created in 1996 for **styling documents**, not building **component-base
 
 > 💡 **This is the #1 reason CSS architecture exists** — to prevent specificity wars by establishing conventions that make overrides unnecessary.
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## 🔹 When CSS Architecture Becomes Critical
@@ -159,6 +167,8 @@ CSS was created in 1996 for **styling documents**, not building **component-base
 
 > 💡 **Rule of Thumb**: If your project will live longer than 3 months or have more than 2 contributors, invest in CSS architecture from day one.
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## 🔹 CSS Architecture Strategies Overview
@@ -175,6 +185,8 @@ Before diving deep, here's the landscape:
 | **Tailwind CSS**        | 2017 | Utility-first classes   | By design    | Zero         | Rapid development, consistency    |
 | **Vanilla Extract**     | 2021 | Typed CSS in TypeScript | Automatic    | Zero         | Type-safe, large TS codebases     |
 | **CSS Layers (@layer)** | 2022 | Native cascade control  | Native       | Zero         | Managing cascade in any approach  |
+
+[⬆ Back to Top](#top)
 
 ---
 
@@ -283,6 +295,8 @@ Before diving deep, here's the landscape:
 | Dynamic styles based on JS state           | CSS-in-JS or CSS variables                           |
 | No real scoping (global namespace)         | CSS Modules or CSS-in-JS for true isolation           |
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## 🔹 SMACSS Scalable and Modular Architecture for CSS
@@ -372,6 +386,8 @@ body { font-family: system-ui, sans-serif; line-height: 1.6; }
 .theme-dark .card { background: #1e1e1e; color: #e0e0e0; border-color: #444; }
 ```
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## 🔹 OOCSS Object Oriented CSS
@@ -427,6 +443,8 @@ The heading style works **anywhere**, not just inside `.sidebar`.
 - Building UI frameworks (like Bootstrap — which is heavily OOCSS-based)
 - Reusable component libraries across multiple projects
 - Reducing code duplication in large CSS codebases
+
+[⬆ Back to Top](#top)
 
 ---
 
@@ -525,6 +543,8 @@ function Button({ variant, disabled, children }) {
   background: yellow;
 }
 ```
+
+[⬆ Back to Top](#top)
 
 ---
 
@@ -658,6 +678,8 @@ Component Render → Parse CSS template → Generate class → Inject <style> �
 
 > ⚠️ This is why the industry is moving toward **zero-runtime alternatives** (Vanilla Extract, Panda CSS, StyleX).
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## 🔹 Tailwind CSS Utility First Approach
@@ -785,6 +807,8 @@ src/
 └── pages/
 ```
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## 🔹 Vanilla Extract and Zero Runtime CSS in TS
@@ -870,6 +894,8 @@ export const darkTheme = createTheme(vars, {
 
 > 💡 **Vanilla Extract is the direction the industry is heading** — type-safe, zero-runtime, SSR-friendly. See also: **Panda CSS**, **StyleX (Meta)**, **Linaria**.
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## 🔹 CSS Layers and Modern Native Cascade Control
@@ -943,6 +969,8 @@ Tailwind v3.3+ uses `@layer` internally:
   .fix-layout { margin: 0; }
 }
 ```
+
+[⬆ Back to Top](#top)
 
 ---
 
@@ -1093,6 +1121,8 @@ tokens.json (source of truth)
   └── Figma Variables Sync    (back to Figma)
 ```
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## 🔹 CSS Custom Properties vs Preprocessor Variables
@@ -1126,6 +1156,8 @@ tokens.json (source of truth)
 }
 ```
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## 🔹 Pros vs Cons of Every CSS Strategy
@@ -1141,6 +1173,8 @@ tokens.json (source of truth)
 | **Vanilla Extract**           | Type-safe, zero runtime, SSR-friendly, themes                       | TypeScript required, small ecosystem, learning curve            | ⚡ Zero cost   | 5-50 devs   |
 | **CSS @layer**                | Native cascade control, works with any approach                      | Doesn't solve scoping, newer browser feature                    | ⚡ Zero cost   | Any         |
 | **Design Tokens + Variables** | Platform-agnostic, consistent, themeable                             | Pipeline setup overhead, requires process discipline             | ⚡ Zero cost   | 10-100 devs |
+
+[⬆ Back to Top](#top)
 
 ---
 
@@ -1172,6 +1206,8 @@ tokens.json (source of truth)
 | Multi-brand / white-label platform | **Design Tokens + CSS Variables**    | Change tokens per brand, same components           |
 | Legacy project refactoring         | **BEM + CSS Layers**                 | Introduce order without rewriting everything       |
 | Vue / Svelte app                   | **Scoped styles (built-in)** + **Tailwind** | Frameworks provide scoping natively        |
+
+[⬆ Back to Top](#top)
 
 ---
 
@@ -1247,6 +1283,8 @@ npx purgecss --css dist/styles.css --content 'src/**/*.{html,jsx,tsx,vue}'
 # Or if using Tailwind, purge is built-in (configured in tailwind.config.js)
 ```
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## 🔹 Performance Implications of CSS Strategies
@@ -1286,6 +1324,8 @@ npx purgecss --css dist/styles.css --content 'src/**/*.{html,jsx,tsx,vue}'
   contain-intrinsic-size: 0 350px;
 }
 ```
+
+[⬆ Back to Top](#top)
 
 ---
 
@@ -1350,6 +1390,8 @@ jobs:
           echo "✅ CSS size OK: ${CSS_SIZE} bytes"
 ```
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## 🔹 Best Practices for Scalable CSS
@@ -1404,6 +1446,8 @@ jobs:
 | Document your CSS conventions               | CONTRIBUTING.md section so new devs know the rules              |
 | Regularly audit with Coverage tool          | Find and remove accumulated dead CSS                            |
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## 🔹 CSS Architecture Checklist
@@ -1451,6 +1495,8 @@ jobs:
 - [ ] CONTRIBUTING.md documents the CSS conventions
 - [ ] New developers can find and understand any CSS within 30 seconds
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## 🔹 Key Interview Takeaways
@@ -1472,6 +1518,8 @@ jobs:
 | **Performance**                        | Flat selectors = fast. Purge unused CSS. Inline critical CSS. Avoid `@import`. `transform` for animations.                          |
 | **Migration strategy**                 | Don't rewrite everything. Add tokens → adopt convention for new code → use `@layer` to separate legacy → incrementally migrate.     |
 | **How to choose?**                     | Small/no-build: BEM. React app: CSS Modules or Tailwind. Design system: Vanilla Extract + Tokens. MVP: Tailwind. Legacy: BEM + @layer. |
+
+[⬆ Back to Top](#top)
 
 ---
 
@@ -1509,3 +1557,5 @@ Hastag: SystemDesignWithZeeshanAli
 [systemdesignwithzeeshanali](https://dev.to/t/systemdesignwithzeeshanali)
 
 Git: https://github.com/ZeeshanAli-0704/front-end-system-design
+
+[⬆ Back to Top](#top)

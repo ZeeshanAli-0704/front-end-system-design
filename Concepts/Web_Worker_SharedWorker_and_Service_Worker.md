@@ -15,6 +15,8 @@ This guide builds a **clear mental model**, explains **when to use which**, dive
 
 ---
 
+<a id="top"></a>
+
 ## Table of Contents
 
 1. [Why Background Workers Exist](#why-background-workers-exist)
@@ -25,10 +27,12 @@ This guide builds a **clear mental model**, explains **when to use which**, dive
 6. [Communication Patterns Deep Dive](#communication-patterns-deep-dive)
 7. [Comparison Table (Web vs Shared vs Service Worker)](#comparison-table-web-vs-shared-vs-service-worker)
 8. [Choosing the Right Worker (Decision Guide)](#choosing-the-right-worker-decision-guide)
-9. [Real World Usage Scenarios (with Code)](#real-world-usage-scenarios-with-code)
-10. [Trade-offs & Gotchas](#trade-offs--gotchas)
-11. [Security & Compliance Considerations](#security--compliance-considerations)
+9. [Real-World Usage Scenarios (with Code)](#real-world-usage-scenarios-with-code)
+10. [Tradeoffs and Gotchas](#tradeoffs-and-gotchas)
+11. [Security and Compliance Considerations](#security-and-compliance-considerations)
 12. [Final Recommendations](#final-recommendations)
+
+[⬆ Back to Top](#top)
 
 ---
 
@@ -74,6 +78,8 @@ Workers run in an **isolated global context** (`self` instead of `window`). They
 - **Their own event loop**
 - **Structured clone** for data transfer (or `Transferable` objects for zero-copy)
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## Quick Mental Model
@@ -108,6 +114,8 @@ Think of workers like **employees with different job descriptions**:
 > **Key Insight**: Web Workers are about **compute**, Shared Workers are about **coordination**, Service Workers are about **the network**.
 
 > ⚠️ Service Workers are **not for long-running compute loops** — the browser terminates them when idle.
+
+[⬆ Back to Top](#top)
 
 ---
 
@@ -319,6 +327,8 @@ self.onmessage = (e) => {
 ```
 
 > **When to use Transferable**: ArrayBuffer, MessagePort, ImageBitmap, OffscreenCanvas. Use when data is large (>1MB) and you don't need it in the sender after transfer.
+
+[⬆ Back to Top](#top)
 
 ---
 
@@ -597,6 +607,8 @@ Shared Workers **don't appear** in the regular DevTools. To debug:
 - **Chrome**: Navigate to `chrome://inspect/#workers`
 - **Firefox**: Navigate to `about:debugging#/runtime/this-firefox`
 - Add `console.log` liberally — they appear in the worker's own console
+
+[⬆ Back to Top](#top)
 
 ---
 
@@ -923,6 +935,8 @@ async function subscribeToPush() {
 }
 ```
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## Communication Patterns Deep Dive
@@ -1123,6 +1137,8 @@ In production, you often **combine all three**:
 - **SharedWorker**: maintains single WebSocket, broadcasts to all tabs
 - **Service Worker**: caches chat history for offline reading, handles push notifications
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## Comparison Table (Web vs Shared vs Service Worker)
@@ -1145,6 +1161,8 @@ In production, you often **combine all three**:
 | **Browser Support** | ✅ Excellent | ⚠️ No Safari iOS < 16 | ✅ Excellent |
 | **DevTools Debugging** | Easy (Sources tab) | Hard (`chrome://inspect`) | Medium (Application tab) |
 | **Max Instances** | Many per page | 1 per URL+name | 1 per scope |
+
+[⬆ Back to Top](#top)
 
 ---
 
@@ -1196,6 +1214,8 @@ In production, you often **combine all three**:
 
 - ✅ You **only** need tab-to-tab messaging (no shared state, no shared connection)
 - ✅ Simplest possible cross-tab communication
+
+[⬆ Back to Top](#top)
 
 ---
 
@@ -1348,9 +1368,11 @@ self.addEventListener('fetch', (event) => {
 └─────────────────────────────────────────────────┘
 ```
 
+[⬆ Back to Top](#top)
+
 ---
 
-## Trade-offs & Gotchas
+## Tradeoffs and Gotchas
 
 ### Web Worker
 
@@ -1545,9 +1567,11 @@ async function cacheFirst(request) {
 | **Learning Curve** | 🟢 Low | 🟡 Medium | 🔴 Steep |
 | **Power** | 🟡 Compute only | 🟡 Coordination | 🟢 Network + Offline |
 
+[⬆ Back to Top](#top)
+
 ---
 
-## Security & Compliance Considerations
+## Security and Compliance Considerations
 
 ### General Rules (All Workers)
 
@@ -1588,6 +1612,8 @@ self.onmessage = (e) => {
 ```
 
 > For enterprise apps (e.g., Oracle, banking), align with internal security and compliance guidelines before adoption. Service Workers especially need review since they intercept all network traffic.
+
+[⬆ Back to Top](#top)
 
 ---
 
@@ -1639,3 +1665,5 @@ Hashtag: SystemDesignWithZeeshanAli
 [systemdesignwithzeeshanali](https://dev.to/t/systemdesignwithzeeshanali)
 
 Git: https://github.com/ZeeshanAli-0704/front-end-system-design
+
+[⬆ Back to Top](#top)

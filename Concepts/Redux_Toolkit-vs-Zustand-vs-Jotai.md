@@ -11,6 +11,8 @@ This guide covers **what each library does**, **why their mental models differ**
 
 ---
 
+<a id="top"></a>
+
 ## 📚 Table of Contents
 
 - [Why This Comparison Matters](#why-this-comparison-matters)
@@ -32,6 +34,8 @@ This guide covers **what each library does**, **why their mental models differ**
 - [State Management Checklist](#state-management-checklist)
 - [Key Interview Takeaways](#key-interview-takeaways)
 - [Further Reading and Resources](#further-reading-and-resources)
+
+[⬆ Back to Top](#top)
 
 ---
 
@@ -62,6 +66,8 @@ The React state management landscape has dozens of libraries, but Redux Toolkit,
 
 Understanding **when and why** to choose each paradigm is a core frontend architecture skill — and a **top-tier interview topic**.
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## 🔹 Mental Models The Core Difference
@@ -75,6 +81,8 @@ Think of state management like organizing information in different ways:
 | **Jotai**         | Atomic state pieces wired together    | **Spreadsheet cells** — each cell holds one value, and cells can reference (derive from) other cells |
 
 > 💡 **Key Insight**: The right choice depends on your **app's complexity**, **team size**, and **how predictable** you need state changes to be.
+
+[⬆ Back to Top](#top)
 
 ---
 
@@ -97,6 +105,8 @@ Components import a **hook** → The hook reads state and exposes mutator functi
 State is defined as small independent **atoms** → Components subscribe to individual atoms → **Derived atoms** automatically compute values from other atoms → When a base atom changes, only its subscribers and dependent derived atoms re-evaluate.
 
 **Key Properties**: Each atom is independent. Dependencies are tracked automatically. Re-renders happen at the atom level — the most granular of all three. Atoms compose bottom-up.
+
+[⬆ Back to Top](#top)
 
 ---
 
@@ -150,6 +160,8 @@ Redux Toolkit (RTK) is the **official, opinionated way** to use Redux. Created b
 | **Indirection**                       | Dispatching in Component A → reducer processes → Component B re-renders        |
 | **Larger bundle**                     | ~13KB min+gzip (RTK + react-redux) — largest of the three                      |
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## 🔹 Zustand Overview
@@ -199,6 +211,8 @@ No reducers. No actions. No dispatch. No provider. No ceremony.
 | **No built-in async conventions**     | You write async logic manually — no equivalent to `createAsyncThunk` or RTK Query |
 | **Manual selector memoization**       | No built-in `createSelector` — you need `useShallow` or manual equality checks |
 | **Hard to enforce at scale**          | Without team conventions, 10 developers will write 10 different patterns        |
+
+[⬆ Back to Top](#top)
 
 ---
 
@@ -256,6 +270,8 @@ Jotai's dependency graph is **automatic** — when a derived atom reads another 
 | **Not ideal for very large teams**    | Without strict conventions, atom organization can become chaotic               |
 | **Smaller ecosystem**                 | Fewer middleware options and fewer Stack Overflow answers than Redux            |
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## 🔹 Side by Side Feature Comparison
@@ -280,6 +296,8 @@ Jotai's dependency graph is **automatic** — when a derived atom reads another 
 | **Scalability**             | ⭐⭐⭐⭐⭐                      | ⭐⭐⭐                       | ⭐⭐⭐⭐                       |
 | **Community & Ecosystem**   | Massive                     | Growing fast              | Growing                     |
 | **Best For**                | Enterprise apps             | Small–mid apps            | Complex UI / fine-grained   |
+
+[⬆ Back to Top](#top)
 
 ---
 
@@ -317,6 +335,8 @@ Consider an app with `users`, `cart`, and `ui` state. A user adds an item to the
 | **Memory footprint**          | Medium            | Small              | Small                          |
 
 > 💡 **Rule of Thumb**: For most apps, all three perform well enough. Jotai shines when you have **large lists** with **frequent individual item updates** — think design tools, spreadsheets, or real-time dashboards.
+
+[⬆ Back to Top](#top)
 
 ---
 
@@ -368,6 +388,8 @@ Consider an app with `users`, `cart`, and `ui` state. A user adds an item to the
 
 > ⚠️ If your app deals with **financial data, audit trails, or regulatory compliance**, Redux Toolkit's debugging capabilities are a significant advantage.
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## 🔹 TypeScript Support
@@ -380,6 +402,8 @@ Consider an app with `users`, `cart`, and `ui` state. A user adds an item to the
 | **Selector type safety**  | Full (via RootState type)         | Full (via store type)            | Full (via atom type)           |
 | **Refactoring confidence**| High                              | High                             | High                           |
 | **Overall TS experience** | ⭐⭐⭐⭐⭐ (best documented)          | ⭐⭐⭐⭐ (clean, less setup)        | ⭐⭐⭐⭐ (most automatic)         |
+
+[⬆ Back to Top](#top)
 
 ---
 
@@ -397,6 +421,8 @@ Server-Side Rendering introduces unique challenges: state must be **initialized 
 | **Risk of state leaks**   | Low (well-documented)      | Medium (store is singleton) | Low (Provider scopes state) |
 
 > 💡 If SSR correctness is critical (e.g., e-commerce with personalized data), Redux Toolkit has the **most battle-tested** patterns. Zustand requires the most manual care since its stores are singletons by default.
+
+[⬆ Back to Top](#top)
 
 ---
 
@@ -437,6 +463,8 @@ Server-Side Rendering introduces unique challenges: state must be **initialized 
 | **Merge conflicts**            | Rare — atoms are small, independent files                            |
 | **Testing**                    | Test by rendering components with specific atom values               |
 | **Code splitting**             | Atoms are naturally code-split (only loaded when imported)           |
+
+[⬆ Back to Top](#top)
 
 ---
 
@@ -501,6 +529,8 @@ Before choosing a library, **classify what kind of state you actually have**:
 
 > 💡 **Most apps need less global state than you think.** If you classify first, you'll often find that 70% of your "state management problem" is actually a **data fetching problem** best solved by TanStack Query or RTK Query — not a store.
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## 🔹 Real World Use Case Mapping
@@ -519,6 +549,8 @@ Before choosing a library, **classify what kind of state you actually have**:
 | Spreadsheet / data grid app           | Jotai             | Cell-level reactivity via atom families, derived formulas via derived atoms                    |
 | Complex form with many dependencies   | Jotai             | Each field as an atom, validation as derived atoms, no unnecessary re-renders                  |
 | Real-time collaborative editor        | Jotai + Zustand   | Jotai for document atoms, Zustand for connection/presence state                               |
+
+[⬆ Back to Top](#top)
 
 ---
 
@@ -542,6 +574,8 @@ Before choosing a library, **classify what kind of state you actually have**:
 - **Delete old code only after new code is tested** — don't leave dead state around
 
 > 💡 **Key Insight**: All three libraries can **coexist in the same app**. A common production pattern is RTK Query or TanStack Query for server state, plus Zustand or Jotai for client/UI state.
+
+[⬆ Back to Top](#top)
 
 ---
 
@@ -588,6 +622,8 @@ Before choosing a library, **classify what kind of state you actually have**:
 | Use atom families for dynamic / list data              | Avoids re-renders of unrelated list items                     |
 | Document atom dependency graphs for your team          | Helps everyone understand what depends on what                |
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## 🔹 State Management Checklist
@@ -619,6 +655,8 @@ Before choosing a library, **classify what kind of state you actually have**:
 ✅ Feature state is co-located with feature components
 ```
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## 🔹 Key Interview Takeaways
@@ -646,6 +684,8 @@ Before choosing a library, **classify what kind of state you actually have**:
 ### "If you had to pick one default?"
 
 > **Zustand** for most new projects — simplest API, smallest bundle, fastest time-to-value. **Redux Toolkit** if the project will be large, long-lived, or worked on by many teams.
+
+[⬆ Back to Top](#top)
 
 ---
 
@@ -675,3 +715,5 @@ Hastag: SystemDesignWithZeeshanAli
 [systemdesignwithzeeshanali](https://dev.to/t/systemdesignwithzeeshanali)
 
 Git: https://github.com/ZeeshanAli-0704/front-end-system-design
+
+[⬆ Back to Top](#top)

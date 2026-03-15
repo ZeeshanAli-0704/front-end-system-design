@@ -1,22 +1,31 @@
-# Rendering Patterns — CSR, SSR, CSR+SSR (Universal), Static Rendering & Prerendering
+# Rendering Patterns — CSR, SSR, CSR+SSR (Universal), SSG, ISR, Prerendering & React Server Components
 
 > A deep-dive into **how**, **when**, and **why** each rendering strategy exists, the request/response flow for every pattern, and concise code samples.
 
 ---
 
+<a id="top"></a>
+
 ## Table of Contents
 
-1. [Client-Side Rendering (CSR)](#1-client-side-rendering-csr)
-2. [Server-Side Rendering (SSR)](#2-server-side-rendering-ssr)
-3. [Universal / Isomorphic Rendering (CSR + SSR)](#3-universal--isomorphic-rendering-csr--ssr)
-4. [Static Site Generation (SSG / Static Rendering)](#4-static-site-generation-ssg--static-rendering)
-5. [Prerendering](#5-prerendering)
-6. [Comparison Matrix](#6-comparison-matrix)
-7. [Decision Flowchart — When to Pick What](#7-decision-flowchart--when-to-pick-what)
+- [Client Side Rendering (CSR)](#client-side-rendering-csr)
+- [Server Side Rendering (SSR)](#server-side-rendering-ssr)
+- [Universal Isomorphic Rendering (CSR and SSR)](#universal-isomorphic-rendering-csr-and-ssr)
+- [Static Site Generation (SSG Static Rendering)](#static-site-generation-ssg-static-rendering)
+- [Incremental Static Regeneration (ISR)](#incremental-static-regeneration-isr)
+- [Prerendering](#prerendering)
+- [React Server Components (RSC)](#react-server-components-rsc)
+- [Comparison Matrix](#comparison-matrix)
+- [Decision Flowchart When to Pick What](#decision-flowchart-when-to-pick-what)
+- [Real World Pattern Usage](#real-world-pattern-usage)
+- [Common Pitfalls](#common-pitfalls)
+- [The Modern Approach Streaming SSR and Selective Hydration](#the-modern-approach-streaming-ssr-and-selective-hydration)
+- [Summary](#summary)
+[⬆ Back to Top](#top)
 
 ---
 
-## 1. Client-Side Rendering (CSR)
+## Client Side Rendering (CSR)
 
 ### What Is It?
 
@@ -122,9 +131,11 @@ export default function App() {
 
 > **Notice:** Data fetching happens *after* the JS bundle loads — this is the CSR waterfall.
 
+[⬆ Back to Top](#top)
+
 ---
 
-## 2. Server-Side Rendering (SSR)
+## Server Side Rendering (SSR)
 
 ### What Is It?
 
@@ -218,9 +229,11 @@ export function AddToCartButton({ id }) {
 
 > **Notice:** The page HTML is ready instantly. The `AddToCartButton` becomes clickable only after hydration.
 
+[⬆ Back to Top](#top)
+
 ---
 
-## 3. Universal / Isomorphic Rendering (CSR + SSR)
+## Universal Isomorphic Rendering (CSR and SSR)
 
 ### What Is It?
 
@@ -337,9 +350,11 @@ export default async function HomePage() {
 
 > **Key insight:** The first request is fully server-rendered. Clicking `<Link href="/about">` triggers a **client-side fetch** for the route data — the browser never reloads.
 
+[⬆ Back to Top](#top)
+
 ---
 
-## 4. Static Site Generation (SSG / Static Rendering)
+## Static Site Generation (SSG Static Rendering)
 
 ### What Is It?
 
@@ -398,18 +413,6 @@ Browser                            CDN (Cloudflare, Vercel Edge, S3+CF)
 | **Build Time** | Can be very long for sites with thousands of pages |
 | **Best For** | Blogs, docs, marketing sites, landing pages — content that changes infrequently |
 
-### Incremental Static Regeneration (ISR) — The Hybrid
-
-ISR (pioneered by Next.js) extends SSG: pages are statically generated but **re-generated in the background** after a configurable time interval, without a full rebuild.
-
-```
-Request 1 → serves cached HTML (built at deploy)
-                                               ← stale-while-revalidate timer expires
-Request 2 → serves stale cached HTML
-             (triggers background re-generation)
-Request 3 → serves FRESH re-generated HTML
-```
-
 ### When to Use SSG
 
 - Content **changes infrequently** (blogs, docs, portfolios).
@@ -417,31 +420,7 @@ Request 3 → serves FRESH re-generated HTML
 - You want **maximum performance** and **minimal infrastructure**.
 - The number of pages is **manageable** at build time (< tens of thousands).
 
-### Sample Code (Next.js SSG + ISR)
-
-```tsx
-// app/blog/[slug]/page.tsx
-
-// Tell Next.js which slugs to pre-render at build time
-export async function generateStaticParams() {
-  const posts = await fetch('https://cms.example.com/posts').then(r => r.json());
-  return posts.map(post => ({ slug: post.slug }));
-}
-
-// This runs at BUILD TIME (or during ISR re-generation)
-export default async function BlogPost({ params }) {
-  const post = await fetch(`https://cms.example.com/posts/${params.slug}`, {
-    next: { revalidate: 3600 },  // ISR: regenerate every hour
-  }).then(r => r.json());
-
-  return (
-    <article>
-      <h1>{post.title}</h1>
-      <div dangerouslySetInnerHTML={{ __html: post.content }} />
-    </article>
-  );
-}
-```
+### Sample Code (Next.js SSG)
 
 ```tsx
 // Pure SSG (no revalidation) — Astro example
@@ -463,9 +442,162 @@ const team = await fetch('https://cms.example.com/team').then(r => r.json());
 <!-- This entire file becomes a static .html at build time. Zero JS shipped. -->
 ```
 
+[⬆ Back to Top](#top)
+
 ---
 
-## 5. Prerendering
+## Incremental Static Regeneration (ISR)
+
+### What Is It?
+
+ISR (pioneered by Next.js) extends SSG by allowing pages to be **re-generated in the background** after a configurable time interval — **without a full site rebuild**. It combines the performance of static pages with the freshness of server-rendered pages.
+
+### How It Works — Step by Step
+
+```
+                        BUILD TIME (same as SSG)
+
+  1. Build generates static HTML for all known routes
+  2. Pages are deployed to CDN as static files
+
+
+                        REQUEST TIME
+
+Browser                            CDN / Edge                    Origin Server
+  |                                     |                              |
+  |  1. GET /products/42                |                              |
+  |------------------------------------>|                              |
+  |                                     |                              |
+  |  2. CDN checks: is cached page      |                              |
+  |     still within revalidate window? |                              |
+  |                                     |                              |
+  |     IF FRESH (within TTL):          |                              |
+  |  3a. Serve cached HTML instantly    |                              |
+  |<------------------------------------|                              |
+  |                                     |                              |
+  |     IF STALE (TTL expired):         |                              |
+  |  3b. Serve stale HTML instantly     |                              |
+  |<------------------------------------|                              |
+  |                                     |                              |
+  |     4. Trigger BACKGROUND regen --->|---regen request------------>|
+  |        (user does NOT wait)         |                              |
+  |                                     |   5. Server re-renders page  |
+  |                                     |      with fresh data         |
+  |                                     |<--- new HTML ----------------|  
+  |                                     |                              |
+  |     6. CDN replaces cached page     |                              |
+  |        with fresh version           |                              |
+  |                                     |                              |
+  |  NEXT REQUEST:                      |                              |
+  |  7. GET /products/42                |                              |
+  |------------------------------------>|                              |
+  |  8. Serves FRESH re-generated HTML  |                              |
+  |<------------------------------------|                              |
+```
+
+**Key behavior:** ISR follows a **stale-while-revalidate** model. The user who triggers regeneration still gets the stale (but fast) page. The **next** user gets the fresh page. No user ever waits for regeneration.
+
+### Key Characteristics
+
+| Aspect | Detail |
+|---|---|
+| **FCP** | Fastest — same as SSG (pre-built HTML from CDN edge) |
+| **TTI** | Fast — minimal JS for mostly static content |
+| **SEO** | Excellent — full HTML available to crawlers |
+| **Server Cost** | Low — only regenerates when stale + requested (not every request like SSR) |
+| **Freshness** | Near-fresh — stale for at most `revalidate` seconds, then updated |
+| **Build Time** | Same as SSG for initial build; no full rebuild needed for updates |
+| **Scalability** | Excellent — CDN serves most traffic; origin only handles regenerations |
+| **Best For** | E-commerce product pages, CMS-driven marketing sites, blogs with frequent updates |
+
+### ISR vs SSG vs SSR — The Trade-off
+
+```
+SSG:  Build once → serve forever → stale until full rebuild
+ISR:  Build once → serve → regenerate in background after TTL
+SSR:  No build → render fresh on every single request
+
+Freshness:    SSR > ISR > SSG
+Performance:  SSG = ISR > SSR
+Server Cost:  SSG < ISR << SSR
+```
+
+### On-Demand Revalidation
+
+Beyond time-based ISR, modern frameworks support **on-demand revalidation** — triggering a page regeneration via an API call (e.g., from a CMS webhook) instead of waiting for the TTL to expire.
+
+```
+CMS content updated → Webhook fires → POST /api/revalidate?path=/blog/my-post
+                                        → Server regenerates that specific page
+                                        → Next request gets fresh content immediately
+```
+
+This gives you **SSG performance** with **near-instant freshness** — the best of both worlds.
+
+### When to Use ISR
+
+- Content updates **periodically but not on every request** (product pages, blog posts, landing pages).
+- You need **SSG performance** but can't tolerate stale content for hours/days.
+- You have **too many pages** to rebuild the entire site on every content change.
+- You want to **avoid the server cost** of SSR while keeping content relatively fresh.
+
+### When NOT to Use ISR
+
+- Content is **personalized per user** (cart, profile, recommendations) → use SSR.
+- Content must be **real-time fresh** (stock prices, live scores) → use SSR or CSR with API.
+- No server/edge runtime available (pure static hosting like GitHub Pages) → use SSG.
+
+### Sample Code (Next.js App Router)
+
+```tsx
+// app/products/[id]/page.tsx
+
+// Generate static pages for known products at build time
+export async function generateStaticParams() {
+  const products = await fetch('https://api.example.com/products').then(r => r.json());
+  return products.map(p => ({ id: String(p.id) }));
+}
+
+// This runs at BUILD TIME and again during ISR re-generation
+export default async function ProductPage({ params }) {
+  const product = await fetch(`https://api.example.com/products/${params.id}`, {
+    next: { revalidate: 3600 },  // ISR: regenerate at most every 60 minutes
+  }).then(r => r.json());
+
+  return (
+    <main>
+      <h1>{product.name}</h1>
+      <p>${product.price}</p>
+      <p>{product.description}</p>
+    </main>
+  );
+}
+```
+
+```ts
+// app/api/revalidate/route.ts — On-demand revalidation via webhook
+import { revalidatePath } from 'next/cache';
+import { NextRequest, NextResponse } from 'next/server';
+
+export async function POST(request: NextRequest) {
+  const { path, secret } = await request.json();
+
+  // Verify the webhook secret
+  if (secret !== process.env.REVALIDATION_SECRET) {
+    return NextResponse.json({ error: 'Invalid secret' }, { status: 401 });
+  }
+
+  // Regenerate the specific page
+  revalidatePath(path); // e.g., '/products/42'
+  return NextResponse.json({ revalidated: true, path });
+}
+```
+
+[⬆ Back to Top](#top)
+
+---
+
+## Prerendering
 
 ### What Is It?
 
@@ -540,7 +672,7 @@ Browser / Crawler                Middleware (Rendertron)           Origin Server
 - The number of routes to prerender is **limited and known**.
 - You want a **quick SEO fix** while planning a longer-term migration to SSR/SSG.
 
-### Sample Code
+### Sample Code (Prerendering)
 
 #### Build-Time Prerendering (using `prerender-spa-plugin` with Webpack)
 
@@ -595,9 +727,201 @@ app.use(express.static('dist'));
 app.listen(3000);
 ```
 
+[⬆ Back to Top](#top)
+
 ---
 
-## 6. Comparison Matrix
+## React Server Components (RSC)
+
+### What Is It?
+
+React Server Components (RSC) are a **new rendering paradigm** introduced by the React team and shipped as the default in **Next.js App Router (13.4+)**. Unlike traditional rendering patterns where the entire component tree is either server-rendered or client-rendered, RSC allows you to **mix server and client components** in the same tree.
+
+Server Components **run only on the server** — their code is never sent to the browser. They can directly access databases, file systems, and server-only APIs. They produce **zero client-side JavaScript** for their own rendering.
+
+### How It Works — Step by Step
+
+```
+Browser                            Server
+  |                                     |
+  |  1. GET /products/42                |
+  |------------------------------------>|
+  |                                     |
+  |  2. Server renders the component    |
+  |     tree:                           |
+  |                                     |
+  |     <ProductPage>          ← Server Component (runs on server)
+  |       <ProductInfo />      ← Server Component (DB query, zero JS)
+  |       <Reviews />          ← Server Component (DB query, zero JS)
+  |       <AddToCartButton />  ← Client Component (interactive, JS shipped)
+  |                                     |
+  |  3. Server sends:                   |
+  |     - Full HTML for immediate paint |
+  |     - RSC Payload (serialized tree) |
+  |     - JS bundle ONLY for Client     |
+  |       Components                    |
+  |<------------------------------------|
+  |                                     |
+  |  4. Browser paints HTML instantly   |
+  |                                     |
+  |  5. JS hydrates ONLY the Client     |
+  |     Components (AddToCartButton)    |
+  |     Server Components need NO JS    |
+  |                                     |
+```
+
+### Server Components vs Client Components
+
+| Aspect | Server Component | Client Component |
+|---|---|---|
+| **Runs on** | Server only | Server (SSR) + Client (hydration) |
+| **JS sent to browser** | None (zero KB) | Full component code |
+| **Can access** | DB, filesystem, server secrets, APIs | Browser APIs, DOM, event handlers |
+| **Can use** | `async/await` directly, Node.js APIs | `useState`, `useEffect`, `onClick`, etc. |
+| **Interactivity** | None — pure render output | Full — state, effects, event handling |
+| **Default in App Router** | ✅ Yes (all components are Server by default) | Must opt-in with `'use client'` directive |
+
+### The Mental Model
+
+Think of your component tree as a **map with two colors**:
+
+```
+┌─────────────────────────────────────────────────────┐
+│  Layout (Server)                                     │
+│  ┌────────────────────────────────────────────────┐  │
+│  │  Header (Server) — no JS                       │  │
+│  │  ┌──────────────────────────────────────────┐  │  │
+│  │  │  SearchBar (Client) — 'use client'       │  │  │
+│  │  │  (needs onChange, useState)               │  │  │
+│  │  └──────────────────────────────────────────┘  │  │
+│  ├────────────────────────────────────────────────┤  │
+│  │  ProductGrid (Server) — DB query, no JS        │  │
+│  │  ┌──────────┐  ┌──────────┐  ┌──────────┐     │  │
+│  │  │ Card     │  │ Card     │  │ Card     │     │  │
+│  │  │ (Server) │  │ (Server) │  │ (Server) │     │  │
+│  │  │          │  │          │  │          │     │  │
+│  │  │ [Buy]    │  │ [Buy]    │  │ [Buy]    │     │  │
+│  │  │ (Client) │  │ (Client) │  │ (Client) │     │  │
+│  │  └──────────┘  └──────────┘  └──────────┘     │  │
+│  ├────────────────────────────────────────────────┤  │
+│  │  Footer (Server) — no JS                       │  │
+│  └────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────┘
+
+  █ Server Component = zero JS shipped
+  █ Client Component = JS shipped + hydrated
+```
+
+**Key rule:** Server Components can import Client Components. Client Components **cannot** import Server Components (but can accept them as `children` props).
+
+### Key Characteristics
+
+| Aspect | Detail |
+|---|---|
+| **FCP** | 🟢 Fast — full HTML from server, no waiting for JS |
+| **Bundle Size** | 🟢 Significantly smaller — only Client Components ship JS |
+| **SEO** | 🟢 Excellent — full HTML response |
+| **Data Fetching** | Direct server access — no API round-trips, no waterfalls |
+| **Interactivity** | Client Components handle all user interactions |
+| **DX** | `async/await` directly in components — no `useEffect` data fetching |
+| **Complexity** | 🟡 Medium — must understand Server/Client boundary rules |
+| **Best For** | Data-heavy pages with selective interactivity (e-commerce, dashboards, content sites) |
+
+### Pros & Cons
+
+| ✅ Pros | ❌ Cons |
+|---|---|
+| Zero JS for Server Components (massive bundle reduction) | Mental model shift — must learn Server/Client boundary |
+| Direct DB/API access (no fetch waterfalls) | Cannot use hooks (`useState`, `useEffect`) in Server Components |
+| Faster page loads (less JS to download, parse, execute) | Ecosystem still adapting — some libraries need `'use client'` wrappers |
+| Eliminates many client-side data fetching patterns | Currently only fully supported in Next.js App Router |
+| Streaming + Suspense integration out of the box | Server infrastructure required (not pure static) |
+| Reduced hydration cost (only Client Components hydrate) | Debugging can be harder (server + client execution) |
+
+### When to Use RSC
+
+- Building with **Next.js App Router** (13.4+) — RSC is the default.
+- Pages have **lots of data-fetching** and only **pockets of interactivity** (e.g., product pages with a buy button).
+- You want to **drastically reduce JS bundle size**.
+- You need **direct server access** (DB queries, secret keys) without building separate API routes.
+
+### When NOT to Use RSC
+
+- **Highly interactive apps** where most components need state/effects (Figma, Google Docs) — most components would be Client Components anyway.
+- **No server runtime available** — RSC requires a server or edge runtime.
+- Your framework **doesn't support RSC** — currently only Next.js has full RSC support. Remix, Astro, and others are exploring it.
+
+### Sample Code (Next.js App Router)
+
+```tsx
+// app/products/[id]/page.tsx — Server Component (default)
+// ✅ Can use async/await, access DB directly, zero JS shipped
+
+import { db } from '@/lib/db';
+import { AddToCart } from './AddToCart'; // Client Component
+
+export default async function ProductPage({ params }) {
+  // Direct DB query — no API route needed, no useEffect, no loading state
+  const product = await db.products.findUnique({ where: { id: params.id } });
+  const reviews = await db.reviews.findMany({ where: { productId: params.id } });
+
+  return (
+    <main>
+      {/* All of this is Server-rendered, zero JS */}
+      <h1>{product.name}</h1>
+      <p>{product.description}</p>
+      <p className="price">${product.price}</p>
+
+      {/* Only this component ships JS to the browser */}
+      <AddToCart productId={product.id} />
+
+      <section>
+        <h2>Reviews ({reviews.length})</h2>
+        {reviews.map(r => (
+          <div key={r.id}>
+            <strong>{r.author}</strong>
+            <p>{r.text}</p>
+          </div>
+        ))}
+      </section>
+    </main>
+  );
+}
+```
+
+```tsx
+// app/products/[id]/AddToCart.tsx — Client Component
+'use client';  // ← This directive marks it as a Client Component
+
+import { useState } from 'react';
+
+export function AddToCart({ productId }: { productId: string }) {
+  const [adding, setAdding] = useState(false);
+
+  async function handleClick() {
+    setAdding(true);
+    await fetch('/api/cart', {
+      method: 'POST',
+      body: JSON.stringify({ productId }),
+    });
+    setAdding(false);
+  }
+
+  return (
+    <button onClick={handleClick} disabled={adding}>
+      {adding ? 'Adding...' : 'Add to Cart'}
+    </button>
+  );
+}
+```
+
+> **Key takeaway:** The product name, description, price, and all reviews are rendered on the server with **zero JavaScript**. Only the tiny `AddToCart` button ships JS. On a page with 50 reviews, this could mean **hundreds of KB less JavaScript** compared to a fully client-rendered approach.
+
+[⬆ Back to Top](#top)
+
+---
+
+## Comparison Matrix
 
 | Pattern | Render Location | Render Timing | FCP | TTI | SEO | Server Cost | Freshness | Complexity |
 |---|---|---|---|---|---|---|---|---|
@@ -605,12 +929,15 @@ app.listen(3000);
 | **SSR** | Server | On every request | 🟢 Fast | 🟡 Delayed (hydration) | 🟢 Excellent | 🔴 High | 🟢 Always fresh | 🟡 Medium |
 | **CSR + SSR (Universal)** | Server → Browser | First load: server; then client | 🟢 Fast | 🟡 Delayed (hydration) | 🟢 Excellent | 🟡 Medium | 🟢 Always fresh | 🔴 High |
 | **SSG** | Build machine | At build time | 🟢 Fastest | 🟢 Fast | 🟢 Excellent | 🟢 None | 🔴 Stale (until rebuild) | 🟢 Low |
-| **SSG + ISR** | Build → Server (bg) | Build + on-demand bg regen | 🟢 Fastest | 🟢 Fast | 🟢 Excellent | 🟡 Low | 🟡 Near-fresh | 🟡 Medium |
+| **ISR** | Build → Server (bg) | Build + on-demand bg regen | 🟢 Fastest | 🟢 Fast | 🟢 Excellent | 🟡 Low | 🟡 Near-fresh | 🟡 Medium |
 | **Prerendering** | Headless browser | Build or on-demand | 🟡 Medium | 🟡 Medium | 🟢 Good | 🟡 Medium | 🟡 Depends | 🟡 Medium |
+| **RSC** | Server (components) + Client (interactive) | On request (Server) + hydrate (Client) | 🟢 Fast | 🟢 Fast (less JS) | 🟢 Excellent | 🟡 Medium | 🟢 Always fresh | 🟡 Medium |
+
+[⬆ Back to Top](#top)
 
 ---
 
-## 7. Decision Flowchart — When to Pick What
+## Decision Flowchart When to Pick What
 
 ```
 Start
@@ -637,12 +964,17 @@ Start
   └─ Is it a legacy SPA you can't rewrite?
        │
        ├─ YES → ✅ Prerendering (Rendertron / Puppeteer)
-       └─ NO  → Pick from above based on requirements
+       └─ NO  → Using Next.js App Router?
+                  │
+                  ├─ YES → ✅ RSC (Server Components by default + Client where needed)
+                  └─ NO  → Pick from above based on requirements
 ```
+
+[⬆ Back to Top](#top)
 
 ---
 
-## 8. Real-World Pattern Usage
+## Real World Pattern Usage
 
 | Company / Product | Pattern | Why |
 |---|---|---|
@@ -650,11 +982,14 @@ Start
 | **Amazon Product Pages** | SSR | SEO critical, personalized (price, recommendations), data changes constantly |
 | **Next.js Docs, Gatsby blogs** | SSG | Content from markdown/CMS, changes infrequently, maximum performance |
 | **Vercel, Shopify Storefronts** | Universal (CSR+SSR) + ISR | SEO + interactivity + near-fresh content without full SSR cost |
+| **Next.js App Router apps** | RSC + Streaming | Minimal JS, direct DB access, selective hydration |
 | **Legacy Angular SPAs** | Prerendering | Quick SEO fix without rewriting to SSR |
+
+[⬆ Back to Top](#top)
 
 ---
 
-## 9. Common Pitfalls
+## Common Pitfalls
 
 ### Hydration Mismatch (SSR / Universal)
 Server HTML and client-rendered DOM must match exactly, or React will throw warnings and re-render from scratch.
@@ -693,9 +1028,11 @@ Every request triggers rendering. Mitigate with:
 - **Edge rendering** (Cloudflare Workers, Vercel Edge Functions) — lower latency, distributed load
 - **Streaming SSR** — send HTML in chunks as components resolve
 
+[⬆ Back to Top](#top)
+
 ---
 
-## 10. The Modern Approach: Streaming SSR + Selective Hydration
+## The Modern Approach Streaming SSR and Selective Hydration
 
 Modern frameworks (React 18+, Next.js 13+) combine the best of all patterns:
 
@@ -763,6 +1100,8 @@ async function ProductDetails() {
 
 > **Selective Hydration:** React 18 can hydrate components **independently** — if the user clicks a not-yet-hydrated component, React **prioritizes hydrating that component first**.
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## Summary
@@ -775,14 +1114,20 @@ async function ProductDetails() {
 | Maximum speed, infrequent updates | **SSG** |
 | SSG + freshish data without full rebuild | **ISR** |
 | SEO for legacy SPA, no rewrite budget | **Prerendering** |
-| Best of everything (modern) | **Streaming SSR + Selective Hydration** |
+| Minimal JS + direct server access + selective interactivity | **RSC (React Server Components)** |
+| Best of everything (modern) | **Streaming SSR + RSC + Selective Hydration** |
 
+[⬆ Back to Top](#top)
 
+---
 
-Get all articles related to system design 
-Hastag: SystemDesignWithZeeshanAli
+More Details:
 
+Get all articles related to system design
+Hashtag: SystemDesignWithZeeshanAli
 
 [systemdesignwithzeeshanali](https://dev.to/t/systemdesignwithzeeshanali)
 
 Git: https://github.com/ZeeshanAli-0704/front-end-system-design
+
+[⬆ Back to Top](#top)

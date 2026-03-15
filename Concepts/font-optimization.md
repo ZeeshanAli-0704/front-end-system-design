@@ -2,18 +2,21 @@
 
 Custom fonts enhance brand identity but can severely hurt performance. An unoptimized font setup can delay text rendering by 1-3 seconds, causing Flash of Invisible Text (FOIT) or Flash of Unstyled Text (FOUT).
 
+<a id="top"></a>
+
 ## Table of Contents
 
-- [1. Common Font Loading Issues (FOUT, FOIT)](#1-common-font-loading-issues-fout-foit)
-- [2. Font Display Strategy](#2-font-display-strategy)
-- [3. Font Format Optimization (WOFF2, WOFF)](#3-font-format-optimization-woff2-woff)
-- [4. Font Preloading](#4-font-preloading)
-- [5. Font Face Observer](#5-font-face-observer)
+- [Common Font Loading Issues (FOUT, FOIT)](#common-font-loading-issues-fout-foit)
+- [Font Display Strategy](#font-display-strategy)
+- [Font Format Optimization (WOFF2, WOFF)](#font-format-optimization-woff2-woff)
+- [Font Preloading](#font-preloading)
+- [Font Face Observer](#font-face-observer)
 - [Key Takeaways](#key-takeaways)
+[⬆ Back to Top](#top)
 
 ---
 
-## 1. Common Font Loading Issues (FOUT, FOIT)
+## Common Font Loading Issues (FOUT, FOIT)
 
 **Concept:**
 When a browser encounters custom fonts, it must decide what to show while the font downloads. This creates two well-known problems:
@@ -50,9 +53,11 @@ Timeline:
 - FOUT is acceptable – content is readable from the start
 - Best approach: Control the behavior explicitly with `font-display`
 
+[⬆ Back to Top](#top)
+
 ---
 
-## 2. Font Display Strategy
+## Font Display Strategy
 
 **Concept:**
 The `font-display` CSS property controls how a font face is displayed based on whether and when it is downloaded and ready to use.
@@ -104,9 +109,11 @@ The `font-display` CSS property controls how a font face is displayed based on w
 }
 ```
 
+[⬆ Back to Top](#top)
+
 ---
 
-## 3. Font Format Optimization (WOFF2, WOFF)
+## Font Format Optimization (WOFF2, WOFF)
 
 **Concept:**
 Font file format directly impacts download size. WOFF2 uses Brotli compression and is 30% smaller than WOFF, which uses gzip compression.
@@ -164,9 +171,11 @@ p  { font-weight: 400; }
 - One variable font file replaces 4-8 individual files
 - Total size is typically smaller than 2-3 static files combined
 
+[⬆ Back to Top](#top)
+
 ---
 
-## 4. Font Preloading
+## Font Preloading
 
 **Concept:**
 Fonts are discovered late in the rendering process (CSS must be parsed first). Preloading tells the browser to start downloading the font file early, before CSS parsing discovers it.
@@ -212,9 +221,11 @@ HTML downloaded → Font download starts immediately (parallel with CSS)
 | Primary heading font | Icon fonts loaded later |
 | Above-the-fold fonts | Secondary decorative fonts |
 
+[⬆ Back to Top](#top)
+
 ---
 
-## 5. Font Face Observer
+## Font Face Observer
 
 **Concept:**
 A JavaScript library that detects when a specific font has fully loaded and is ready to use. This gives you programmatic control over font-dependent styling and transitions.
@@ -284,6 +295,8 @@ if (sessionStorage.getItem('fonts-loaded')) {
 }
 ```
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## Key Takeaways
@@ -303,3 +316,18 @@ if (sessionStorage.getItem('fonts-loaded')) {
 | FCP (First Contentful Paint) | ++ Moderate – font-display and preloading speed up text rendering |
 | CLS (Cumulative Layout Shift) | ++ Moderate – font swapping causes layout shifts if metrics differ |
 | LCP (Largest Contentful Paint) | + Minor – text elements can be LCP if they are the largest visible element |
+
+[⬆ Back to Top](#top)
+
+---
+
+More Details:
+
+Get all articles related to system design
+Hashtag: SystemDesignWithZeeshanAli
+
+[systemdesignwithzeeshanali](https://dev.to/t/systemdesignwithzeeshanali)
+
+Git: https://github.com/ZeeshanAli-0704/front-end-system-design
+
+[⬆ Back to Top](#top)

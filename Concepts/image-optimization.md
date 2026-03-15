@@ -2,24 +2,30 @@
 
 Images are typically the largest assets on a web page, often accounting for 50-70% of total page weight. Optimizing images directly impacts LCP (Largest Contentful Paint), bandwidth usage, and overall user experience.
 
+<a id="top"></a>
+
 ## Table of Contents
 
-- [1. Image Formats (JPEG, PNG, WebP, AVIF, SVG)](#1-image-formats-jpeg-png-webp-avif-svg)
-- [2. Device Pixel Ratio (DPR)](#2-device-pixel-ratio-dpr)
-- [3. Responsive Images (srcset, sizes)](#3-responsive-images-srcset-sizes)
-- [4. Lazy Loading Images](#4-lazy-loading-images)
-- [5. Progressive and Interlaced Images](#5-progressive-and-interlaced-images)
-- [6. Image Compression (Lossy vs Lossless)](#6-image-compression-lossy-vs-lossless)
-- [7. Image CDN and Transformation](#7-image-cdn-and-transformation)
-- [8. Art Direction (Picture Element)](#8-art-direction-picture-element)
-- [9. Placeholder Strategies (LQIP, BlurHash, Dominant Color)](#9-placeholder-strategies-lqip-blurhash-dominant-color)
-- [10. CSS Sprite Images](#10-css-sprite-images)
-- [11. Adaptive Media Loading](#11-adaptive-media-loading)
+- [Image Formats (JPEG, PNG, WebP, AVIF, SVG)](#image-formats-jpeg-png-webp-avif-svg)
+- [Device Pixel Ratio (DPR)](#device-pixel-ratio-dpr)
+- [Responsive Images (srcset, sizes)](#responsive-images-srcset-sizes)
+- [Lazy Loading Images](#lazy-loading-images)
+- [Fetch Priority (fetchpriority Attribute)](#fetch-priority-fetchpriority-attribute)
+- [Progressive and Interlaced Images](#progressive-and-interlaced-images)
+- [Image Compression (Lossy vs Lossless)](#image-compression-lossy-vs-lossless)
+- [Image CDN and Transformation](#image-cdn-and-transformation)
+- [Art Direction (Picture Element)](#art-direction-picture-element)
+- [Placeholder Strategies (LQIP, BlurHash, Dominant Color)](#placeholder-strategies-lqip-blurhash-dominant-color)
+- [CSS Sprite Images](#css-sprite-images)
+- [Adaptive Media Loading](#adaptive-media-loading)
 - [Key Takeaways](#key-takeaways)
+
+
+[⬆ Back to Top](#top)
 
 ---
 
-## 1. Image Formats (JPEG, PNG, WebP, AVIF, SVG)
+## Image Formats (JPEG, PNG, WebP, AVIF, SVG)
 
 **Concept:**
 Choosing the right image format is the first and most impactful optimization. Each format has specific strengths depending on the content type, transparency needs, and compression quality.
@@ -78,9 +84,11 @@ Is it an icon/logo/illustration?
               └── NO → Use WebP (with JPEG fallback)
 ```
 
+[⬆ Back to Top](#top)
+
 ---
 
-## 2. Device Pixel Ratio (DPR)
+## Device Pixel Ratio (DPR)
 
 **Concept:**
 Device Pixel Ratio (DPR) is the ratio between **physical pixels** on the screen and **CSS (logical) pixels** used in layout. It tells you how many hardware pixels represent one CSS pixel.
@@ -196,9 +204,11 @@ ctx.fillRect(10, 10, 100, 100);
 
 **Key rule:** Always serve images at **display size × DPR**. But cap at 2x — the visual difference between 2x and 3x is negligible for most images, while 3x files are significantly larger.
 
+[⬆ Back to Top](#top)
+
 ---
 
-## 3. Responsive Images (srcset, sizes)
+## Responsive Images (srcset, sizes)
 
 **Concept:**
 Instead of serving one large image to all devices, serve different image resolutions based on the device's screen size and pixel density. A 4K hero image on a 320px mobile screen wastes bandwidth.
@@ -264,9 +274,11 @@ Example: Viewport = 500px, DPR = 2
   srcset: 400w, 800w, 1200w → browser picks 800w ✓
 ```
 
+[⬆ Back to Top](#top)
+
 ---
 
-## 4. Lazy Loading Images
+## Lazy Loading Images
 
 **Concept:**
 Do not load images that are below the fold (not visible in the viewport). Load them only when the user scrolls near them. This reduces initial page weight and speeds up first render.
@@ -336,11 +348,109 @@ document.querySelectorAll('img[data-src]').forEach(img => {
 <img src="sidebar-ad.jpg" fetchpriority="low" alt="Ad">
 ```
 
-`fetchpriority="high"` tells the browser to prioritize this image in the network queue, which directly improves LCP.
+`fetchpriority="high"` tells the browser to prioritize this image in the network queue, which directly improves LCP. See [Section 5](#5-fetch-priority-fetchpriority-attribute) for a full deep dive.
+
+[⬆ Back to Top](#top)
 
 ---
 
-## 5. Progressive and Interlaced Images
+## Fetch Priority (fetchpriority Attribute)
+
+**Concept:**
+By default, the browser assigns a **priority** to every resource based on its type and position in the HTML. Images generally get a medium priority. But the browser doesn't know which image is your **LCP element** (the largest visible content) until it starts rendering. The `fetchpriority` attribute lets you **override** the browser's default priority, telling it exactly which images matter most.
+
+This is one of the **highest-impact, lowest-effort** optimizations for LCP. Adding a single attribute to your hero image can improve LCP by 100-400ms.
+
+**Default browser priorities for images:**
+
+| Image Position | Default Priority | Why |
+|----------------|-----------------|-----|
+| First large image in viewport | High (auto-detected in some browsers) | Browser guesses it might be LCP |
+| Other in-viewport images | Medium | Normal parsing order |
+| Below-fold images | Low | Not immediately visible |
+| `loading="lazy"` images | Low | Explicitly deferred |
+| Background images (CSS) | Low | Discovered late (after CSSOM) |
+
+**With `fetchpriority`, you make the intent explicit:**
+
+```html
+<!-- ✅ LCP hero image — fetch this FIRST -->
+<img src="hero.webp" fetchpriority="high" alt="Hero banner" width="1200" height="600">
+
+<!-- ✅ Above-fold but not LCP — normal priority -->
+<img src="logo.svg" alt="Logo">
+
+<!-- ✅ Above-fold but non-critical — lower priority -->
+<img src="sidebar-promo.jpg" fetchpriority="low" alt="Promo">
+
+<!-- ✅ Below-fold carousel — low priority + lazy -->
+<img src="carousel-1.jpg" loading="lazy" fetchpriority="low" alt="Carousel image">
+```
+
+**`fetchpriority` values:**
+
+| Value | Effect | Use For |
+|-------|--------|---------|
+| `high` | Promotes resource to high network priority | LCP image, hero banner, critical above-fold image |
+| `low` | Demotes resource to low network priority | Non-critical visible images, ads, decorative images |
+| `auto` | Browser decides (default) | Everything else |
+
+**Combining with `<link rel="preload">`:**
+
+For maximum LCP optimization, combine preload with fetchpriority:
+
+```html
+<head>
+  <!-- Preload tells browser about the image EARLY (during HTML parsing) -->
+  <!-- fetchpriority="high" ensures it's prioritized over other preloads -->
+  <link rel="preload" href="/hero.webp" as="image" fetchpriority="high">
+</head>
+<body>
+  <img src="/hero.webp" fetchpriority="high" alt="Hero">
+</body>
+```
+
+**Using with `<picture>` element:**
+
+```html
+<picture>
+  <source srcset="hero.avif" type="image/avif">
+  <source srcset="hero.webp" type="image/webp">
+  <img src="hero.jpg" fetchpriority="high" alt="Hero banner">
+</picture>
+```
+
+The `fetchpriority` goes on the `<img>` fallback — it applies to whichever source the browser selects.
+
+**Using with background images (via preload):**
+
+```html
+<!-- CSS background images are discovered late — preload with high priority -->
+<link rel="preload" href="/hero-bg.webp" as="image" fetchpriority="high">
+```
+
+**Impact on LCP — real-world results:**
+
+| Scenario | Without fetchpriority | With fetchpriority="high" | Improvement |
+|----------|-----------------------|--------------------------|-------------|
+| Hero image on e-commerce page | LCP: 2.8s | LCP: 2.4s | ~400ms |
+| News article header image | LCP: 2.2s | LCP: 1.9s | ~300ms |
+| Blog post hero | LCP: 1.8s | LCP: 1.6s | ~200ms |
+
+**Browser support:** Chrome 101+, Edge 101+, Safari 17.2+, Firefox 132+.
+
+**Best practices:**
+- Only use `fetchpriority="high"` on **one image** per page (the LCP candidate)
+- Never use `fetchpriority="high"` on lazy-loaded images (contradictory signals)
+- Use `fetchpriority="low"` on above-fold images that aren't the LCP (ads, sidebar)
+- Combine with `<link rel="preload">` for maximum effect on LCP
+- Always set `width` and `height` on the LCP image to avoid CLS
+
+[⬆ Back to Top](#top)
+
+---
+
+## Progressive and Interlaced Images
 
 **Concept:**
 Normal images load top-to-bottom, line by line. Progressive images load as a blurry full image first, then sharpen progressively. This gives users a faster perceived experience.
@@ -387,9 +497,11 @@ cjpeg -progressive input.bmp > output-progressive.jpg
 - On slow connections (3G/4G), progressive JPEG is significantly better
 - Rule: Use progressive for images > 10KB
 
+[⬆ Back to Top](#top)
+
 ---
 
-## 6. Image Compression (Lossy vs Lossless)
+## Image Compression (Lossy vs Lossless)
 
 **Concept:**
 Compression reduces image file size. The key decision is how much quality loss is acceptable.
@@ -475,9 +587,11 @@ module.exports = {
 
 **Automation tip:** Never manually compress images. Integrate compression into your CI/CD pipeline or use an Image CDN that handles it automatically. Manual compression doesn't scale and is error-prone.
 
+[⬆ Back to Top](#top)
+
 ---
 
-## 7. Image CDN and Transformation
+## Image CDN and Transformation
 
 **Concept:**
 An Image CDN serves images from edge servers closest to the user and can dynamically resize, convert, and optimize images on-the-fly via URL parameters. No need to manually create multiple sizes.
@@ -544,9 +658,11 @@ function HeroSection() {
 - Prevents layout shift with width/height
 - Serves from optimized CDN endpoint
 
+[⬆ Back to Top](#top)
+
 ---
 
-## 8. Art Direction (Picture Element)
+## Art Direction (Picture Element)
 
 **Concept:**
 Art direction is about showing a completely different image (not just a resized version) at different breakpoints. A wide landscape photo on desktop may need a tightly cropped portrait version on mobile.
@@ -596,9 +712,11 @@ Art direction is about showing a completely different image (not just a resized 
 </picture>
 ```
 
+[⬆ Back to Top](#top)
+
 ---
 
-## 9. Placeholder Strategies (LQIP, BlurHash, Dominant Color)
+## Placeholder Strategies (LQIP, BlurHash, Dominant Color)
 
 **Concept:**
 While the real image loads, show a lightweight placeholder to avoid blank space and layout shifts. This dramatically improves perceived performance.
@@ -684,9 +802,11 @@ ctx.putImageData(imageData, 0, 0);
 | BlurHash | ~20-30 chars | Good (color gradient) | Requires library |
 | Dominant Color | ~7 chars (hex) | Basic (solid color) | Simplest |
 
+[⬆ Back to Top](#top)
+
 ---
 
-## 10. CSS Sprite Images
+## CSS Sprite Images
 
 **Concept:**
 A CSS sprite is a single image file that contains multiple smaller images (icons, buttons, UI elements) arranged in a grid. Instead of making separate HTTP requests for each small image, you load one sprite sheet and use CSS `background-position` to display only the portion you need.
@@ -822,9 +942,11 @@ module.exports = {
 
 **Bottom line:** CSS sprites are still relevant for raster icon sets, but for new projects, prefer **SVG sprites** or **inline SVGs** for scalability and DPR independence. Use CSS sprites when working with photographic/raster UI elements that can't be vectorized.
 
+[⬆ Back to Top](#top)
+
 ---
 
-## 11. Adaptive Media Loading
+## Adaptive Media Loading
 
 **Concept:**
 Adaptive media loading is the practice of serving **different quality, size, or even type of media** based on the user's **device capabilities, network conditions, and preferences**. Instead of one-size-fits-all, you adapt the experience to each user's context.
@@ -1063,6 +1185,8 @@ function ProductImage({ src, alt }) {
 
 **Key principle:** Adaptive loading is not about degrading the experience — it's about delivering **the best possible experience for each user's context**.
 
+[⬆ Back to Top](#top)
+
 ---
 
 ## Key Takeaways
@@ -1087,3 +1211,18 @@ function ProductImage({ src, alt }) {
 | LCP (Largest Contentful Paint) | +++ Major – images are often the LCP element |
 | CLS (Cumulative Layout Shift) | ++ Moderate – proper dimensions and placeholders prevent shifts |
 | FCP (First Contentful Paint) | + Minor – faster image starts mean earlier paints |
+
+[⬆ Back to Top](#top)
+
+---
+
+More Details:
+
+Get all articles related to system design
+Hashtag: SystemDesignWithZeeshanAli
+
+[systemdesignwithzeeshanali](https://dev.to/t/systemdesignwithzeeshanali)
+
+Git: https://github.com/ZeeshanAli-0704/front-end-system-design
+
+[⬆ Back to Top](#top)

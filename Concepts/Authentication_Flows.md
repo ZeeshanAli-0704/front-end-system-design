@@ -6,19 +6,23 @@
 
 ---
 
+<a id="top"></a>
+
 ## Table of Contents
 
-1. [Authentication vs Authorization](#1-authentication-vs-authorization)
-2. [Session-Based Authentication](#2-session-based-authentication)
-3. [JWT (JSON Web Token) Authentication](#3-jwt-json-web-token-authentication)
-4. [OAuth 2.0](#4-oauth-20)
-5. [Single Sign-On (SSO)](#5-single-sign-on-sso)
-6. [Comparison Table — Auth Flows](#6-comparison-table--auth-flows)
-7. [Interview Cheat Sheet](#7-interview-cheat-sheet)
+- [Authentication vs Authorization](#authentication-vs-authorization)
+- [Session Based Authentication](#session-based-authentication)
+- [JWT (JSON Web Token) Authentication](#jwt-json-web-token-authentication)
+- [OAuth 2.0](#oauth-20)
+- [Single Sign On (SSO)](#single-sign-on-sso)
+- [Comparison Table Auth Flows](#comparison-table-auth-flows)
+- [Interview Cheat Sheet](#interview-cheat-sheet)
+
+[⬆ Back to Top](#top)
 
 ---
 
-## 1. Authentication vs Authorization
+## Authentication vs Authorization
 
 | Concept            | Authentication (AuthN)            | Authorization (AuthZ)                 |
 | ------------------ | --------------------------------- | ------------------------------------- |
@@ -27,9 +31,11 @@
 | **Example**        | Entering username + password      | Checking if user has `admin` role     |
 | **Frontend role**  | Collect credentials, store tokens | Guard routes, hide/show UI per role   |
 
+[⬆ Back to Top](#top)
+
 ---
 
-## 2. Session-Based Authentication
+## Session Based Authentication
 
 ### How It Works
 
@@ -131,9 +137,11 @@ async function getProfile() {
 | Cookie sent automatically by browser | Vulnerable to CSRF if `SameSite` not set |
 | HttpOnly cookie = safe from XSS token theft | Not ideal for mobile apps / cross-domain APIs |
 
+[⬆ Back to Top](#top)
+
 ---
 
-## 3. JWT (JSON Web Token) Authentication
+## JWT (JSON Web Token) Authentication
 
 ### How It Works (Overview)
 
@@ -369,9 +377,11 @@ async function fetchWithAuth(url, options = {}) {
 | Can carry claims (roles, permissions) | Must handle token refresh logic |
 | Scales horizontally easily | If secret is leaked, all tokens are compromised |
 
+[⬆ Back to Top](#top)
+
 ---
 
-## 4. OAuth 2.0
+## OAuth 2.0
 
 ### Concept
 
@@ -682,9 +692,11 @@ async function handleCallback() {
 
 > **Best Practice (2024+):** OAuth 2.1 draft spec **requires PKCE for ALL authorization code flows**, even for confidential clients with a `client_secret`. It's defense in depth.
 
+[⬆ Back to Top](#top)
+
 ---
 
-## 5. Single Sign-On (SSO)
+## Single Sign On (SSO)
 
 ### What Is SSO?
 
@@ -1094,9 +1106,11 @@ Each SP validates the logout_token JWT → destroys the matching session.
 **Q: How do you handle SSO logout properly?**
 > Best approach: **back-channel logout** (IdP sends server-to-server calls to each SP). Fallback: RP-initiated logout (redirect user to IdP `/logout` which triggers front-channel iframes). Always set short app session lifetimes as a safety net.
 
+[⬆ Back to Top](#top)
+
 ---
 
-## 6. Comparison Table — Auth Flows
+## Comparison Table Auth Flows
 
 | Feature | Session-Based | JWT | OAuth 2.0 | SSO (OIDC) |
 |---------|:------------:|:---:|:---------:|:----------:|
@@ -1108,9 +1122,11 @@ Each SP validates the logout_token JWT → destroys the matching session.
 | **Complexity** | Low | Medium | High | High |
 | **Cross-Domain** | Hard (cookies) | Easy (header-based) | Built for it | Built for it |
 
+[⬆ Back to Top](#top)
+
 ---
 
-## 7. Interview Cheat Sheet
+## Interview Cheat Sheet
 
 ### Quick Answers for System Design Interviews
 
@@ -1137,3 +1153,18 @@ Each SP validates the logout_token JWT → destroys the matching session.
 > - [JWT RFC 7519](https://datatracker.ietf.org/doc/html/rfc7519)
 > - [OWASP Top 10](https://owasp.org/www-project-top-ten/)
 > - [Frontend Security Guide](Frontend_Security.md) — XSS, CSRF, CORS, CSP, and more
+
+[⬆ Back to Top](#top)
+
+---
+
+More Details:
+
+Get all articles related to system design
+Hashtag: SystemDesignWithZeeshanAli
+
+[systemdesignwithzeeshanali](https://dev.to/t/systemdesignwithzeeshanali)
+
+Git: https://github.com/ZeeshanAli-0704/front-end-system-design
+
+[⬆ Back to Top](#top)
