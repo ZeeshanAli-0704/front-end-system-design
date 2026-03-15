@@ -13,7 +13,7 @@ This guide covers **why accessibility matters**, **how to audit and check it**, 
 
 <a id="top"></a>
 
-## 📚 Table of Contents
+## Table of Contents
 
 - [Why Accessibility Matters](#why-accessibility-matters)
 - [Understanding WCAG Standards](#understanding-wcag-standards)
@@ -40,7 +40,7 @@ This guide covers **why accessibility matters**, **how to audit and check it**, 
 
 ---
 
-## 🔹 Why Accessibility Matters
+## Why Accessibility Matters
 
 ### Real-World Impact
 
@@ -67,7 +67,7 @@ Over **1 billion people worldwide** live with some form of disability. That's ro
 
 ---
 
-## 🔹 Understanding WCAG Standards
+## Understanding WCAG Standards
 
 **WCAG (Web Content Accessibility Guidelines)** is the international standard maintained by the **W3C (World Wide Web Consortium)**.
 
@@ -94,7 +94,7 @@ Over **1 billion people worldwide** live with some form of disability. That's ro
 
 ---
 
-## 🔹 The Four Principles POUR
+## The Four Principles POUR
 
 WCAG is built on **four foundational principles** known as **POUR**:
 
@@ -128,7 +128,7 @@ WCAG is built on **four foundational principles** known as **POUR**:
 
 ---
 
-## 🔹 Common Accessibility Issues in Web Apps
+## Common Accessibility Issues in Web Apps
 
 Here are the **most frequently found** accessibility violations (based on WebAIM's annual Million Report):
 
@@ -147,7 +147,7 @@ Here are the **most frequently found** accessibility violations (based on WebAIM
 
 ---
 
-## 🔹 Semantic HTML The Foundation of A11y
+## Semantic HTML The Foundation of A11y
 
 The single most impactful thing you can do for accessibility is write **proper, semantic HTML**. Before reaching for ARIA, use the right HTML elements.
 
@@ -207,7 +207,7 @@ The single most impactful thing you can do for accessibility is write **proper, 
 
 ---
 
-## 🔹 ARIA Roles States and Properties
+## ARIA Roles States and Properties
 
 **ARIA (Accessible Rich Internet Applications)** extends HTML semantics when native elements aren't sufficient — particularly for custom widgets, SPAs, and dynamic content.
 
@@ -266,7 +266,7 @@ The single most impactful thing you can do for accessibility is write **proper, 
 
 ---
 
-## 🔹 Keyboard Accessibility
+## Keyboard Accessibility
 
 **All interactive elements must be operable via keyboard alone.** Many users — including power users, screen reader users, and motor-impaired users — navigate exclusively with the keyboard.
 
@@ -324,7 +324,7 @@ The single most impactful thing you can do for accessibility is write **proper, 
 
 ---
 
-## 🔹 Focus Management
+## Focus Management
 
 Focus management ensures users always know **where they are** and that focus moves logically through the interface.
 
@@ -425,7 +425,7 @@ function trapFocus(modalElement) {
 
 ---
 
-## 🔹 Color Contrast and Visual Design
+## Color Contrast and Visual Design
 
 ### Contrast Requirements
 
@@ -462,7 +462,7 @@ function trapFocus(modalElement) {
 
 ---
 
-## 🔹 Accessible Forms
+## Accessible Forms
 
 Forms are the **most common source of accessibility failures**. Every input must have a programmatic label, clear instructions, and proper error handling.
 
@@ -542,7 +542,7 @@ function validateEmail(input) {
 
 ---
 
-## 🔹 Accessible Images and Media
+## Accessible Images and Media
 
 ### Images
 
@@ -594,7 +594,7 @@ function validateEmail(input) {
 
 ---
 
-## 🔹 Accessible Navigation and Routing (SPAs)
+## Accessible Navigation and Routing (SPAs)
 
 Single Page Applications (React, Angular, Vue) introduce unique challenges because **page transitions don't trigger a browser page load** — screen readers aren't notified of content changes.
 
@@ -659,7 +659,7 @@ useEffect(() => {
 
 ---
 
-## 🔹 Accessible Modals Dialogs and Popups
+## Accessible Modals Dialogs and Popups
 
 Modals are one of the **most commonly inaccessible components** on the web. Here's how to build them right.
 
@@ -704,7 +704,7 @@ If building custom modals, ensure you handle:
 
 ---
 
-## 🔹 Responsive and Zoom Friendly Design
+## Responsive and Zoom Friendly Design
 
 ### Zoom and Text Resize
 
@@ -761,7 +761,7 @@ button, a, input[type="checkbox"], input[type="radio"] {
 
 ---
 
-## 🔹 How to Check and Audit Accessibility
+## How to Check and Audit Accessibility
 
 ### 1. Automated Testing Tools
 
@@ -899,7 +899,7 @@ jobs:
 
 ---
 
-## 🔹 How to Fix Accessibility Issues Step by Step
+## How to Fix Accessibility Issues Step by Step
 
 Follow this **prioritized approach** when fixing accessibility issues in an existing application:
 
@@ -949,7 +949,7 @@ npx pa11y https://yoursite.com
 
 ---
 
-## 🔹 Accessibility in React Angular and Vue
+## Accessibility in React Angular and Vue
 
 ### React
 
@@ -1060,7 +1060,7 @@ async function onNavigate() {
 
 ---
 
-## 🔹 Accessibility Testing Checklist
+## Accessibility Testing Checklist
 
 Use this checklist for every component and page before release:
 
@@ -1121,7 +1121,7 @@ Use this checklist for every component and page before release:
 
 ---
 
-## 🔹 Key Interview Takeaways
+## Key Interview Takeaways
 
 | Topic                     | Key Point                                                                                    |
 | ------------------------- | -------------------------------------------------------------------------------------------- |
@@ -1141,7 +1141,7 @@ Use this checklist for every component and page before release:
 
 ---
 
-## 🔹 Further Reading and Resources
+## Further Reading and Resources
 
 | Resource                                | Link                                                      |
 | --------------------------------------- | --------------------------------------------------------- |
