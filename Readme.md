@@ -35,12 +35,20 @@
 
 | # | Case Study | Description |
 |---|-----------|-------------|
-| 1 | [Facebook News Feed](./Case_Studies/Facebook/Frontend_System_Design_Facebook_News_Feed.md) | Facebook News Feed Design, Components, API, Data Model |
-| 2 | [Pinterest](./Case_Studies/Pinterest/Frontend_System_Design_Pinterest.md) | Pinterest Design, Components, API, Data Model |
+| 1 | [Facebook Social Feed](./Case_Studies/Facebook/Frontend_System_Design_Social_Feed.md) | Social Feed Design — Infinite scroll with IntersectionObserver, virtualized feed list, scroll position restoration, new posts banner, pull to refresh, lazy loading media |
+| 2 | [Pinterest Pin Grid](./Case_Studies/Pinterest/Frontend_System_Design_Pinterest_Pin_Grid.md) | Pinterest Design — Masonry grid layout, shortest column first algorithm, CSS and JS based masonry, responsive column count, virtualized masonry grid, image placeholder strategy |
 | 3 | [Typeahead / Autocomplete](./Case_Studies/Typeahead) | Autocomplete backend and frontend design, LLD, HLD, UI usage |
 | 4 | [Search Results Page](./Case_Studies/Search) | Search Results Page (Google / Amazon style) — polymorphic result cards, faceted filtering, URL state sync, pagination, query highlighting |
 | 5 | [Excalidraw (Collaborative Whiteboard)](./Case_Studies/Excalidraw/Frontend_System_Design_Excalidraw.md) | Excalidraw Design — Canvas 2D rendering engine, IndexedDB local-first storage, Rough.js hand-drawn style, CRDT collaboration, undo/redo, E2E encryption |
 | 6 | [Google Docs (Collaborative Document Editor)](./Case_Studies/GoogleDocs/Frontend_System_Design_Google_Docs.md) | Google Docs Design — Rich text editor engine, Operational Transformation (OT) deep dive, CRDTs vs OT, real-time cursor presence, document model, collaborative undo/redo |
+| 7 | [Instagram Stories](./Case_Studies/Instagram/Frontend_System_Design_Instagram_Stories.md) | Instagram Stories Design — Horizontal story tray scrolling, virtualized horizontal list, desktop arrow navigation, unseen first ordering, RTL support, lazy loading avatars |
+| 8 | [Netflix Streaming](./Case_Studies/Netflix/Frontend_System_Design_Netflix_Streaming.md) | Netflix Design — Browse page row carousels, virtualized row rendering, title card hover expansion, billboard hero autoplay, prefetching for instant playback, remote control navigation |
+| 9 | [YouTube Video Streaming](./Case_Studies/YouTube/Frontend_System_Design_Video_Streaming.md) | YouTube Design — HLS and DASH adaptive bitrate streaming, video player state machine, custom controls overlay, buffering and preload strategy, Picture in Picture, quality selection |
+| 10 | [Real Time Chat](./Case_Studies/Chat/Frontend_System_Design_Real_Time_Chat.md) | Chat Design — WebSocket connection and message transport, optimistic message sending, virtualized message list, typing indicators, message status (sent, delivered, read), rich media messages |
+| 11 | [Notification System](./Case_Studies/Notification/Frontend_System_Design_Notification_System.md) | Notification Design — Real time delivery via WebSocket vs SSE vs Polling, toast and snackbar queue, notification bell badge, notification grouping and stacking, Web Push integration |
+| 12 | [Uber Ride Hailing](./Case_Studies/Uber/Frontend_System_Design_Ride_Hailing.md) | Uber Design — Map centered booking interface, place autocomplete, ride type selection, driver matching state machine, real time ride tracking with live map, ETA countdown |
+| 13 | [Zomato Food Delivery](./Case_Studies/Zomato/Frontend_System_Design_Food_Delivery.md) | Zomato Design — Restaurant listing with filters, multi faceted filtering with URL sync, menu page with sticky cart, cart management across restaurants, real time order tracking with map |
+| 14 | [Caching Strategy](./Case_Studies/Caching/Frontend_System_Design_Caching_Strategy.md) | Caching Design — Multi layer cache architecture, HTTP cache and Cache Control headers, Service Worker cache with Workbox, in memory API cache, IndexedDB, cache invalidation patterns, TTL management |
 
 [⬆ Back to Top](#top)
 
