@@ -1,0 +1,427 @@
+<mxfile host="app.diagrams.net" agent="GitHub Copilot" version="28.2.8">
+  <diagram name="Component Architecture" id="instagram-stories-component-arch">
+    <mxGraphModel dx="2200" dy="1400" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="2400" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="title" value="Instagram Stories — Frontend Component Architecture" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontStyle=1;fontSize=20;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="400" y="20" width="600" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== FEED PAGE ==================== -->
+        <mxCell id="feedPage" value="FeedPage&#xa;— SSR shell, mounts StoryTray + feed content" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f0ff;strokeColor=#356ebf;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="500" y="80" width="380" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== STORY TRAY ==================== -->
+        <mxCell id="storyTray" value="StoryTray&#xa;(horizontal scrollable container)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="160" y="230" width="320" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-feed-tray" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="feedPage" target="storyTray">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== STORY VIEWER ==================== -->
+        <mxCell id="storyViewer" value="StoryViewer&#xa;(Portal / Full-screen Overlay — lazy loaded)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#fb8c00;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="820" y="230" width="360" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-feed-viewer" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="feedPage" target="storyViewer">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Note: tap opens viewer -->
+        <mxCell id="note-tap" value="User taps avatar →&#xa;lazy-loads viewer chunk" style="shape=note;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#b7a500;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="560" y="220" width="180" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== TRAY SUB-COMPONENTS ==================== -->
+        <mxCell id="tray-label" value="Story Tray Sub-components" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontStyle=1;fontSize=13;fontColor=#43a047;" vertex="1" parent="1">
+          <mxGeometry x="80" y="340" width="250" height="25" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ownStoryAvatar" value="OwnStoryAvatar&#xa;(pinned first — &quot;Add&quot; / &quot;Your Story&quot;)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#43a047;" vertex="1" parent="1">
+          <mxGeometry x="30" y="390" width="260" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-tray-own" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#43a047;" edge="1" parent="1" source="storyTray" target="ownStoryAvatar">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="storyAvatarItem" value="StoryAvatarItem[]&#xa;(scrollable list of user avatars)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#43a047;" vertex="1" parent="1">
+          <mxGeometry x="330" y="390" width="260" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-tray-items" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#43a047;" edge="1" parent="1" source="storyTray" target="storyAvatarItem">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Avatar sub-components -->
+        <mxCell id="avatarRing" value="AvatarRing&#xa;(gradient = unseen, grey = seen)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#8e24aa;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="240" y="490" width="220" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-item-ring" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#8e24aa;" edge="1" parent="1" source="storyAvatarItem" target="avatarRing">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="username" value="Username" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#8e24aa;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="490" y="490" width="130" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-item-name" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#8e24aa;" edge="1" parent="1" source="storyAvatarItem" target="username">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== VIEWER SUB-COMPONENTS ==================== -->
+        <mxCell id="viewer-label" value="Story Viewer Sub-components" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontStyle=1;fontSize=13;fontColor=#fb8c00;" vertex="1" parent="1">
+          <mxGeometry x="700" y="340" width="280" height="25" as="geometry" />
+        </mxCell>
+
+        <mxCell id="progressBar" value="StoryProgressBar&#xa;→ ProgressSegment[] (one per slide)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#fb8c00;" vertex="1" parent="1">
+          <mxGeometry x="660" y="390" width="260" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-viewer-progress" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#fb8c00;" edge="1" parent="1" source="storyViewer" target="progressBar">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="storyHeader" value="StoryHeader&#xa;(Avatar + Username + Timestamp + Close)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#fb8c00;" vertex="1" parent="1">
+          <mxGeometry x="950" y="390" width="270" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-viewer-header" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#fb8c00;" edge="1" parent="1" source="storyViewer" target="storyHeader">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="mediaRenderer" value="StoryMediaRenderer&#xa;├── ImageSlide&#xa;└── VideoSlide" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#fb8c00;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="660" y="480" width="220" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-viewer-media" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#fb8c00;" edge="1" parent="1" source="storyViewer" target="mediaRenderer">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="navLayer" value="StoryNavigationLayer&#xa;(invisible tap zones: left / right)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#fb8c00;" vertex="1" parent="1">
+          <mxGeometry x="910" y="480" width="260" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-viewer-nav" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#fb8c00;" edge="1" parent="1" source="storyViewer" target="navLayer">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="replyDrawer" value="StoryReplyDrawer&#xa;├── ReplyInput&#xa;└── EmojiReactionBar" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#fb8c00;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="1200" y="480" width="220" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-viewer-reply" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#fb8c00;" edge="1" parent="1" source="storyViewer" target="replyDrawer">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== TWO-PHASE FETCH ==================== -->
+        <mxCell id="fetch-title" value="Two-Phase Data Fetching Strategy" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f0ff;strokeColor=#356ebf;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="460" y="620" width="400" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Phase 1 -->
+        <mxCell id="phase1" value="Phase 1: Tray Metadata&#xa;GET /api/stories/tray&#xa;~10-20KB for 200 users" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="180" y="740" width="300" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-fetch-p1" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="fetch-title" target="phase1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Phase 2 -->
+        <mxCell id="phase2" value="Phase 2: Story Slides (on tap)&#xa;GET /api/stories/user/:userId&#xa;~500B-2KB per user" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#fb8c00;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="560" y="740" width="300" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-fetch-p2" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="fetch-title" target="phase2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Phase 3: Media -->
+        <mxCell id="phase3" value="Phase 3: Media Assets (CDN)&#xa;Images: 50-500KB each&#xa;Videos: 1-5MB (HLS/MP4)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#e53935;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="940" y="740" width="300" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-fetch-p3" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="fetch-title" target="phase3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Phase 1 details -->
+        <mxCell id="p1d1" value="userId, username, avatarUrl" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#43a047;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="80" y="850" width="210" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="p1d2" value="hasUnseenStory (boolean)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#43a047;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="310" y="850" width="200" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="p1d3" value="isCloseFriend, latestTimestamp" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#43a047;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="140" y="905" width="230" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-p1-d1" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#43a047;" edge="1" parent="1" source="phase1" target="p1d1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-p1-d2" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#43a047;" edge="1" parent="1" source="phase1" target="p1d2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-p1-d3" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#43a047;" edge="1" parent="1" source="phase1" target="p1d3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Phase 2 details -->
+        <mxCell id="p2d1" value="Slide: id, type, mediaUrl" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#fb8c00;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="530" y="850" width="190" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="p2d2" value="displayDuration, isSeen" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#fb8c00;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="740" y="850" width="190" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="p2d3" value="Prefetch: next user slides&#xa;while current story plays" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#fb8c00;fontSize=11;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="590" y="905" width="230" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-p2-d1" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#fb8c00;" edge="1" parent="1" source="phase2" target="p2d1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-p2-d2" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#fb8c00;" edge="1" parent="1" source="phase2" target="p2d2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-p2-d3" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#fb8c00;" edge="1" parent="1" source="phase2" target="p2d3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Phase 3 details -->
+        <mxCell id="p3d1" value="Preload next slide image&#xa;(new Image().src)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e53935;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="910" y="850" width="200" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="p3d2" value="Preload next user's first slide&#xa;on last slide of current user" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e53935;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1130" y="850" width="230" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-p3-d1" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#e53935;" edge="1" parent="1" source="phase3" target="p3d1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-p3-d2" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#e53935;" edge="1" parent="1" source="phase3" target="p3d2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== TRAY SCROLLING STRATEGY ==================== -->
+        <mxCell id="scroll-title" value="Horizontal Tray — Scrolling Strategy" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="460" y="1010" width="400" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="cssScroll" value="&lt; 50 Avatars&#xa;CSS overflow-x: auto + Flexbox&#xa;(zero JS, native scroll)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1e88e5;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="120" y="1130" width="280" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-scroll-css" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#43a047;strokeWidth=2;" edge="1" parent="1" source="scroll-title" target="cssScroll">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="virtualized" value="50–500+ Avatars&#xa;Virtualized Horizontal List&#xa;(@tanstack/react-virtual)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#8e24aa;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="460" y="1130" width="280" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-scroll-virt" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#43a047;strokeWidth=2;" edge="1" parent="1" source="scroll-title" target="virtualized">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="desktopArrows" value="Desktop Users&#xa;Arrow buttons with scrollBy()&#xa;(show on @media hover: hover)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#fb8c00;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="800" y="1130" width="280" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-scroll-arrows" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#43a047;strokeWidth=2;" edge="1" parent="1" source="scroll-title" target="desktopArrows">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="traySort" value="Tray Ordering&#xa;Unseen first → Seen pushed to back&#xa;(server-driven + optimistic re-sort)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#e53935;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1140" y="1130" width="290" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-scroll-sort" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#43a047;strokeWidth=2;" edge="1" parent="1" source="scroll-title" target="traySort">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Virtualization internals -->
+        <mxCell id="virt-outer" value="Outer Container&#xa;(overflow-x: auto, fixed width)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#8e24aa;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="310" y="1250" width="220" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="virt-spacer" value="Inner Spacer&#xa;(empty div, full scroll width)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#8e24aa;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="550" y="1250" width="220" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="virt-items" value="Absolute Positioned Items&#xa;(only visible + overscan buffer)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#8e24aa;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="430" y="1310" width="240" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-virt-outer" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#8e24aa;" edge="1" parent="1" source="virtualized" target="virt-outer">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-virt-spacer" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#8e24aa;" edge="1" parent="1" source="virtualized" target="virt-spacer">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-virt-items" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#8e24aa;" edge="1" parent="1" source="virtualized" target="virt-items">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== PERFORMANCE & OPTIMIZATION ==================== -->
+        <mxCell id="perf-title" value="Performance Optimization" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="460" y="1430" width="400" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="perf-media" value="Media Preloading" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1e88e5;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="100" y="1550" width="280" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-perf-media" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#43a047;strokeWidth=2;" edge="1" parent="1" source="perf-title" target="perf-media">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="perf-render" value="Rendering" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#fb8c00;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="440" y="1550" width="280" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-perf-render" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#43a047;strokeWidth=2;" edge="1" parent="1" source="perf-title" target="perf-render">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="perf-bundle" value="Bundle &amp; Network" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#8e24aa;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="780" y="1550" width="280" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-perf-bundle" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#43a047;strokeWidth=2;" edge="1" parent="1" source="perf-title" target="perf-bundle">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="perf-state" value="State &amp; API" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#e53935;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="1120" y="1550" width="280" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-perf-state" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#43a047;strokeWidth=2;" edge="1" parent="1" source="perf-title" target="perf-state">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Media Preloading details -->
+        <mxCell id="pm1" value="Preload next slide while current plays" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1e88e5;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="50" y="1640" width="250" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="pm2" value="Preload next user's first slide" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1e88e5;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="50" y="1690" width="250" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="pm3" value="Prefetch top 3-5 users on tray load" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1e88e5;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="50" y="1740" width="250" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-pm1" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#1e88e5;" edge="1" parent="1" source="perf-media" target="pm1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-pm2" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#1e88e5;" edge="1" parent="1" source="perf-media" target="pm2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-pm3" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#1e88e5;" edge="1" parent="1" source="perf-media" target="pm3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Rendering details -->
+        <mxCell id="pr1" value="SSR shell for feed + tray placeholder" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#fb8c00;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="400" y="1640" width="250" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="pr2" value="CSR for story viewer (lazy loaded)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#fb8c00;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="400" y="1690" width="250" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="pr3" value="Portal rendering (document.body)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#fb8c00;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="400" y="1740" width="250" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="pr4" value="RAF-based progress bar (60fps)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#fb8c00;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="400" y="1790" width="250" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-pr1" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#fb8c00;" edge="1" parent="1" source="perf-render" target="pr1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-pr2" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#fb8c00;" edge="1" parent="1" source="perf-render" target="pr2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-pr3" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#fb8c00;" edge="1" parent="1" source="perf-render" target="pr3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-pr4" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#fb8c00;" edge="1" parent="1" source="perf-render" target="pr4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Bundle details -->
+        <mxCell id="pb1" value="Code-split viewer (~50-80KB chunk)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#8e24aa;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="740" y="1640" width="250" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="pb2" value="WebP/AVIF images via CDN" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#8e24aa;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="740" y="1690" width="250" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="pb3" value="HLS adaptive bitrate for videos" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#8e24aa;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="740" y="1740" width="250" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="pb4" value="Signed CDN URLs (1h expiry)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#8e24aa;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="740" y="1790" width="250" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-pb1" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#8e24aa;" edge="1" parent="1" source="perf-bundle" target="pb1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-pb2" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#8e24aa;" edge="1" parent="1" source="perf-bundle" target="pb2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-pb3" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#8e24aa;" edge="1" parent="1" source="perf-bundle" target="pb3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-pb4" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#8e24aa;" edge="1" parent="1" source="perf-bundle" target="pb4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- State details -->
+        <mxCell id="ps1" value="Batched seen reporting (every 3-5s)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e53935;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1080" y="1640" width="260" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ps2" value="Optimistic tray re-sort on view" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e53935;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1080" y="1690" width="260" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ps3" value="React Query cache (staleTime: 5min)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e53935;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1080" y="1740" width="260" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ps4" value="localStorage for seen IDs + mute pref" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e53935;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1080" y="1790" width="260" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-ps1" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#e53935;" edge="1" parent="1" source="perf-state" target="ps1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-ps2" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#e53935;" edge="1" parent="1" source="perf-state" target="ps2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-ps3" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#e53935;" edge="1" parent="1" source="perf-state" target="ps3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-ps4" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#e53935;" edge="1" parent="1" source="perf-state" target="ps4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== STORY FLOW (bottom) ==================== -->
+        <mxCell id="flow-title" value="Complete Story Flow" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f0ff;strokeColor=#356ebf;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="460" y="1900" width="400" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="flow1" value="1. Feed loads →&#xa;GET /api/stories/tray" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="2000" width="180" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="flow2" value="2. Tray renders →&#xa;avatars + rings" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="260" y="2000" width="170" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="flow3" value="3. Tap avatar →&#xa;GET /api/stories/user/:id" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#fb8c00;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="460" y="2000" width="190" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="flow4" value="4. Viewer opens →&#xa;slides auto-advance" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#fb8c00;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="680" y="2000" width="180" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="flow5" value="5. Seen batch →&#xa;POST /api/stories/seen" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#e53935;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="890" y="2000" width="180" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="flow6" value="6. Tray re-sorts →&#xa;viewed → seen section" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#e53935;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="2000" width="190" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge-flow12" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#666666;strokeWidth=2;" edge="1" parent="1" source="flow1" target="flow2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-flow23" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#666666;strokeWidth=2;" edge="1" parent="1" source="flow2" target="flow3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-flow34" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#666666;strokeWidth=2;" edge="1" parent="1" source="flow3" target="flow4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-flow45" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#666666;strokeWidth=2;" edge="1" parent="1" source="flow4" target="flow5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-flow56" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#666666;strokeWidth=2;" edge="1" parent="1" source="flow5" target="flow6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge-flow-title" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="flow-title" target="flow1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

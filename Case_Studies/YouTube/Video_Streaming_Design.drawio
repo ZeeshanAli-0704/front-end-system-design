@@ -1,0 +1,403 @@
+<mxfile host="app.diagrams.net" agent="GitHub Copilot" version="28.2.8">
+  <diagram name="Component Architecture" id="video-streaming-component-arch">
+    <mxGraphModel dx="2400" dy="1600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1400" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="title" value="Video Streaming (YouTube) — Frontend Component Architecture" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontStyle=1;fontSize=20;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="400" y="20" width="700" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== APP SHELL ==================== -->
+        <mxCell id="appShell" value="App Shell&#xa;— SPA with SSR, client-side routing, code-split per route" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f0ff;strokeColor=#356ebf;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="500" y="80" width="460" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== TOP-LEVEL PAGES ==================== -->
+        <mxCell id="header" value="Header&#xa;(Logo + SearchBar + UserMenu)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="40" y="210" width="240" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-app-header" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="appShell" target="header">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="sidebar" value="Sidebar&#xa;(Nav: Home, Trending,&#xa;Subscriptions, Library)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="320" y="210" width="200" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-app-sidebar" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="appShell" target="sidebar">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="homeFeed" value="HomeFeedPage&#xa;(Video grid + infinite scroll)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#fb8c00;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="560" y="210" width="220" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-app-home" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="appShell" target="homeFeed">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="watchPage" value="VideoWatchPage&#xa;(Player + Metadata + Comments + Recs)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f0ff;strokeColor=#356ebf;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="820" y="210" width="280" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-app-watch" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="appShell" target="watchPage">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="searchPage" value="SearchPage&#xa;(Results + Filters)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#8e24aa;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1140" y="210" width="190" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-app-search" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="appShell" target="searchPage">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== HOME FEED CHILDREN ==================== -->
+        <mxCell id="categoryChips" value="CategoryChips&#xa;(Trending, Music, Gaming...)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#fb8c00;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="460" y="330" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-home-chips" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#fb8c00;strokeWidth=1;" edge="1" parent="1" source="homeFeed" target="categoryChips">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="videoGrid" value="VideoGrid&#xa;(CSS Grid, responsive)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#fb8c00;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="700" y="330" width="180" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-home-grid" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#fb8c00;strokeWidth=1;" edge="1" parent="1" source="homeFeed" target="videoGrid">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="videoCardFeed" value="VideoCard[]&#xa;(Thumbnail + Title + Meta)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#fb8c00;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="700" y="410" width="180" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-grid-card" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#fb8c00;" edge="1" parent="1" source="videoGrid" target="videoCardFeed">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="feedSentinel" value="FeedSentinel&#xa;(IntersectionObserver)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="460" y="410" width="180" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-home-sentinel" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#fb8c00;" edge="1" parent="1" source="homeFeed" target="feedSentinel">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== WATCH PAGE CHILDREN ==================== -->
+        <mxCell id="videoPlayer" value="VideoPlayer&#xa;(HLS/DASH adaptive streaming)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f0ff;strokeColor=#356ebf;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="680" y="520" width="260" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-watch-player" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="watchPage" target="videoPlayer">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="videoMeta" value="VideoMetadata&#xa;(Title + Description + Publish Date)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#356ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="390" y="520" width="240" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-watch-meta" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;strokeWidth=1;" edge="1" parent="1" source="watchPage" target="videoMeta">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="engagementBar" value="EngagementBar&#xa;(Like + Dislike + Share + Save)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#43a047;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="390" y="610" width="240" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-meta-engagement" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#43a047;" edge="1" parent="1" source="videoMeta" target="engagementBar">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="channelInfo" value="ChannelInfo&#xa;(Avatar + Name + Subscribe)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#43a047;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="390" y="690" width="240" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-engagement-channel" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#43a047;" edge="1" parent="1" source="engagementBar" target="channelInfo">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="commentsSection" value="CommentsSection (lazy loaded)&#xa;(Sort Toggle + CreateComment + CommentList)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#fb8c00;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="980" y="520" width="280" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-watch-comments" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="watchPage" target="commentsSection">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="recommendedVideos" value="RecommendedVideos&#xa;(Sidebar / Below player)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#8e24aa;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1300" y="520" width="220" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-watch-recs" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="watchPage" target="recommendedVideos">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== VIDEO PLAYER SUB-COMPONENTS ==================== -->
+        <mxCell id="player-label" value="VideoPlayer Sub-components" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontStyle=1;fontSize=13;fontColor=#356ebf;" vertex="1" parent="1">
+          <mxGeometry x="560" y="630" width="280" height="25" as="geometry" />
+        </mxCell>
+
+        <mxCell id="videoElement" value="VideoElement&#xa;(HTML5 video + HLS.js/DASH.js)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1e88e5;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="560" y="670" width="220" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-player-video" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="videoPlayer" target="videoElement">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="controlsOverlay" value="ControlsOverlay&#xa;(Play/Pause + Seek + Volume&#xa;+ Quality + Speed + Captions&#xa;+ PiP + Fullscreen)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1e88e5;fontSize=11;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="810" y="660" width="220" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-player-controls" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="videoPlayer" target="controlsOverlay">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="captionsLayer" value="CaptionsRenderer&#xa;(WebVTT overlay)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1e88e5;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="560" y="740" width="180" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-player-captions" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#1e88e5;" edge="1" parent="1" source="videoElement" target="captionsLayer">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="miniPlayer" value="MiniPlayer&#xa;(fixed bottom-right on scroll)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1e88e5;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="780" y="740" width="200" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-player-mini" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#1e88e5;" edge="1" parent="1" source="controlsOverlay" target="miniPlayer">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="bufferingSpinner" value="BufferingSpinner" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#e53935;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1010" y="740" width="160" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-player-buffer" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#e53935;" edge="1" parent="1" source="controlsOverlay" target="bufferingSpinner">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== COMMENT SUB-COMPONENTS ==================== -->
+        <mxCell id="commentItem" value="CommentItem[]&#xa;(Avatar + Body + Actions + Replies)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#fb8c00;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="980" y="610" width="280" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-comments-item" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#fb8c00;" edge="1" parent="1" source="commentsSection" target="commentItem">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="repliesThread" value="RepliesThread&#xa;(expandable, lazy loaded)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#fb8c00;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="980" y="690" width="220" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-item-replies" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#fb8c00;" edge="1" parent="1" source="commentItem" target="repliesThread">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Recommended video cards -->
+        <mxCell id="recVideoCard" value="VideoCard[] (compact)&#xa;(Thumbnail + Title + Channel + Views)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#8e24aa;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1300" y="610" width="220" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-recs-card" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#8e24aa;" edge="1" parent="1" source="recommendedVideos" target="recVideoCard">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== NOTES ==================== -->
+        <mxCell id="note-hls" value="HLS.js: adaptive bitrate&#xa;streaming with auto quality&#xa;switching based on bandwidth" style="shape=note;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#b7a500;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="560" y="810" width="200" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="note-lazy" value="Comments and Recommendations&#xa;are code-split and lazy loaded&#xa;via React.lazy + Suspense" style="shape=note;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#b7a500;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1210" y="740" width="210" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="note-sentinel" value="IntersectionObserver sentinel&#xa;triggers infinite scroll for&#xa;feed and comment lists" style="shape=note;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#b7a500;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="360" y="410" width="190" height="60" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+  <diagram name="Data Flow and API" id="video-streaming-data-flow">
+    <mxGraphModel dx="2400" dy="1600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1400" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="df-title" value="Video Streaming — Data Flow and API Design" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontStyle=1;fontSize=20;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="400" y="20" width="700" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== VIDEO WATCH FLOW ==================== -->
+        <mxCell id="flow-title" value="Video Watch Page Flow" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f0ff;strokeColor=#356ebf;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="500" y="80" width="400" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="fl1" value="1. Navigate to /watch?v=abc&#xa;SSR renders metadata shell" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="170" width="200" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="fl2" value="2. Browser preloads&#xa;HLS manifest (m3u8)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="270" y="170" width="190" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="fl3" value="3. JS hydrates, Player&#xa;mounts, hls.js loads manifest" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1e88e5;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="490" y="170" width="200" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="fl4" value="4. ABR selects quality,&#xa;fetches first segments" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1e88e5;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="720" y="170" width="190" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="fl5" value="5. First frame decoded&#xa;→ playback starts" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#fb8c00;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="940" y="170" width="170" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="fl6" value="6. Comments + Recs&#xa;lazy loaded below fold" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#8e24aa;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1140" y="170" width="190" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge-fl12" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#666666;strokeWidth=2;" edge="1" parent="1" source="fl1" target="fl2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-fl23" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#666666;strokeWidth=2;" edge="1" parent="1" source="fl2" target="fl3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-fl34" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#666666;strokeWidth=2;" edge="1" parent="1" source="fl3" target="fl4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-fl45" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#666666;strokeWidth=2;" edge="1" parent="1" source="fl4" target="fl5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-fl56" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#666666;strokeWidth=2;" edge="1" parent="1" source="fl5" target="fl6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-flow-top" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="flow-title" target="fl1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== ADAPTIVE STREAMING FLOW ==================== -->
+        <mxCell id="abr-title" value="Adaptive Bitrate Streaming Flow" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f0ff;strokeColor=#356ebf;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="160" y="290" width="380" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="abr1" value="Fetch master.m3u8&#xa;(lists all quality levels)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="380" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="abr2" value="Estimate bandwidth&#xa;from recent downloads" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1e88e5;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="270" y="380" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="abr3" value="Select highest quality&#xa;that fits bandwidth" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#fb8c00;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="500" y="380" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="abr4" value="Fetch next segment&#xa;at selected quality" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="730" y="380" width="190" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="abr5" value="Decode and render&#xa;→ loop back to step 2" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#e53935;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="950" y="380" width="190" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge-abr12" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#666666;strokeWidth=2;" edge="1" parent="1" source="abr1" target="abr2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-abr23" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#666666;strokeWidth=2;" edge="1" parent="1" source="abr2" target="abr3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-abr34" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#666666;strokeWidth=2;" edge="1" parent="1" source="abr3" target="abr4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-abr45" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#666666;strokeWidth=2;" edge="1" parent="1" source="abr4" target="abr5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-abr-loop" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#e53935;strokeWidth=1;dashed=1;entryX=0.5;entryY=1;exitX=0.5;exitY=1;" edge="1" parent="1" source="abr5" target="abr2">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1045" y="460" />
+              <mxPoint x="370" y="460" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- ==================== API DESIGN ==================== -->
+        <mxCell id="api-title" value="Key Frontend APIs" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f0ff;strokeColor=#356ebf;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="160" y="510" width="300" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="api1" value="GET /api/videos/:id&#xa;→ metadata + manifestUrl + captions" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="600" width="250" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="api2" value="GET /api/videos/:id/recommendations&#xa;→ cursor-based video list" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1e88e5;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="320" y="600" width="260" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="api3" value="GET /api/videos/:id/comments&#xa;?sort=top&amp;cursor=abc&#xa;→ paginated comments" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#fb8c00;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="610" y="600" width="220" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="api4" value="GET /api/feed&#xa;?cursor=xyz&amp;category=trending&#xa;→ personalized video grid" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#8e24aa;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="860" y="600" width="220" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="api5" value="POST /api/videos/:id/like&#xa;POST /api/videos/:id/comments&#xa;(optimistic updates)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#e53935;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1110" y="600" width="220" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== PLAYER STATE MACHINE ==================== -->
+        <mxCell id="state-title" value="Video Player State Machine" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f0ff;strokeColor=#356ebf;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="160" y="720" width="360" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="st-idle" value="IDLE" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="40" y="820" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="st-loading" value="LOADING" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#fb8c00;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="200" y="820" width="110" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="st-ready" value="READY" style="ellipse;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="370" y="820" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="st-playing" value="PLAYING" style="ellipse;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1e88e5;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="530" y="820" width="110" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="st-paused" value="PAUSED" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="700" y="820" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="st-buffering" value="BUFFERING" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#e53935;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="530" y="910" width="110" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="st-ended" value="ENDED" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="870" y="820" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="st-error" value="ERROR" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#e53935;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="870" y="910" width="100" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge-st-12" value="loadSource" style="endArrow=block;strokeColor=#666666;fontSize=10;" edge="1" parent="1" source="st-idle" target="st-loading">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-st-23" value="canplay" style="endArrow=block;strokeColor=#43a047;fontSize=10;" edge="1" parent="1" source="st-loading" target="st-ready">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-st-34" value="play()" style="endArrow=block;strokeColor=#1e88e5;fontSize=10;" edge="1" parent="1" source="st-ready" target="st-playing">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-st-45" value="pause()" style="endArrow=block;strokeColor=#666666;fontSize=10;" edge="1" parent="1" source="st-playing" target="st-paused">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-st-4b" value="waiting" style="endArrow=block;strokeColor=#e53935;fontSize=10;" edge="1" parent="1" source="st-playing" target="st-buffering">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-st-b4" value="playing" style="endArrow=block;strokeColor=#1e88e5;fontSize=10;" edge="1" parent="1" source="st-buffering" target="st-playing">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-st-5e" value="ended" style="endArrow=block;strokeColor=#666666;fontSize=10;" edge="1" parent="1" source="st-paused" target="st-ended">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-st-err" value="error" style="endArrow=block;strokeColor=#e53935;fontSize=10;dashed=1;" edge="1" parent="1" source="st-playing" target="st-error">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== CACHING LAYERS ==================== -->
+        <mxCell id="cache-title" value="Caching Layers" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f0ff;strokeColor=#356ebf;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="160" y="1010" width="300" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="cache1" value="React Query Cache&#xa;(video metadata, feed, comments&#xa;stale-while-revalidate)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="1100" width="220" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="cache2" value="HTTP Browser Cache&#xa;(video segments .ts/.m4s&#xa;immutable, long TTL)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1e88e5;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="290" y="1100" width="210" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="cache3" value="Service Worker Cache&#xa;(app shell, JS, CSS, fonts&#xa;precached on install)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#fb8c00;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="530" y="1100" width="210" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="cache4" value="localStorage&#xa;(watch progress, volume,&#xa;playback speed, captions pref)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#8e24aa;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="770" y="1100" width="210" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="cache-cdn" value="CDN Edge Servers&#xa;(multi-region, segments +&#xa;thumbnails + manifests)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#e53935;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1010" y="1100" width="210" height="60" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

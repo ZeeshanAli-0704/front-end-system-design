@@ -1,0 +1,335 @@
+<mxfile host="app.diagrams.net" agent="GitHub Copilot" version="28.2.8">
+  <diagram name="Component Architecture" id="notification-system-component-arch">
+    <mxGraphModel dx="2200" dy="1400" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="2400" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="title" value="Notification System — Frontend Component Architecture" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontStyle=1;fontSize=20;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="400" y="20" width="600" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== APP SHELL ==================== -->
+        <mxCell id="appShell" value="AppShell&#xa;— Global layout (Header + Content)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f0ff;strokeColor=#356ebf;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="500" y="80" width="380" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== NOTIFICATION BELL ==================== -->
+        <mxCell id="notifBell" value="NotificationBell&#xa;(Header icon + Unread Badge)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="240" y="230" width="280" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-shell-bell" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="appShell" target="notifBell">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== TOAST CONTAINER ==================== -->
+        <mxCell id="toastContainer" value="ToastContainer&#xa;(Fixed position — top-right)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#e53935;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="860" y="230" width="280" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-shell-toast" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="appShell" target="toastContainer">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Note: WebSocket feeds both -->
+        <mxCell id="note-ws" value="WebSocket delivers events →&#xa;updates bell badge + shows toasts" style="shape=note;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#b7a500;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="560" y="220" width="220" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== BELL SUB-COMPONENTS ==================== -->
+        <mxCell id="bell-label" value="Bell Sub-components" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontStyle=1;fontSize=13;fontColor=#43a047;" vertex="1" parent="1">
+          <mxGeometry x="60" y="340" width="250" height="25" as="geometry" />
+        </mxCell>
+
+        <mxCell id="bellIcon" value="BellIcon (SVG)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#43a047;" vertex="1" parent="1">
+          <mxGeometry x="30" y="390" width="180" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-bell-icon" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#43a047;" edge="1" parent="1" source="notifBell" target="bellIcon">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="unreadBadge" value="UnreadBadge&#xa;(count pill: 1-9 or 9+)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#43a047;" vertex="1" parent="1">
+          <mxGeometry x="240" y="390" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-bell-badge" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#43a047;" edge="1" parent="1" source="notifBell" target="unreadBadge">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="notifPanel" value="NotificationPanel&#xa;(Dropdown — lazy-loaded on click)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#fb8c00;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="470" y="390" width="260" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-bell-panel" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#43a047;" edge="1" parent="1" source="notifBell" target="notifPanel">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== PANEL SUB-COMPONENTS ==================== -->
+        <mxCell id="panel-label" value="Notification Panel Sub-components" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontStyle=1;fontSize=13;fontColor=#fb8c00;" vertex="1" parent="1">
+          <mxGeometry x="200" y="480" width="300" height="25" as="geometry" />
+        </mxCell>
+
+        <mxCell id="panelHeader" value="PanelHeader&#xa;(Title + FilterTabs + MarkAllRead)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#fb8c00;" vertex="1" parent="1">
+          <mxGeometry x="160" y="520" width="250" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-panel-header" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#fb8c00;" edge="1" parent="1" source="notifPanel" target="panelHeader">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="notifList" value="NotificationList&#xa;(Scrollable, Virtualized)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#fb8c00;" vertex="1" parent="1">
+          <mxGeometry x="440" y="520" width="230" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-panel-list" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#fb8c00;" edge="1" parent="1" source="notifPanel" target="notifList">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="emptyState" value="EmptyState&#xa;('No notifications yet')" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#fb8c00;" vertex="1" parent="1">
+          <mxGeometry x="700" y="520" width="200" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-panel-empty" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#fb8c00;" edge="1" parent="1" source="notifPanel" target="emptyState">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Notification Item details -->
+        <mxCell id="notifItem" value="NotificationItem[]&#xa;├── NotificationAvatar&#xa;├── NotificationContent (text + time)&#xa;├── NotificationActions (Accept/Decline)&#xa;├── UnreadDot (blue indicator)&#xa;└── NotificationMenu (mark read, delete)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#8e24aa;align=left;spacingLeft=10;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="280" y="620" width="300" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-list-item" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#8e24aa;" edge="1" parent="1" source="notifList" target="notifItem">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="notifGroup" value="NotificationGroupItem&#xa;├── GroupSummary ('Alice, +3 others liked...')&#xa;└── GroupExpandedList → NotificationItem[]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#8e24aa;align=left;spacingLeft=10;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="620" y="620" width="310" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-list-group" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#8e24aa;" edge="1" parent="1" source="notifList" target="notifGroup">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== TOAST SUB-COMPONENTS ==================== -->
+        <mxCell id="toast-label" value="Toast Sub-components" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontStyle=1;fontSize=13;fontColor=#e53935;" vertex="1" parent="1">
+          <mxGeometry x="850" y="340" width="250" height="25" as="geometry" />
+        </mxCell>
+
+        <mxCell id="toastItem" value="ToastItem[]&#xa;(animated stack — max 3 visible)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e53935;" vertex="1" parent="1">
+          <mxGeometry x="840" y="390" width="230" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-toast-item" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#e53935;" edge="1" parent="1" source="toastContainer" target="toastItem">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="toastQueue" value="ToastQueue&#xa;(FIFO + priority + groupKey aggregation)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e53935;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="390" width="270" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-toast-queue" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#e53935;" edge="1" parent="1" source="toastContainer" target="toastQueue">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Toast Item sub-parts -->
+        <mxCell id="toastParts" value="├── ToastIcon (type icon)&#xa;├── ToastMessage (short preview)&#xa;├── ToastAction (optional CTA)&#xa;├── ToastDismiss (close button)&#xa;└── ToastProgressBar (auto-dismiss timer)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e53935;align=left;spacingLeft=10;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="820" y="480" width="280" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-toast-parts" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#e53935;" edge="1" parent="1" source="toastItem" target="toastParts">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== REAL-TIME TRANSPORT LAYER ==================== -->
+        <mxCell id="transport-title" value="Real-Time Transport Layer — Fallback Chain" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f0ff;strokeColor=#356ebf;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="420" y="790" width="440" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- WebSocket -->
+        <mxCell id="wsTransport" value="WebSocket (Primary)&#xa;wss://api.example.com/notifications/stream&#xa;Bidirectional, lowest latency" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="100" y="920" width="300" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-transport-ws" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="transport-title" target="wsTransport">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- SSE -->
+        <mxCell id="sseTransport" value="SSE Fallback&#xa;EventSource with auto-reconnect&#xa;Server → Client only" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#fb8c00;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="480" y="920" width="300" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-transport-sse" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="transport-title" target="sseTransport">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Polling -->
+        <mxCell id="pollTransport" value="Long Polling (Last Resort)&#xa;GET /api/notifications every 30s&#xa;Universal compatibility" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#e53935;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="860" y="920" width="300" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-transport-poll" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="transport-title" target="pollTransport">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Fallback arrows -->
+        <mxCell id="fallback1" value="fails →" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontStyle=2;fontSize=11;fontColor=#e53935;" vertex="1" parent="1">
+          <mxGeometry x="410" y="940" width="60" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="fallback2" value="fails →" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontStyle=2;fontSize=11;fontColor=#e53935;" vertex="1" parent="1">
+          <mxGeometry x="790" y="940" width="60" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- Connection Lifecycle -->
+        <mxCell id="lifecycle-label" value="Connection Lifecycle" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontStyle=1;fontSize=13;fontColor=#356ebf;" vertex="1" parent="1">
+          <mxGeometry x="100" y="1020" width="200" height="25" as="geometry" />
+        </mxCell>
+
+        <mxCell id="lc1" value="Exponential Backoff + Jitter&#xa;(1s → 2s → 4s → ... → 30s max)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#356ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="100" y="1060" width="250" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="lc2" value="lastEventId on Reconnect&#xa;(server replays missed events)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#356ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="380" y="1060" width="240" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="lc3" value="Visibility Change Handler&#xa;(REST backfill on tab re-focus)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#356ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="650" y="1060" width="240" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="lc4" value="Ping/Pong Keepalive&#xa;(every 30s, 5s timeout)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#356ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="920" y="1060" width="220" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== STATE MANAGEMENT ==================== -->
+        <mxCell id="state-title" value="State Management and Data Flow" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="420" y="1170" width="440" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="notifStore" value="NotificationStore (Zustand)&#xa;notifications[], unreadCount,&#xa;preferences, connectionStatus" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1e88e5;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="120" y="1300" width="280" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-state-store" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#43a047;strokeWidth=2;" edge="1" parent="1" source="state-title" target="notifStore">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="rqCache" value="React Query Cache&#xa;Notification list (paginated),&#xa;staleTime: 2min, refetchOnFocus" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#8e24aa;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="460" y="1300" width="280" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-state-rq" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#43a047;strokeWidth=2;" edge="1" parent="1" source="state-title" target="rqCache">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="localStorage" value="localStorage&#xa;unreadCount (instant badge),&#xa;preferences, push permission" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#fb8c00;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="800" y="1300" width="260" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-state-ls" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#43a047;strokeWidth=2;" edge="1" parent="1" source="state-title" target="localStorage">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Store flow arrows -->
+        <mxCell id="flow-ws-store" value="WebSocket → addNotification() → badge+1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1e88e5;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="80" y="1400" width="300" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="flow-read-store" value="Click → markAsRead() → badge-1 (optimistic)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1e88e5;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="80" y="1445" width="300" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="flow-sync-store" value="Tab focus → syncUnreadCount() → reconcile" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1e88e5;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="80" y="1490" width="300" height="35" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== WEB PUSH ==================== -->
+        <mxCell id="push-title" value="Web Push Notifications (Service Worker)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#e53935;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="420" y="1570" width="440" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="pushSubscribe" value="Push Subscription&#xa;PushManager.subscribe()&#xa;with VAPID key" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e53935;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="100" y="1700" width="240" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-push-sub" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#e53935;strokeWidth=2;" edge="1" parent="1" source="push-title" target="pushSubscribe">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="pushService" value="Push Service (FCM/Mozilla)&#xa;Receives push from your server&#xa;Delivers to browser" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e53935;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="410" y="1700" width="260" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-push-svc" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#e53935;strokeWidth=2;" edge="1" parent="1" source="push-title" target="pushService">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="pushSW" value="Service Worker&#xa;push event → showNotification()&#xa;notificationclick → navigate" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e53935;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="740" y="1700" width="260" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-push-sw" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#e53935;strokeWidth=2;" edge="1" parent="1" source="push-title" target="pushSW">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="pushPermission" value="Permission UX&#xa;Custom pre-prompt → Browser dialog&#xa;(Never ask on first load)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#b7a500;fontSize=12;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="1700" width="260" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-push-perm" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#e53935;strokeWidth=2;" edge="1" parent="1" source="push-title" target="pushPermission">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== API ENDPOINTS ==================== -->
+        <mxCell id="api-title" value="API Endpoints" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f0ff;strokeColor=#356ebf;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="420" y="1840" width="440" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="api1" value="GET /api/notifications&#xa;(paginated list)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#356ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="40" y="1960" width="190" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="api2" value="GET /api/notifications/count&#xa;(unread count)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#356ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="260" y="1960" width="200" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="api3" value="POST /api/notifications/:id/read&#xa;(mark as read)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#356ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="490" y="1960" width="220" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="api4" value="POST /api/notifications/read-all&#xa;(mark all as read)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#356ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="740" y="1960" width="220" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="api5" value="WS /api/notifications/stream&#xa;(real-time channel)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="990" y="1960" width="220" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="api6" value="POST /api/push/subscribe&#xa;(register push)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#356ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1240" y="1960" width="190" height="45" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge-api1" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="api-title" target="api1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-api2" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="api-title" target="api2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-api3" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="api-title" target="api3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-api4" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="api-title" target="api4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-api5" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="api-title" target="api5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-api6" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="api-title" target="api6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== PERFORMANCE OPTIMIZATION ==================== -->
+        <mxCell id="perf-title" value="Performance Optimization" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="420" y="2070" width="440" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="perf1" value="Code Splitting&#xa;Panel lazy-loaded on first click&#xa;Toast in initial bundle" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1e88e5;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="80" y="2190" width="230" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="perf2" value="Virtualized List&#xa;15-20 DOM nodes max&#xa;@tanstack/react-virtual" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#8e24aa;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="350" y="2190" width="230" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="perf3" value="Optimistic Updates&#xa;Badge and read state&#xa;instant, server confirms later" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#fb8c00;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="620" y="2190" width="230" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="perf4" value="Message Deduplication&#xa;Set-based dedup by eventId&#xa;prevents duplicate renders" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#e53935;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="890" y="2190" width="240" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge-perf1" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#43a047;" edge="1" parent="1" source="perf-title" target="perf1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-perf2" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#43a047;" edge="1" parent="1" source="perf-title" target="perf2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-perf3" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#43a047;" edge="1" parent="1" source="perf-title" target="perf3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-perf4" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#43a047;" edge="1" parent="1" source="perf-title" target="perf4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

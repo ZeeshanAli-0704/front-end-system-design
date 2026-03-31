@@ -1,0 +1,387 @@
+<mxfile host="app.diagrams.net" agent="GitHub Copilot" version="28.2.8">
+  <diagram name="Component Architecture" id="pinterest-pin-grid-component-arch">
+    <mxGraphModel dx="2200" dy="1400" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="2400" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="title" value="Pinterest Pin Grid — Frontend Component Architecture" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontStyle=1;fontSize=20;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="400" y="20" width="600" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== HOME PAGE ==================== -->
+        <mxCell id="homePage" value="HomePage&#xa;— SSR shell, manages grid feed, infinite scroll, routing" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f0ff;strokeColor=#356ebf;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="480" y="80" width="420" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== TOP-LEVEL CHILDREN OF HOMEPAGE ==================== -->
+        <mxCell id="navBar" value="NavBar&#xa;(Logo + SearchBar + UserMenu)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="60" y="230" width="260" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-home-nav" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="homePage" target="navBar">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="masonryGrid" value="MasonryGrid&#xa;(virtualized, multi-column, absolute positioning)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="380" y="230" width="340" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-home-grid" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="homePage" target="masonryGrid">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="gridSentinel" value="GridSentinel&#xa;(IntersectionObserver trigger)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="780" y="230" width="260" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-home-sentinel" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="homePage" target="gridSentinel">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="pinDetailModal" value="PinDetailModal&#xa;(Portal / Overlay — lazy loaded)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#fb8c00;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="230" width="260" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-home-detail" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="homePage" target="pinDetailModal">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Notes -->
+        <mxCell id="note-sentinel" value="rootMargin: 500px&#xa;→ preloads next batch&#xa;before user reaches bottom" style="shape=note;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#b7a500;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="780" y="310" width="200" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="note-detail" value="User taps pin →&#xa;lazy-loads detail chunk&#xa;React.lazy + Portal" style="shape=note;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#b7a500;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="310" width="180" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== PIN CARD ==================== -->
+        <mxCell id="pinCard" value="PinCard&#xa;(repeated for each pin, position: absolute + transform)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f0ff;strokeColor=#356ebf;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="380" y="420" width="340" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-grid-card" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#666666;strokeWidth=2;" edge="1" parent="1" source="masonryGrid" target="pinCard">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== PIN CARD SUB-COMPONENTS ==================== -->
+        <mxCell id="subcomp-label" value="PinCard Sub-components" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontStyle=1;fontSize=13;fontColor=#356ebf;" vertex="1" parent="1">
+          <mxGeometry x="80" y="510" width="250" height="25" as="geometry" />
+        </mxCell>
+
+        <mxCell id="pinImage" value="PinImage&#xa;(lazy loading + dominant color placeholder + aspectRatio)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#356ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="30" y="560" width="280" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-card-image" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="pinCard" target="pinImage">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="pinHoverOverlay" value="PinHoverOverlay (desktop)&#xa;├── SaveButton&#xa;├── SourceLinkBadge&#xa;└── ShareButton" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#43a047;align=left;spacingLeft=10;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="340" y="550" width="220" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-card-overlay" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="pinCard" target="pinHoverOverlay">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="pinFooter" value="PinFooter&#xa;(Title + AuthorAvatar + AuthorName)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#356ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="590" y="560" width="240" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-card-footer" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="pinCard" target="pinFooter">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="boardPicker" value="BoardPicker&#xa;(dropdown on save — board selection)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#fb8c00;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="860" y="560" width="230" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-card-board" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="pinCard" target="boardPicker">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== PIN DETAIL MODAL SUB-COMPONENTS ==================== -->
+        <mxCell id="detail-label" value="PinDetailModal Sub-components" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontStyle=1;fontSize=13;fontColor=#fb8c00;" vertex="1" parent="1">
+          <mxGeometry x="700" y="680" width="300" height="25" as="geometry" />
+        </mxCell>
+
+        <mxCell id="pinDetailImage" value="PinDetailImage&#xa;(full-size with zoom)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#fb8c00;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="580" y="720" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-detail-img" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#fb8c00;" edge="1" parent="1" source="pinDetailModal" target="pinDetailImage">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="pinMetadata" value="PinMetadata&#xa;(description, source link, author)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#fb8c00;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="800" y="720" width="210" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-detail-meta" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#fb8c00;" edge="1" parent="1" source="pinDetailModal" target="pinMetadata">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="commentSection" value="CommentSection&#xa;(CommentList + CommentInput)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#fb8c00;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1030" y="720" width="210" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-detail-comments" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#fb8c00;" edge="1" parent="1" source="pinDetailModal" target="commentSection">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="relatedPins" value="RelatedPinsGrid&#xa;(&quot;More like this&quot; — mini masonry)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#fb8c00;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1260" y="720" width="220" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-detail-related" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#fb8c00;" edge="1" parent="1" source="pinDetailModal" target="relatedPins">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== MASONRY LAYOUT ALGORITHM ==================== -->
+        <mxCell id="masonry-title" value="Masonry Layout Algorithm — Shortest Column First" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f0ff;strokeColor=#356ebf;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="420" y="850" width="460" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="masonry-step1" value="1. API provides image&#xa;width + height per pin" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="60" y="970" width="240" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-m-s1" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="masonry-title" target="masonry-step1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="masonry-step2" value="2. Compute cardHeight =&#xa;(imgH / imgW) * colWidth + footer" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="340" y="970" width="260" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-m-s2" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="masonry-title" target="masonry-step2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="masonry-step3" value="3. Place in shortest column&#xa;argmin(columnHeights)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="640" y="970" width="240" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-m-s3" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="masonry-title" target="masonry-step3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="masonry-step4" value="4. Position via transform:&#xa;translate(left, top) — GPU accel." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="920" y="970" width="260" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-m-s4" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="masonry-title" target="masonry-step4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="masonry-step5" value="5. Update columnHeights[]&#xa;repeat for next pin" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1220" y="970" width="240" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-m-s5" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="masonry-title" target="masonry-step5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== VIRTUALIZATION STRATEGY ==================== -->
+        <mxCell id="virt-title" value="Virtualized Masonry — Rendering Strategy" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#8e24aa;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="420" y="1100" width="460" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="virt-spacer" value="Inner Spacer&#xa;height = max(columnHeights)&#xa;(creates total scroll area)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#8e24aa;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="120" y="1220" width="260" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-v-spacer" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#8e24aa;strokeWidth=2;" edge="1" parent="1" source="virt-title" target="virt-spacer">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="virt-visible" value="Visible Pins Only&#xa;pins where (top + height &gt; scrollTop - 500)&#xa;AND (top &lt; scrollTop + viewport + 500)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#8e24aa;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="420" y="1220" width="340" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-v-visible" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#8e24aa;strokeWidth=2;" edge="1" parent="1" source="virt-title" target="virt-visible">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="virt-bucket" value="Spatial Bucketing&#xa;500px buckets → O(1) lookup&#xa;(for 1000+ pins)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#8e24aa;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="800" y="1220" width="260" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-v-bucket" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#8e24aa;strokeWidth=2;" edge="1" parent="1" source="virt-title" target="virt-bucket">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="virt-incremental" value="Incremental Layout&#xa;new batch appends only O(batchSize)&#xa;not O(totalPins)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#8e24aa;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="1220" width="270" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-v-incr" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#8e24aa;strokeWidth=2;" edge="1" parent="1" source="virt-title" target="virt-incremental">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== PERFORMANCE OPTIMIZATION ==================== -->
+        <mxCell id="perf-title" value="Performance Optimization" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="420" y="1380" width="460" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="perf-images" value="Image Loading" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1e88e5;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="80" y="1500" width="260" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-perf-img" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#43a047;strokeWidth=2;" edge="1" parent="1" source="perf-title" target="perf-images">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="perf-render" value="Rendering" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#fb8c00;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="400" y="1500" width="260" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-perf-rend" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#43a047;strokeWidth=2;" edge="1" parent="1" source="perf-title" target="perf-render">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="perf-bundle" value="Bundle and Network" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#8e24aa;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="720" y="1500" width="260" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-perf-bun" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#43a047;strokeWidth=2;" edge="1" parent="1" source="perf-title" target="perf-bundle">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="perf-state" value="State and API" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#e53935;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="1500" width="260" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-perf-st" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#43a047;strokeWidth=2;" edge="1" parent="1" source="perf-title" target="perf-state">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Image Loading details -->
+        <mxCell id="pi1" value="Dominant color placeholder (instant)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1e88e5;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="40" y="1590" width="240" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="pi2" value="loading=eager for first 8-12 pins" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1e88e5;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="40" y="1640" width="240" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="pi3" value="loading=lazy for below-fold pins" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1e88e5;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="40" y="1690" width="240" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="pi4" value="srcset 1x/2x for retina CDN resizing" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1e88e5;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="40" y="1740" width="240" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-pi1" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#1e88e5;" edge="1" parent="1" source="perf-images" target="pi1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-pi2" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#1e88e5;" edge="1" parent="1" source="perf-images" target="pi2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-pi3" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#1e88e5;" edge="1" parent="1" source="perf-images" target="pi3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-pi4" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#1e88e5;" edge="1" parent="1" source="perf-images" target="pi4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Rendering details -->
+        <mxCell id="pr1" value="SSR shell + first 25 pins server-rendered" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#fb8c00;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="360" y="1590" width="250" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="pr2" value="CSR for infinite scroll batches" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#fb8c00;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="360" y="1640" width="250" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="pr3" value="Lazy-loaded PinDetailModal chunk" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#fb8c00;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="360" y="1690" width="250" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="pr4" value="React.memo on PinCard (prevent re-renders)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#fb8c00;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="360" y="1740" width="250" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-pr1" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#fb8c00;" edge="1" parent="1" source="perf-render" target="pr1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-pr2" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#fb8c00;" edge="1" parent="1" source="perf-render" target="pr2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-pr3" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#fb8c00;" edge="1" parent="1" source="perf-render" target="pr3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-pr4" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#fb8c00;" edge="1" parent="1" source="perf-render" target="pr4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Bundle details -->
+        <mxCell id="pb1" value="Code-split: detail modal, search, boards" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#8e24aa;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="680" y="1590" width="250" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="pb2" value="WebP/AVIF via CDN with fallback" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#8e24aa;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="680" y="1640" width="250" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="pb3" value="Preconnect to CDN in head" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#8e24aa;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="680" y="1690" width="250" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="pb4" value="Brotli compression for all assets" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#8e24aa;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="680" y="1740" width="250" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-pb1" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#8e24aa;" edge="1" parent="1" source="perf-bundle" target="pb1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-pb2" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#8e24aa;" edge="1" parent="1" source="perf-bundle" target="pb2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-pb3" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#8e24aa;" edge="1" parent="1" source="perf-bundle" target="pb3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-pb4" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#8e24aa;" edge="1" parent="1" source="perf-bundle" target="pb4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- State details -->
+        <mxCell id="ps1" value="React Query (staleTime: 5min)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e53935;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="1590" width="250" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ps2" value="Optimistic save-to-board updates" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e53935;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="1640" width="250" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ps3" value="Cursor-based pagination (no duplicates)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e53935;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="1690" width="250" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ps4" value="sessionStorage for scroll position" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e53935;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="1740" width="250" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-ps1" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#e53935;" edge="1" parent="1" source="perf-state" target="ps1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-ps2" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#e53935;" edge="1" parent="1" source="perf-state" target="ps2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-ps3" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#e53935;" edge="1" parent="1" source="perf-state" target="ps3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-ps4" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#e53935;" edge="1" parent="1" source="perf-state" target="ps4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== COMPLETE FLOW ==================== -->
+        <mxCell id="flow-title" value="Complete Pin Grid Flow" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f0ff;strokeColor=#356ebf;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="420" y="1870" width="460" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="flow1" value="1. Page loads →&#xa;GET /api/feed?limit=25" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="30" y="1970" width="190" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="flow2" value="2. Masonry layout →&#xa;calculate positions" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="250" y="1970" width="180" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="flow3" value="3. Render pins →&#xa;absolute positioned cards" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1e88e5;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="460" y="1970" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="flow4" value="4. Scroll → sentinel →&#xa;GET /api/feed?cursor=X" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#fb8c00;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="690" y="1970" width="190" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="flow5" value="5. Tap pin →&#xa;open detail modal" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#8e24aa;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="910" y="1970" width="170" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="flow6" value="6. Save pin →&#xa;optimistic update" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#e53935;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1110" y="1970" width="170" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge-flow12" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#666666;strokeWidth=2;" edge="1" parent="1" source="flow1" target="flow2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-flow23" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#666666;strokeWidth=2;" edge="1" parent="1" source="flow2" target="flow3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-flow34" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#666666;strokeWidth=2;" edge="1" parent="1" source="flow3" target="flow4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-flow45" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#666666;strokeWidth=2;" edge="1" parent="1" source="flow4" target="flow5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-flow56" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#666666;strokeWidth=2;" edge="1" parent="1" source="flow5" target="flow6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge-flow-title" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="flow-title" target="flow1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

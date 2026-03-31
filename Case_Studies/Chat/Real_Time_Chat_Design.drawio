@@ -1,0 +1,333 @@
+<mxfile host="app.diagrams.net" agent="GitHub Copilot" version="28.2.8">
+  <diagram name="Component Architecture" id="chat-app-component-arch">
+    <mxGraphModel dx="2200" dy="1400" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="2600" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="title" value="Real-Time Chat Application — Frontend Component Architecture" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontStyle=1;fontSize=20;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="350" y="20" width="700" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== CHAT APP SHELL ==================== -->
+        <mxCell id="chatApp" value="ChatApp&#xa;— SPA shell (Sidebar + ChatView layout)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f0ff;strokeColor=#356ebf;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="480" y="80" width="380" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== SIDEBAR ==================== -->
+        <mxCell id="sidebar" value="Sidebar&#xa;(Conversation List + Search)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="160" y="230" width="280" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-app-sidebar" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="chatApp" target="sidebar">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== CHAT VIEW ==================== -->
+        <mxCell id="chatView" value="ChatView&#xa;(Messages + Composer + Header)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#fb8c00;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="560" y="230" width="280" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-app-chatview" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="chatApp" target="chatView">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== INFO PANEL ==================== -->
+        <mxCell id="infoPanel" value="InfoPanel&#xa;(Members, Shared Media — lazy)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#8e24aa;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="960" y="230" width="260" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-app-info" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="chatApp" target="infoPanel">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Note: WebSocket -->
+        <mxCell id="note-ws" value="Single multiplexed WebSocket&#xa;carries messages, typing,&#xa;presence, and status events" style="shape=note;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#b7a500;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1240" y="80" width="220" height="65" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== SIDEBAR SUB-COMPONENTS ==================== -->
+        <mxCell id="sidebar-label" value="Sidebar Sub-components" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontStyle=1;fontSize=13;fontColor=#43a047;" vertex="1" parent="1">
+          <mxGeometry x="40" y="340" width="250" height="25" as="geometry" />
+        </mxCell>
+
+        <mxCell id="convoSearch" value="ConversationSearch" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#43a047;" vertex="1" parent="1">
+          <mxGeometry x="30" y="390" width="200" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-side-search" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#43a047;" edge="1" parent="1" source="sidebar" target="convoSearch">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="convoList" value="ConversationList&#xa;(scrollable, virtualized)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#43a047;" vertex="1" parent="1">
+          <mxGeometry x="260" y="390" width="220" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-side-list" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#43a047;" edge="1" parent="1" source="sidebar" target="convoList">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="convoItem" value="ConversationItem[]&#xa;├── Avatar (with online dot)&#xa;├── ConvoPreview (name + last msg)&#xa;├── Timestamp&#xa;└── UnreadBadge" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#8e24aa;align=left;spacingLeft=10;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="230" y="470" width="260" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-list-item" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#8e24aa;" edge="1" parent="1" source="convoList" target="convoItem">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== CHAT VIEW SUB-COMPONENTS ==================== -->
+        <mxCell id="chat-label" value="ChatView Sub-components" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontStyle=1;fontSize=13;fontColor=#fb8c00;" vertex="1" parent="1">
+          <mxGeometry x="520" y="340" width="300" height="25" as="geometry" />
+        </mxCell>
+
+        <mxCell id="chatHeader" value="ChatHeader&#xa;(Avatar + Name + Presence + Actions)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#fb8c00;" vertex="1" parent="1">
+          <mxGeometry x="520" y="380" width="260" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-chat-header" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#fb8c00;" edge="1" parent="1" source="chatView" target="chatHeader">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="msgList" value="MessageList&#xa;(virtualized, bottom-anchored)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#fb8c00;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="520" y="450" width="260" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-chat-msglist" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#fb8c00;" edge="1" parent="1" source="chatView" target="msgList">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="typingInd" value="TypingIndicator&#xa;('Alice is typing...')" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#fb8c00;" vertex="1" parent="1">
+          <mxGeometry x="810" y="380" width="210" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-chat-typing" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#fb8c00;" edge="1" parent="1" source="chatView" target="typingInd">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="composer" value="MessageComposer&#xa;(Input + Attach + Emoji + Send)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#fb8c00;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="810" y="450" width="260" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-chat-composer" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#fb8c00;" edge="1" parent="1" source="chatView" target="composer">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Message Bubble details -->
+        <mxCell id="msgBubble" value="MessageBubble[]&#xa;├── MessageAvatar (group chat sender)&#xa;├── MessageContent&#xa;│   ├── TextMessage (with linkify)&#xa;│   ├── ImageMessage (thumb + lightbox)&#xa;│   ├── FileMessage (icon + name + size)&#xa;│   └── LinkPreviewCard&#xa;├── MessageTimestamp&#xa;├── MessageStatus (✓ ✓✓ blue ✓✓)&#xa;└── MessageReactions" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#8e24aa;align=left;spacingLeft=10;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="500" y="540" width="300" height="165" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-msglist-bubble" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#8e24aa;" edge="1" parent="1" source="msgList" target="msgBubble">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Composer sub-parts -->
+        <mxCell id="composerParts" value="├── AttachmentButton (file picker)&#xa;├── TextInput (auto-grow textarea)&#xa;├── EmojiPicker (lazy-loaded popover)&#xa;└── SendButton" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#8e24aa;align=left;spacingLeft=10;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="830" y="540" width="260" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-composer-parts" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#8e24aa;" edge="1" parent="1" source="composer" target="composerParts">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== REAL-TIME TRANSPORT LAYER ==================== -->
+        <mxCell id="transport-title" value="Real-Time Transport Layer — WebSocket" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f0ff;strokeColor=#356ebf;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="400" y="770" width="440" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- WebSocket Events -->
+        <mxCell id="wsOutgoing" value="Outgoing (Client → Server)&#xa;• message.send&#xa;• message.read&#xa;• typing.start / typing.stop&#xa;• presence.heartbeat&#xa;• ping" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontSize=12;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="100" y="900" width="280" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-transport-out" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="transport-title" target="wsOutgoing">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wsIncoming" value="Incoming (Server → Client)&#xa;• message.new&#xa;• message.status (sent/delivered/read)&#xa;• typing.update&#xa;• presence.update&#xa;• conversation.updated&#xa;• pong" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#fb8c00;fontSize=12;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="460" y="900" width="300" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-transport-in" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="transport-title" target="wsIncoming">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wsLifecycle" value="Connection Lifecycle&#xa;• Exponential backoff (1s → 30s)&#xa;• Offline message queue&#xa;• lastEventId for gap backfill&#xa;• Ping/pong keepalive (30s)&#xa;• visibilitychange handler" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#e53935;fontSize=12;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="840" y="900" width="280" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-transport-lc" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="transport-title" target="wsLifecycle">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== OPTIMISTIC MESSAGE FLOW ==================== -->
+        <mxCell id="optmsg-title" value="Optimistic Message Sending Flow" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="400" y="1100" width="440" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="opt1" value="1. User hits Send&#xa;→ Generate clientId (UUID)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1e88e5;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="60" y="1230" width="220" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="opt2" value="2. Optimistic render&#xa;→ status: 'sending' ⏳" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1e88e5;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="320" y="1230" width="220" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="opt3" value="3. Send via WebSocket&#xa;→ message.send { clientId }" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1e88e5;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="580" y="1230" width="220" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="opt4" value="4. Server ACK&#xa;→ status: 'sent' ✓" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="840" y="1230" width="200" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge-opt1" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#43a047;strokeWidth=2;" edge="1" parent="1" source="optmsg-title" target="opt1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-opt2" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#43a047;strokeWidth=2;" edge="1" parent="1" source="optmsg-title" target="opt2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-opt3" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#43a047;strokeWidth=2;" edge="1" parent="1" source="optmsg-title" target="opt3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-opt4" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#43a047;strokeWidth=2;" edge="1" parent="1" source="optmsg-title" target="opt4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Status flow below -->
+        <mxCell id="status-flow" value="5. Recipient receives → 'delivered' ✓✓ (grey)   →   6. Recipient reads → 'read' ✓✓ (blue)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#fb8c00;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="280" y="1320" width="600" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Failed state -->
+        <mxCell id="failed-note" value="7. Timeout / Error → 'failed' ⚠️ → Tap to retry" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#e53935;fontSize=12;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="380" y="1380" width="400" height="35" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== STATE MANAGEMENT ==================== -->
+        <mxCell id="state-title" value="State Management" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#8e24aa;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="400" y="1470" width="440" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="convoStore" value="ConversationStore&#xa;conversations[], unreadCounts,&#xa;activeConversationId" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1e88e5;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="60" y="1600" width="260" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-state-convo" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#8e24aa;strokeWidth=2;" edge="1" parent="1" source="state-title" target="convoStore">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="msgStore" value="MessageStore&#xa;messages: Record&lt;convId, Message[]&gt;&#xa;optimistic sends, status updates" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="370" y="1600" width="280" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-state-msg" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#8e24aa;strokeWidth=2;" edge="1" parent="1" source="state-title" target="msgStore">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="presenceStore" value="PresenceStore&#xa;online/offline per user,&#xa;typing per conversation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#fb8c00;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="700" y="1600" width="240" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-state-presence" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#8e24aa;strokeWidth=2;" edge="1" parent="1" source="state-title" target="presenceStore">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="draftStore" value="Drafts (localStorage)&#xa;per-conversation text + attachments&#xa;persisted across reloads" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#e53935;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="990" y="1600" width="260" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-state-draft" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#8e24aa;strokeWidth=2;" edge="1" parent="1" source="state-title" target="draftStore">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== REVERSE SCROLL + VIRTUALIZATION ==================== -->
+        <mxCell id="scroll-title" value="Message List Rendering Strategy" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f0ff;strokeColor=#356ebf;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="400" y="1730" width="440" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="virtList" value="Virtualized List&#xa;@tanstack/react-virtual&#xa;~20 DOM nodes always" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1e88e5;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="80" y="1860" width="240" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-scroll-virt" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="scroll-title" target="virtList">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="revScroll" value="Reverse Infinite Scroll&#xa;IntersectionObserver at top&#xa;scrollTop correction on prepend" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="370" y="1860" width="260" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-scroll-rev" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="scroll-title" target="revScroll">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="bottomAnchor" value="Bottom Anchoring&#xa;Auto-scroll on new msg (if at bottom)&#xa;'New messages' pill (if scrolled up)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#fb8c00;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="680" y="1860" width="270" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-scroll-anchor" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="scroll-title" target="bottomAnchor">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="scrollRestore" value="Scroll Restoration&#xa;Per-conversation scroll position&#xa;saved/restored on switch" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#e53935;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="1860" width="250" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-scroll-restore" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="scroll-title" target="scrollRestore">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== API ENDPOINTS ==================== -->
+        <mxCell id="api-title" value="API Endpoints" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f0ff;strokeColor=#356ebf;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="400" y="1990" width="440" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="api1" value="GET /api/conversations&#xa;(conversation list)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#356ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="40" y="2110" width="190" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="api2" value="GET /conversations/:id/messages&#xa;(paginated history)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#356ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="260" y="2110" width="220" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="api3" value="POST /api/upload&#xa;(media/file upload)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#356ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="510" y="2110" width="180" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="api4" value="POST /conversations/:id/read&#xa;(mark as read)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#356ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="720" y="2110" width="200" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="api5" value="WS /chat/ws&#xa;(real-time channel)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="950" y="2110" width="180" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="api6" value="GET /api/link-preview&#xa;(OG metadata)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#356ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1160" y="2110" width="180" height="45" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge-api1" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="api-title" target="api1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-api2" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="api-title" target="api2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-api3" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="api-title" target="api3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-api4" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="api-title" target="api4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-api5" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="api-title" target="api5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-api6" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="api-title" target="api6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== PERFORMANCE ==================== -->
+        <mxCell id="perf-title" value="Performance Optimization" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="400" y="2220" width="440" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="perf1" value="Code Splitting&#xa;Emoji picker (~50KB) lazy-loaded&#xa;Info panel lazy-loaded" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1e88e5;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="60" y="2340" width="230" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="perf2" value="Virtualized Lists&#xa;Both conversation list and&#xa;message list: ~20 DOM nodes" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#8e24aa;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="330" y="2340" width="230" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="perf3" value="Memoization&#xa;React.memo on MessageBubble&#xa;keyed by id + status" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#fb8c00;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="600" y="2340" width="230" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="perf4" value="Deduplication&#xa;Set-based dedup by messageId&#xa;prevents duplicate renders" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#e53935;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="870" y="2340" width="240" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge-perf1" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#43a047;" edge="1" parent="1" source="perf-title" target="perf1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-perf2" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#43a047;" edge="1" parent="1" source="perf-title" target="perf2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-perf3" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#43a047;" edge="1" parent="1" source="perf-title" target="perf3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-perf4" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#43a047;" edge="1" parent="1" source="perf-title" target="perf4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

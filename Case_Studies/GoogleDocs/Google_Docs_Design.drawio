@@ -1,0 +1,301 @@
+<mxfile host="app.diagrams.net" agent="GitHub Copilot" version="28.2.8">
+  <diagram name="Google Docs Architecture" id="google-docs-arch">
+    <mxGraphModel dx="2400" dy="1800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2000" pageHeight="1800" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="title" value="Google Docs — Frontend System Design Architecture" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontStyle=1;fontSize=22;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="500" y="20" width="700" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== APP ROOT ==================== -->
+        <mxCell id="docPage" value="DocumentPage&#xa;— SPA (SSR shell + CSR editing)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#2d6db5;fontStyle=1;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry x="650" y="90" width="400" height="65" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== UI LAYER ==================== -->
+        <mxCell id="ui-label" value="UI Layer" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontStyle=1;fontSize=14;fontColor=#1565C0;" vertex="1" parent="1">
+          <mxGeometry x="30" y="175" width="100" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- MenuBar -->
+        <mxCell id="menuBar" value="MenuBar&#xa;(File, Edit, View, Insert)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="50" y="220" width="190" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-dp-menu" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#2d6db5;strokeWidth=2;" edge="1" parent="1" source="docPage" target="menuBar">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Toolbar -->
+        <mxCell id="toolbar" value="Toolbar&#xa;(bold, italic, heading, list,&#xa;font, color, alignment)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="280" y="220" width="210" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-dp-toolbar" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#2d6db5;strokeWidth=2;" edge="1" parent="1" source="docPage" target="toolbar">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Editor Surface (Main) -->
+        <mxCell id="editorSurface" value="EditorSurface&#xa;(ContentEditable + Custom Renderer)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1565C0;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="540" y="220" width="300" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-dp-editor" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#2d6db5;strokeWidth=2;" edge="1" parent="1" source="docPage" target="editorSurface">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Editor children -->
+        <mxCell id="pageContainer" value="PageContainer&#xa;(simulated paper)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#bbdefb;strokeColor=#1565C0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="460" y="310" width="135" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-es-page" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#1565C0;strokeWidth=1;" edge="1" parent="1" source="editorSurface" target="pageContainer">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="blockNodes" value="BlockNode[]&#xa;(paragraph, heading,&#xa;list, table, image)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#bbdefb;strokeColor=#1565C0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="615" y="310" width="150" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-es-blocks" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#1565C0;strokeWidth=1;" edge="1" parent="1" source="editorSurface" target="blockNodes">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="cursorOverlay" value="CursorOverlay&#xa;(local + remote cursors)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#bbdefb;strokeColor=#1565C0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="785" y="310" width="145" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-es-cursor" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#1565C0;strokeWidth=1;" edge="1" parent="1" source="editorSurface" target="cursorOverlay">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Comment Sidebar -->
+        <mxCell id="commentSidebar" value="CommentSidebar&#xa;(threads, replies, resolve)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="890" y="220" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-dp-comments" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#2d6db5;strokeWidth=2;" edge="1" parent="1" source="docPage" target="commentSidebar">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Version History -->
+        <mxCell id="versionHistory" value="VersionHistoryPanel&#xa;(timeline, preview, restore)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1130" y="220" width="210" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-dp-versions" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#2d6db5;strokeWidth=2;" edge="1" parent="1" source="docPage" target="versionHistory">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Collaborator Avatars -->
+        <mxCell id="collabAvatars" value="CollaboratorAvatars&#xa;(who is online)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#c62828;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1380" y="220" width="180" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-dp-avatars" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#2d6db5;strokeWidth=2;" edge="1" parent="1" source="docPage" target="collabAvatars">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== DIVIDER ==================== -->
+        <mxCell id="divider1" value="" style="line;strokeColor=#cccccc;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="30" y="380" width="1550" height="10" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== DOCUMENT MODEL LAYER ==================== -->
+        <mxCell id="model-label" value="Document Model Layer" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontStyle=1;fontSize=14;fontColor=#E65100;" vertex="1" parent="1">
+          <mxGeometry x="30" y="400" width="250" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="docModel" value="Document Model&#xa;(typed tree: blocks, text runs, marks)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#ef6c00;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="80" y="445" width="250" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="schema" value="Schema&#xa;(allowed node types,&#xa;validation rules)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#ef6c00;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="380" y="445" width="160" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="selectionModel" value="Selection Model&#xa;(anchor, head positions)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#ef6c00;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="590" y="445" width="160" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== EDITOR CORE LAYER ==================== -->
+        <mxCell id="core-label" value="Editor Core (Command / Transaction Layer)" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontStyle=1;fontSize=14;fontColor=#4A148C;" vertex="1" parent="1">
+          <mxGeometry x="30" y="520" width="400" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="operations" value="Operations&#xa;(insert, delete, format,&#xa;split, merge)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1bee7;strokeColor=#7b1fa2;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="80" y="565" width="170" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="inputHandler" value="Input Handler&#xa;(beforeinput, IME,&#xa;clipboard, drop)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1bee7;strokeColor=#7b1fa2;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="290" y="565" width="160" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="undoManager" value="Undo Manager&#xa;(per-user undo,&#xa;stack transformation)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1bee7;strokeColor=#7b1fa2;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="490" y="565" width="165" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="viewRenderer" value="View Renderer&#xa;(model → DOM patching)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1bee7;strokeColor=#7b1fa2;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="695" y="565" width="155" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== DIVIDER ==================== -->
+        <mxCell id="divider2" value="" style="line;strokeColor=#cccccc;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="30" y="640" width="1550" height="10" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== COLLABORATION LAYER ==================== -->
+        <mxCell id="collab-label" value="Collaboration Layer (Real Time)" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontStyle=1;fontSize=14;fontColor=#B71C1C;" vertex="1" parent="1">
+          <mxGeometry x="30" y="660" width="300" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="otClient" value="OT Client&#xa;(3-state machine: synchronized,&#xa;awaiting confirm, awaiting+buffer)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffcdd2;strokeColor=#c62828;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="80" y="710" width="240" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="transformFn" value="Transform Function&#xa;(insert×insert, insert×delete,&#xa;delete×delete)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffcdd2;strokeColor=#c62828;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="360" y="710" width="200" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wsTransport" value="WebSocket Transport&#xa;(send/receive ops,&#xa;reconnect, offline buffer)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffcdd2;strokeColor=#c62828;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="600" y="710" width="200" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="presenceMgr" value="Presence Manager&#xa;(cursor broadcast,&#xa;selection sharing)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffcdd2;strokeColor=#c62828;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="840" y="710" width="175" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="collabServer" value="Collaboration Server&#xa;(central OT authority, operation log,&#xa;revision ordering)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffebee;strokeColor=#c62828;fontStyle=3;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="710" width="240" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- Collab edges -->
+        <mxCell id="edge-ot-xform" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#c62828;strokeWidth=1;" edge="1" parent="1" source="otClient" target="transformFn">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-ot-ws" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#c62828;strokeWidth=1;" edge="1" parent="1" source="otClient" target="wsTransport">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-ws-server" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#c62828;strokeWidth=2;dashed=1;" edge="1" parent="1" source="wsTransport" target="collabServer">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-ws-presence" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#c62828;strokeWidth=1;" edge="1" parent="1" source="wsTransport" target="presenceMgr">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- OT State Machine Note -->
+        <mxCell id="note-ot" value="OT Client State Machine:&#xa;1. SYNCHRONIZED — in sync, send ops directly&#xa;2. AWAITING_CONFIRM — op in flight, waiting for ack&#xa;3. AWAITING_WITH_BUFFER — op in flight + buffered&#xa;&#xa;Server transforms concurrent ops&#xa;→ all clients converge to same state" style="shape=note;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#b7a500;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="80" y="790" width="280" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== DIVIDER ==================== -->
+        <mxCell id="divider3" value="" style="line;strokeColor=#cccccc;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="30" y="910" width="1550" height="10" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== PERSISTENCE LAYER ==================== -->
+        <mxCell id="persist-label" value="Persistence Layer" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontStyle=1;fontSize=14;fontColor=#1B5E20;" vertex="1" parent="1">
+          <mxGeometry x="30" y="930" width="200" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="autoSave" value="Auto Save&#xa;(ops stream = implicit save)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#c8e6c9;strokeColor=#2e7d32;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="80" y="975" width="185" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="offlineBuffer" value="Offline Buffer&#xa;(IndexedDB for crash safety)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#c8e6c9;strokeColor=#2e7d32;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="310" y="975" width="185" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="versionClient" value="Version History Client&#xa;(fetch + preview past versions)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#c8e6c9;strokeColor=#2e7d32;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="540" y="975" width="200" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="exportImport" value="Export / Import&#xa;(PDF, DOCX, HTML, plain text)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#c8e6c9;strokeColor=#2e7d32;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="785" y="975" width="190" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="docStorageAPI" value="Document Storage API&#xa;(REST: load/save snapshots)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#2e7d32;fontStyle=3;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1020" y="975" width="210" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Note: auto-save -->
+        <mxCell id="note-save" value="No save button. Every operation&#xa;is synced in real-time via WebSocket.&#xa;Server persists the operation log." style="shape=note;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#b7a500;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="80" y="1045" width="220" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== DIVIDER ==================== -->
+        <mxCell id="divider4" value="" style="line;strokeColor=#cccccc;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="30" y="1110" width="1550" height="10" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== DATA FLOW ==================== -->
+        <mxCell id="flow-label" value="Real Time Collaboration Flow" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontStyle=1;fontSize=14;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="30" y="1130" width="300" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="flow1" value="1. User Types&#xa;(beforeinput event)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1565C0;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="1180" width="145" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="flow2" value="2. Create Op&#xa;(insert/delete/format)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1bee7;strokeColor=#7b1fa2;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="230" y="1180" width="155" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="flow3" value="3. Apply Locally&#xa;(model + DOM update)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#ef6c00;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="420" y="1180" width="155" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="flow4" value="4. Send to Server&#xa;(WebSocket + revision)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffcdd2;strokeColor=#c62828;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="610" y="1180" width="160" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="flow5" value="5. Server Transforms&#xa;(OT against concurrent ops)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffcdd2;strokeColor=#c62828;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="805" y="1180" width="180" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="flow6" value="6. Broadcast to Others&#xa;(all clients converge)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#c8e6c9;strokeColor=#2e7d32;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1020" y="1180" width="170" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Flow edges -->
+        <mxCell id="edge-f1-f2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#555;strokeWidth=2;" edge="1" parent="1" source="flow1" target="flow2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-f2-f3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#555;strokeWidth=2;" edge="1" parent="1" source="flow2" target="flow3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-f3-f4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#555;strokeWidth=2;" edge="1" parent="1" source="flow3" target="flow4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-f4-f5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#555;strokeWidth=2;" edge="1" parent="1" source="flow4" target="flow5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-f5-f6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#555;strokeWidth=2;" edge="1" parent="1" source="flow5" target="flow6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== LEGEND ==================== -->
+        <mxCell id="legend-label" value="Legend" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontStyle=1;fontSize=13;fontColor=#333;" vertex="1" parent="1">
+          <mxGeometry x="50" y="1270" width="60" height="25" as="geometry" />
+        </mxCell>
+
+        <mxCell id="legend-ui" value="UI Components" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="50" y="1300" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-editor" value="Editor Surface" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#bbdefb;strokeColor=#1565C0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="175" y="1300" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-model" value="Document Model" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#ef6c00;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="300" y="1300" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-core" value="Editor Core" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1bee7;strokeColor=#7b1fa2;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="435" y="1300" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-collab" value="Collaboration (OT)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffcdd2;strokeColor=#c62828;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="550" y="1300" width="130" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-persist" value="Persistence" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#c8e6c9;strokeColor=#2e7d32;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="695" y="1300" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-external" value="External (Server)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffebee;strokeColor=#c62828;fontStyle=2;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="810" y="1300" width="120" height="30" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

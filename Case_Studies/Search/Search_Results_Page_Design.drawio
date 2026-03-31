@@ -1,0 +1,417 @@
+<mxfile host="app.diagrams.net" agent="GitHub Copilot" version="28.2.8">
+  <diagram name="Component Architecture" id="search-results-page-component-arch">
+    <mxGraphModel dx="2200" dy="1400" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="3200" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="title" value="Search Results Page — Frontend Component Architecture" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontStyle=1;fontSize=20;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="350" y="20" width="650" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== SEARCH RESULTS PAGE ==================== -->
+        <mxCell id="searchResultsPage" value="SearchResultsPage&#xa;— URL is single source of truth (useSearchState hook)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f0ff;strokeColor=#356ebf;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="440" y="80" width="440" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== TOP-LEVEL CHILDREN ==================== -->
+        <mxCell id="searchHeader" value="SearchHeader&#xa;(SearchBar pre-filled + SortDropdown + LayoutToggle)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="60" y="230" width="340" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-page-header" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="searchResultsPage" target="searchHeader">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="contentArea" value="ContentArea&#xa;(flex row: FilterSidebar + ResultsContainer)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f0ff;strokeColor=#356ebf;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="480" y="230" width="330" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-page-content" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="searchResultsPage" target="contentArea">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="activeFilterChips" value="ActiveFilterChips&#xa;(horizontal removable chips)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#fb8c00;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="880" y="230" width="240" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-page-chips" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="searchResultsPage" target="activeFilterChips">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== FILTER SIDEBAR ==================== -->
+        <mxCell id="filterSidebar" value="FilterSidebar (desktop)&#xa;FilterDrawer (mobile)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#fb8c00;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="60" y="380" width="250" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-content-filter" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#fb8c00;strokeWidth=2;" edge="1" parent="1" source="contentArea" target="filterSidebar">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Filter children -->
+        <mxCell id="categoryFilter" value="CategoryFilter&#xa;(tree / accordion)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#fb8c00;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="20" y="480" width="160" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="priceRangeFilter" value="PriceRangeFilter&#xa;(slider + inputs)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#fb8c00;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="200" y="480" width="160" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="brandFilter" value="BrandFilter&#xa;(checkbox list + search)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#fb8c00;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="20" y="540" width="160" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="ratingFilter" value="RatingFilter&#xa;(star selector)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#fb8c00;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="200" y="540" width="160" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-fs-cat" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#fb8c00;" edge="1" parent="1" source="filterSidebar" target="categoryFilter">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-fs-price" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#fb8c00;" edge="1" parent="1" source="filterSidebar" target="priceRangeFilter">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-fs-brand" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#fb8c00;" edge="1" parent="1" source="filterSidebar" target="brandFilter">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-fs-rating" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#fb8c00;" edge="1" parent="1" source="filterSidebar" target="ratingFilter">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Filter note -->
+        <mxCell id="note-filter" value="Facet counts from API&#xa;Disabled when count = 0&#xa;URL params updated on change&#xa;Page resets to 1" style="shape=note;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#b7a500;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="20" y="610" width="220" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== RESULTS CONTAINER ==================== -->
+        <mxCell id="resultsContainer" value="ResultsContainer&#xa;(results list + pagination + related)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="480" y="380" width="300" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-content-results" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#43a047;strokeWidth=2;" edge="1" parent="1" source="contentArea" target="resultsContainer">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Results Container children -->
+        <mxCell id="resultsMeta" value="ResultsMeta&#xa;&quot;Showing 1–10 of 1,234 results&quot;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#43a047;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="420" y="480" width="230" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="spellCorrection" value="SpellCorrection&#xa;&quot;Did you mean: running shoes?&quot;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#43a047;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="680" y="480" width="230" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-rc-meta" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#43a047;" edge="1" parent="1" source="resultsContainer" target="resultsMeta">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-rc-spell" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#43a047;" edge="1" parent="1" source="resultsContainer" target="spellCorrection">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ResultsList -->
+        <mxCell id="resultsList" value="ResultsList (ol role=list)&#xa;Polymorphic — renders type→component via registry" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1e88e5;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="430" y="570" width="370" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-rc-list" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#1e88e5;strokeWidth=2;" edge="1" parent="1" source="resultsContainer" target="resultsList">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== RESULT CARD TYPES (POLYMORPHIC) ==================== -->
+        <mxCell id="cards-label" value="Result Card Types (Registry Pattern)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontStyle=1;fontSize=13;fontColor=#1e88e5;" vertex="1" parent="1">
+          <mxGeometry x="350" y="660" width="320" height="25" as="geometry" />
+        </mxCell>
+
+        <mxCell id="webResultCard" value="WebResultCard&#xa;title + URL + snippet&#xa;+ sitelinks" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1e88e5;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="40" y="710" width="180" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="productResultCard" value="ProductResultCard&#xa;image + price + rating&#xa;+ seller + badge" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1e88e5;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="250" y="710" width="180" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="videoResultCard" value="VideoResultCard&#xa;thumbnail + duration&#xa;+ channel + views" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1e88e5;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="460" y="710" width="180" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="imagePackCard" value="ImagePackCard&#xa;horizontal thumbnail grid" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1e88e5;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="670" y="710" width="180" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="featuredSnippetCard" value="FeaturedSnippetCard&#xa;answer box + source" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1e88e5;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="880" y="710" width="180" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="knowledgePanelCard" value="KnowledgePanelCard&#xa;entity info sidebar" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1e88e5;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1090" y="710" width="170" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-rl-web" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#1e88e5;" edge="1" parent="1" source="resultsList" target="webResultCard">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-rl-product" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#1e88e5;" edge="1" parent="1" source="resultsList" target="productResultCard">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-rl-video" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#1e88e5;" edge="1" parent="1" source="resultsList" target="videoResultCard">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-rl-image" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#1e88e5;" edge="1" parent="1" source="resultsList" target="imagePackCard">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-rl-snippet" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#1e88e5;" edge="1" parent="1" source="resultsList" target="featuredSnippetCard">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-rl-kp" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#1e88e5;" edge="1" parent="1" source="resultsList" target="knowledgePanelCard">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- HighlightedText shared component note -->
+        <mxCell id="note-highlight" value="All cards use HighlightedText&#xa;component with &lt;mark&gt; for&#xa;query match highlighting&#xa;(server-side highlight ranges)" style="shape=note;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#b7a500;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1090" y="790" width="220" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- Pagination + Related -->
+        <mxCell id="paginationBar" value="PaginationBar&#xa;(1 2 3 ... 10 Next &gt;)&#xa;aria-current=&quot;page&quot;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#8e24aa;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="420" y="810" width="220" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="relatedSearches" value="RelatedSearches&#xa;&quot;People also search for...&quot;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#8e24aa;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="680" y="810" width="220" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-rc-pagination" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#8e24aa;" edge="1" parent="1" source="resultsContainer" target="paginationBar">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-rc-related" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#8e24aa;" edge="1" parent="1" source="resultsContainer" target="relatedSearches">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Pagination note -->
+        <mxCell id="note-pagination" value="Offset-based (not cursor)&#xa;SEO-friendly: ?q=X&amp;page=N&#xa;Each page is a crawlable URL&#xa;Scroll to top on page change" style="shape=note;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#b7a500;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="420" y="890" width="220" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== URL STATE SYNCHRONIZATION ==================== -->
+        <mxCell id="url-title" value="URL ↔ State Synchronization (Source of Truth)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f0ff;strokeColor=#356ebf;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="350" y="1020" width="520" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="url-query" value="q=shoes&#xa;(search query)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#356ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="60" y="1140" width="150" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="url-brand" value="brand=nike,adidas&#xa;(multi-select filter)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#356ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="240" y="1140" width="170" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="url-price" value="price_min=50&amp;price_max=200&#xa;(range filter)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#356ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="440" y="1140" width="200" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="url-sort" value="sort=price_asc&#xa;(sort order)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#356ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="670" y="1140" width="150" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="url-page" value="page=2&#xa;(pagination offset)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#356ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="850" y="1140" width="150" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-url1" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="url-title" target="url-query">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-url2" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="url-title" target="url-brand">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-url3" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="url-title" target="url-price">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-url4" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="url-title" target="url-sort">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-url5" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="url-title" target="url-page">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="note-url" value="Every state change → URL update (push history)&#xa;Filter/Sort change → page resets to 1&#xa;Back/Forward browser nav works automatically&#xa;Shareable &amp; bookmarkable URLs" style="shape=note;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#b7a500;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="1120" width="260" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== DATA FLOW ==================== -->
+        <mxCell id="data-title" value="Data Flow — Search Request Lifecycle" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="350" y="1280" width="520" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="df-step1" value="1. User submits query&#xa;   or changes filter/sort/page" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="40" y="1400" width="230" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="df-step2" value="2. URL updates →&#xa;   useSearchState derives new state" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="310" y="1400" width="250" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="df-step3" value="3. React Query fires →&#xa;   GET /api/search?q=X&amp;...&#xa;   (abort previous)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1e88e5;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="600" y="1400" width="230" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="df-step4" value="4. keepPreviousData:&#xa;   old results visible (faded)&#xa;   while fetching new" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#fb8c00;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="870" y="1400" width="230" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-df12" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#666666;strokeWidth=2;" edge="1" parent="1" source="df-step1" target="df-step2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-df23" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#666666;strokeWidth=2;" edge="1" parent="1" source="df-step2" target="df-step3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-df34" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#666666;strokeWidth=2;" edge="1" parent="1" source="df-step3" target="df-step4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="df-step5" value="5. API responds →&#xa;   Results + Facets + Pagination&#xa;   update React Query cache" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#c8e6c9;strokeColor=#2e7d32;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="200" y="1520" width="260" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="df-step6" value="6. ResultsList re-renders&#xa;   FilterSidebar facet counts update&#xa;   PaginationBar updates" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#c8e6c9;strokeColor=#2e7d32;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="520" y="1520" width="260" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="df-step7" value="7. Prefetch next page&#xa;   in background →&#xa;   instant page navigation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#8e24aa;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="840" y="1520" width="240" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-df45" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#666666;strokeWidth=2;" edge="1" parent="1" source="df-step4" target="df-step5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-df56" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#666666;strokeWidth=2;" edge="1" parent="1" source="df-step5" target="df-step6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-df67" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#666666;strokeWidth=2;" edge="1" parent="1" source="df-step6" target="df-step7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-df-title" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#43a047;strokeWidth=2;" edge="1" parent="1" source="data-title" target="df-step1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== RENDERING STRATEGY ==================== -->
+        <mxCell id="render-title" value="Rendering Strategy" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#8e24aa;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="350" y="1660" width="520" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="render-ssr" value="SSR — Initial SERP&#xa;First page of results&#xa;Fast FCP + SEO + Social Preview" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1e88e5;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="60" y="1780" width="250" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="render-csr" value="CSR — Interactions&#xa;Filter, Sort, Paginate, Re-search&#xa;Client-side fetch + re-render" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="350" y="1780" width="250" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="render-lazy" value="Code Split — Uncommon types&#xa;KnowledgePanel, FeaturedSnippet&#xa;FilterDrawer (mobile)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#fb8c00;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="640" y="1780" width="250" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="render-hydrate" value="Selective Hydration&#xa;Search bar + filters first&#xa;Result links deferred" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#e53935;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="930" y="1780" width="230" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-rt-ssr" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#8e24aa;strokeWidth=2;" edge="1" parent="1" source="render-title" target="render-ssr">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-rt-csr" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#8e24aa;strokeWidth=2;" edge="1" parent="1" source="render-title" target="render-csr">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-rt-lazy" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#8e24aa;strokeWidth=2;" edge="1" parent="1" source="render-title" target="render-lazy">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-rt-hydrate" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#8e24aa;strokeWidth=2;" edge="1" parent="1" source="render-title" target="render-hydrate">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== PERFORMANCE OPTIMIZATION ==================== -->
+        <mxCell id="perf-title" value="Performance Optimization" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f0ff;strokeColor=#356ebf;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="350" y="1920" width="520" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="perf-prefetch" value="Prefetch Next Page&#xa;→ Instant page navigation&#xa;→ Background fetch page N+1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1e88e5;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="40" y="2040" width="250" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="perf-keep" value="keepPreviousData&#xa;→ No blank screen on filter change&#xa;→ Old results faded during fetch" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#fb8c00;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="320" y="2040" width="260" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="perf-images" value="Image Lazy Loading&#xa;→ First 3 eager (above fold / LCP)&#xa;→ Rest: loading=&quot;lazy&quot;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="610" y="2040" width="240" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="perf-abort" value="AbortController&#xa;→ Cancel stale search on re-query&#xa;→ Cancel on filter/sort change" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#e53935;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="880" y="2040" width="250" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-perf-prefetch" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="perf-title" target="perf-prefetch">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-perf-keep" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="perf-title" target="perf-keep">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-perf-images" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="perf-title" target="perf-images">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-perf-abort" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="perf-title" target="perf-abort">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Performance budget note -->
+        <mxCell id="note-perf" value="Performance Budget:&#xa;FCP &lt; 1.2s, LCP &lt; 2.0s, TTI &lt; 2.5s&#xa;CLS &lt; 0.05, Page change &lt; 300ms&#xa;Filter change &lt; 500ms" style="shape=note;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#b7a500;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1160" y="2040" width="220" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== COMPLETE SEARCH FLOW ==================== -->
+        <mxCell id="flow-title" value="Complete Search Results Flow" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f0ff;strokeColor=#356ebf;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="350" y="2180" width="520" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="flow1" value="1. User submits&#xa;query" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="20" y="2290" width="130" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="flow2" value="2. SSR fetches →&#xa;HTML streams" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1e88e5;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="180" y="2290" width="140" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="flow3" value="3. Client hydrates&#xa;+ interactions" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="350" y="2290" width="150" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="flow4" value="4. Filter/Sort/Page →&#xa;URL updates" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#fb8c00;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="530" y="2290" width="150" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="flow5" value="5. CSR fetch →&#xa;results update" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1e88e5;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="710" y="2290" width="150" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="flow6" value="6. Prefetch next&#xa;page (background)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#8e24aa;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="890" y="2290" width="160" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge-flow12" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#666666;strokeWidth=2;" edge="1" parent="1" source="flow1" target="flow2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-flow23" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#666666;strokeWidth=2;" edge="1" parent="1" source="flow2" target="flow3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-flow34" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#666666;strokeWidth=2;" edge="1" parent="1" source="flow3" target="flow4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-flow45" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#666666;strokeWidth=2;" edge="1" parent="1" source="flow4" target="flow5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-flow56" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#666666;strokeWidth=2;" edge="1" parent="1" source="flow5" target="flow6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-flow-title" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="flow-title" target="flow1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== KEY DECISIONS SUMMARY ==================== -->
+        <mxCell id="summary-title" value="Key Architectural Decisions" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f0ff;strokeColor=#356ebf;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="350" y="2420" width="520" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="dec1" value="SSR initial page&#xa;+ CSR interactions" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1e88e5;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="40" y="2520" width="160" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="dec2" value="URL = single&#xa;source of truth" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="230" y="2520" width="160" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="dec3" value="Offset pagination&#xa;(SEO-friendly)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#fb8c00;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="420" y="2520" width="160" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="dec4" value="Registry polymorphic&#xa;result cards" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#8e24aa;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="610" y="2520" width="160" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="dec5" value="Server-side&#xa;highlights + sort" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#e53935;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="800" y="2520" width="160" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="dec6" value="React Query +&#xa;keepPreviousData" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f0ff;strokeColor=#356ebf;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="990" y="2520" width="170" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-dec1" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="summary-title" target="dec1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-dec2" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="summary-title" target="dec2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-dec3" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="summary-title" target="dec3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-dec4" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="summary-title" target="dec4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-dec5" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="summary-title" target="dec5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-dec6" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="summary-title" target="dec6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,798 @@
+<mxfile host="app.diagrams.net" agent="GitHub Copilot" version="28.2.8">
+  <diagram name="Component Architecture" id="social-feed-component-arch">
+    <mxGraphModel dx="2200" dy="1400" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1200" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="title" value="Social Feed — Frontend Component Architecture" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontStyle=1;fontSize=20;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="400" y="20" width="600" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== FEED PAGE ==================== -->
+        <mxCell id="feedPage" value="FeedPage&#xa;— SSR shell, manages initial load, infinite scroll, SSE subscription" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f0ff;strokeColor=#356ebf;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="480" y="80" width="420" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== TOP-LEVEL CHILDREN OF FEEDPAGE ==================== -->
+        <mxCell id="createPostBox" value="CreatePostBox&#xa;(compose text + attach media)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="60" y="230" width="260" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-feed-create" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="feedPage" target="createPostBox">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="newPostsBanner" value="NewPostsBanner&#xa;(&quot;5 new posts — tap to see&quot;)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#fb8c00;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="380" y="230" width="260" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-feed-banner" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="feedPage" target="newPostsBanner">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="feedList" value="FeedList&#xa;(virtualized / windowed scroll container)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="700" y="230" width="300" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-feed-list" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="feedPage" target="feedList">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="feedSentinel" value="FeedSentinel&#xa;(IntersectionObserver trigger)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="230" width="260" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-feed-sentinel" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="feedPage" target="feedSentinel">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Note: SSE + Infinite scroll -->
+        <mxCell id="note-sse" value="SSE: /api/feed/stream&#xa;→ buffers new posts&#xa;→ shows banner" style="shape=note;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#b7a500;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="380" y="310" width="175" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="note-sentinel" value="rootMargin: 500px&#xa;→ preloads next page&#xa;before user reaches bottom" style="shape=note;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#b7a500;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="310" width="200" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== POST CARD ==================== -->
+        <mxCell id="postCard" value="PostCard&#xa;(repeated for each post in feed)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f0ff;strokeColor=#356ebf;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="700" y="400" width="300" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-list-card" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#666666;strokeWidth=2;" edge="1" parent="1" source="feedList" target="postCard">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== POST CARD SUB-COMPONENTS ==================== -->
+        <mxCell id="subcomp-label" value="PostCard Sub-components" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontStyle=1;fontSize=13;fontColor=#356ebf;" vertex="1" parent="1">
+          <mxGeometry x="80" y="490" width="250" height="25" as="geometry" />
+        </mxCell>
+
+        <mxCell id="postHeader" value="PostHeader&#xa;(AuthorAvatar + Name + Timestamp + MoreMenu)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#356ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="30" y="540" width="280" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-card-header" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="postCard" target="postHeader">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="postContent" value="PostContent&#xa;(text body + &quot;See More&quot; truncation)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#356ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="340" y="540" width="240" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-card-content" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="postCard" target="postContent">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="postMedia" value="PostMedia&#xa;├── SingleImage&#xa;├── ImageCarousel&#xa;├── VideoPlayer&#xa;└── LinkPreviewCard" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#356ebf;align=left;spacingLeft=10;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="610" y="530" width="200" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-card-media" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="postCard" target="postMedia">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="postActions" value="PostActions&#xa;(Like + Comment + Share buttons)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#43a047;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="840" y="540" width="240" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-card-actions" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="postCard" target="postActions">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="commentList" value="CommentList&#xa;(threaded, paginated per post)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#fb8c00;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1110" y="540" width="230" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-card-comments" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="postCard" target="commentList">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="createComment" value="CreateComment&#xa;(UserAvatar + Input + Post button)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#fb8c00;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1370" y="540" width="220" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-card-createcomment" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="postCard" target="createComment">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- CommentItem under CommentList -->
+        <mxCell id="commentItem" value="CommentItem[]&#xa;(Avatar + Body + Actions + Replies)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#fb8c00;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1110" y="630" width="230" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-comments-item" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#fb8c00;" edge="1" parent="1" source="commentList" target="commentItem">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== ENGAGEMENT SUMMARY ==================== -->
+        <mxCell id="engagementSummary" value="EngagementSummary&#xa;(&quot;12K likes · 340 comments&quot;)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#43a047;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="840" y="630" width="230" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-actions-engagement" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#43a047;" edge="1" parent="1" source="postActions" target="engagementSummary">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== DEPENDENCY GRAPH ==================== -->
+        <mxCell id="dep-title" value="COMPONENT DEPENDENCY GRAPH" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="60" y="740" width="280" height="40" as="geometry" />
+        </mxCell>
+
+        <mxCell id="dep-feedpage" value="FeedPage" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f0ff;strokeColor=#356ebf;" vertex="1" parent="1">
+          <mxGeometry x="130" y="800" width="120" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="dep-feedlist" value="FeedList" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="130" y="880" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-dep-1" style="endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="dep-feedpage" target="dep-feedlist">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="dep-postcard" value="PostCard" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f0ff;strokeColor=#356ebf;" vertex="1" parent="1">
+          <mxGeometry x="130" y="960" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-dep-2" style="endArrow=block;strokeColor=#666666;" edge="1" parent="1" source="dep-feedlist" target="dep-postcard">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="dep-postheader" value="PostHeader" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="20" y="1050" width="110" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="dep-postmedia" value="PostMedia" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="140" y="1050" width="110" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="dep-postactions" value="PostActions" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="260" y="1050" width="110" height="45" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge-dep-3" style="endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="dep-postcard" target="dep-postheader">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-dep-4" style="endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="dep-postcard" target="dep-postmedia">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-dep-5" style="endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="dep-postcard" target="dep-postactions">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="dep-commentlist" value="CommentList" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="20" y="1120" width="110" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="dep-createcomment" value="CreateComment" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="260" y="1120" width="110" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-dep-6" style="endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="dep-postcard" target="dep-commentlist">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-dep-7" style="endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="dep-postcard" target="dep-createcomment">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+  <diagram name="Data Flow and API" id="social-feed-data-flow">
+    <mxGraphModel dx="2200" dy="1600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1400" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="df-title" value="Social Feed — Data Flow and API Design" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontStyle=1;fontSize=20;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="400" y="20" width="600" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== COMPLETE FEED FLOW ==================== -->
+        <mxCell id="flow-title" value="Complete Feed Flow" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f0ff;strokeColor=#356ebf;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="500" y="80" width="360" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="fl1" value="1. App opens →&#xa;SSR renders shell + first 10 posts" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="170" width="200" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="fl2" value="2. Client hydrates →&#xa;GET /api/feed?limit=10" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="270" y="170" width="190" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="fl3" value="3. SSE connects →&#xa;GET /api/feed/stream" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#fb8c00;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="490" y="170" width="180" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="fl4" value="4. Scroll → sentinel →&#xa;GET /api/feed?cursor=abc" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1e88e5;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="700" y="170" width="190" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="fl5" value="5. New post arrives →&#xa;buffer + banner" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#fb8c00;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="920" y="170" width="170" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="fl6" value="6. User taps banner →&#xa;prepend to feed + scroll top" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#e53935;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1120" y="170" width="200" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge-fl12" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#666666;strokeWidth=2;" edge="1" parent="1" source="fl1" target="fl2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-fl23" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#666666;strokeWidth=2;" edge="1" parent="1" source="fl2" target="fl3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-fl34" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#666666;strokeWidth=2;" edge="1" parent="1" source="fl3" target="fl4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-fl45" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#666666;strokeWidth=2;" edge="1" parent="1" source="fl4" target="fl5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-fl56" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#666666;strokeWidth=2;" edge="1" parent="1" source="fl5" target="fl6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-flow-top" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="flow-title" target="fl1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== CURSOR-BASED PAGINATION ==================== -->
+        <mxCell id="cursor-title" value="Cursor-Based Pagination" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f0ff;strokeColor=#356ebf;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="160" y="300" width="340" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="cur1" value="GET /api/feed?limit=10&#xa;→ {posts: [...], nextCursor: &quot;abc123&quot;}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="390" width="260" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="cur2" value="GET /api/feed?cursor=abc123&#xa;→ {posts: [...], nextCursor: &quot;def456&quot;}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1e88e5;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="460" width="260" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="cur3" value="GET /api/feed?cursor=def456&#xa;→ {posts: [...], nextCursor: null}&#xa;(no more pages)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#e53935;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="530" width="260" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-cur12" style="endArrow=block;strokeColor=#666666;strokeWidth=2;" edge="1" parent="1" source="cur1" target="cur2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-cur23" style="endArrow=block;strokeColor=#666666;strokeWidth=2;" edge="1" parent="1" source="cur2" target="cur3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-cursor-top" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="cursor-title" target="cur1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Cursor vs Offset comparison note -->
+        <mxCell id="cursor-note" value="Why Cursor over Offset?&#xa;&#xa;• No duplicate posts on insert&#xa;• No missing posts on delete&#xa;• Fast at deep pages (no OFFSET N)&#xa;• Standard for social feeds" style="shape=note;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#b7a500;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="350" y="390" width="220" height="120" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== REAL-TIME UPDATES ==================== -->
+        <mxCell id="rt-title" value="Real-Time Update Strategy (SSE)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#fb8c00;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="780" y="300" width="380" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="rt-sse" value="SSE: GET /api/feed/stream&#xa;(server → client push)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="650" y="400" width="240" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-rt-sse" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#fb8c00;strokeWidth=2;" edge="1" parent="1" source="rt-title" target="rt-sse">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="rt-poll" value="Polling Fallback&#xa;(every 60s if SSE fails)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="930" y="400" width="220" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-rt-poll" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#fb8c00;strokeWidth=2;" edge="1" parent="1" source="rt-title" target="rt-poll">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- SSE event types -->
+        <mxCell id="sse-new" value="event: new_post&#xa;→ add to newPostsBuffer&#xa;→ show banner" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#43a047;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="620" y="490" width="200" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="sse-engage" value="event: engagement_update&#xa;→ update likeCount,&#xa;  commentCount on visible post" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#43a047;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="840" y="490" width="220" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-sse-new" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#43a047;" edge="1" parent="1" source="rt-sse" target="sse-new">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-sse-engage" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#43a047;" edge="1" parent="1" source="rt-sse" target="sse-engage">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- SSE comparison note -->
+        <mxCell id="rt-note" value="SSE vs WebSocket vs Polling&#xa;&#xa;• SSE: simple, auto-reconnect, HTTP/2 friendly&#xa;• WebSocket: bidirectional (overkill for feeds)&#xa;• Polling: fallback only, higher latency&#xa;&#xa;→ SSE is the recommended choice for feeds" style="shape=note;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#b7a500;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="390" width="270" height="130" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== OPTIMISTIC UPDATES ==================== -->
+        <mxCell id="opt-title" value="Optimistic Update Flow (Like)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#8e24aa;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="300" y="650" width="380" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="opt1" value="User taps Like →&#xa;UI updates instantly&#xa;(isLiked=true, count+1)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="750" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="opt2" value="Background API →&#xa;POST /api/post/:id/like" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1e88e5;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="300" y="750" width="190" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="opt3-ok" value="API Success →&#xa;done (state already correct)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="530" y="730" width="190" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="opt3-fail" value="API Fails →&#xa;ROLLBACK (isLiked=false, count-1)&#xa;+ show error toast" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#e53935;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="530" y="790" width="230" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge-opt12" style="endArrow=block;strokeColor=#666666;strokeWidth=2;" edge="1" parent="1" source="opt1" target="opt2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-opt3ok" style="endArrow=block;strokeColor=#43a047;strokeWidth=2;" edge="1" parent="1" source="opt2" target="opt3-ok">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-opt3fail" style="endArrow=block;strokeColor=#e53935;strokeWidth=2;" edge="1" parent="1" source="opt2" target="opt3-fail">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-opt-top" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#8e24aa;strokeWidth=2;" edge="1" parent="1" source="opt-title" target="opt1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== ENDPOINT SUMMARY ==================== -->
+        <mxCell id="api-title" value="API Endpoint Summary" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f0ff;strokeColor=#356ebf;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="300" y="920" width="380" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="api1" value="GET /api/feed&#xa;(cursor-based pagination)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="1020" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="api2" value="GET /api/feed/stream&#xa;(SSE — real-time push)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#fb8c00;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="270" y="1020" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="api3" value="POST /api/post&#xa;(create new post)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1e88e5;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="500" y="1020" width="180" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="api4" value="POST /api/post/:id/like&#xa;(like or unlike)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#8e24aa;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="710" y="1020" width="180" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="api5" value="POST /api/post/:id/comment&#xa;(add comment)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#8e24aa;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="920" y="1020" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="api6" value="POST /api/post/:id/share&#xa;(share or repost)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#8e24aa;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1150" y="1020" width="190" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge-api1" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="api-title" target="api1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-api2" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="api-title" target="api2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-api3" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="api-title" target="api3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-api4" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="api-title" target="api4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-api5" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="api-title" target="api5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-api6" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="api-title" target="api6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+  <diagram name="Infinite Scroll and Virtualization" id="social-feed-scroll-virt">
+    <mxGraphModel dx="2200" dy="1400" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1200" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="sv-title" value="Feed List — Infinite Scroll and Virtualization Strategy" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontStyle=1;fontSize=20;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="350" y="20" width="650" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== INFINITE SCROLL ==================== -->
+        <mxCell id="is-title" value="Infinite Scroll — IntersectionObserver Pattern" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f0ff;strokeColor=#356ebf;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="120" y="80" width="420" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- Scroll diagram -->
+        <mxCell id="is-viewport" value="Viewport (visible area)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontStyle=1;fontSize=11;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="120" y="160" width="250" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="is-p1" value="PostCard 1 ✅ visible" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#43a047;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="140" y="190" width="210" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="is-p2" value="PostCard 2 ✅ visible" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#43a047;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="140" y="235" width="210" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="is-p3" value="PostCard 3 ✅ visible (bottom)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#43a047;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="140" y="280" width="210" height="35" as="geometry" />
+        </mxCell>
+
+        <mxCell id="is-below" value="Below Viewport" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;fontStyle=1;fontSize=11;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="120" y="355" width="250" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="is-p4" value="PostCard 4 (below)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#999999;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="140" y="385" width="210" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="is-p5" value="PostCard 5 (below)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#999999;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="140" y="425" width="210" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="is-sentinel" value="🔽 SENTINEL (0px height)&#xa;→ triggers fetch when enters rootMargin" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="140" y="465" width="210" height="40" as="geometry" />
+        </mxCell>
+
+        <mxCell id="is-margin" value="rootMargin: 500px ↓&#xa;(fires fetch 500px BEFORE&#xa; sentinel is visible)" style="shape=note;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#b7a500;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="400" y="380" width="200" height="65" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== VIRTUALIZATION ==================== -->
+        <mxCell id="virt-title" value="Feed Virtualization — Variable Height Items" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#8e24aa;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="780" y="80" width="420" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- Three-layer structure -->
+        <mxCell id="vl-outer" value="Layer 1: Outer Scroll Container&#xa;(overflow: auto, height: 100vh)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1e88e5;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="700" y="170" width="290" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="vl-spacer" value="Layer 2: Inner Spacer&#xa;(height = sum of all item heights,&#xa; measured + estimated)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#fb8c00;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1020" y="170" width="260" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="vl-items" value="Layer 3: Absolute Positioned Items&#xa;(only visible + overscan buffer)&#xa;transform: translateY(start)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="830" y="260" width="290" height="65" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge-vl-1" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#8e24aa;strokeWidth=2;" edge="1" parent="1" source="virt-title" target="vl-outer">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-vl-2" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#8e24aa;strokeWidth=2;" edge="1" parent="1" source="virt-title" target="vl-spacer">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-vl-3" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#8e24aa;strokeWidth=2;" edge="1" parent="1" source="virt-title" target="vl-items">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Dynamic measurement flow -->
+        <mxCell id="dm-title" value="Dynamic Height Measurement Flow" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#8e24aa;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="780" y="370" width="370" height="45" as="geometry" />
+        </mxCell>
+
+        <mxCell id="dm1" value="Item mounts →&#xa;estimates height (400px)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#8e24aa;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="660" y="450" width="190" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="dm2" value="measureElement fires →&#xa;records real height (520px)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#8e24aa;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="870" y="450" width="200" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="dm3" value="Spacer + positions recalculated&#xa;(total height converges)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#8e24aa;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1090" y="450" width="210" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-dm12" style="endArrow=block;strokeColor=#8e24aa;strokeWidth=2;" edge="1" parent="1" source="dm1" target="dm2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-dm23" style="endArrow=block;strokeColor=#8e24aa;strokeWidth=2;" edge="1" parent="1" source="dm2" target="dm3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Performance comparison -->
+        <mxCell id="perf-compare" value="Performance: Virtualized vs Not" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f0ff;strokeColor=#356ebf;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="120" y="570" width="340" height="45" as="geometry" />
+        </mxCell>
+
+        <mxCell id="perf-no" value="No Virtualization (500 posts)&#xa;&#xa;• ~15,000+ DOM nodes&#xa;• Initial render: 500ms-2s&#xa;• Memory: all images decoded&#xa;• Scroll: degrades with count" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#e53935;fontSize=11;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="650" width="230" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="perf-yes" value="Virtualized (overscan=3)&#xa;&#xa;• ~300 DOM nodes (10 posts)&#xa;• Initial render: 30-80ms&#xa;• Memory: only visible images&#xa;• Scroll: consistent 60fps" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontSize=11;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="310" y="650" width="230" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-perf-no" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="perf-compare" target="perf-no">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-perf-yes" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="perf-compare" target="perf-yes">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- CSS alternative -->
+        <mxCell id="css-alt" value="CSS Alternative: content-visibility: auto&#xa;&#xa;• Zero JS — one CSS property&#xa;• Browser skips off-screen layout/paint&#xa;• Use contain-intrinsic-size: auto 400px&#xa;• Chrome 85+, Firefox 125+, no Safari until 18" style="shape=note;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#b7a500;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="40" y="810" width="310" height="110" as="geometry" />
+        </mxCell>
+
+        <!-- Decision matrix -->
+        <mxCell id="dec-title" value="Decision Matrix" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f0ff;strokeColor=#356ebf;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="700" y="570" width="340" height="45" as="geometry" />
+        </mxCell>
+
+        <mxCell id="dec1" value="&lt; 20 posts&#xa;Plain DOM + loading=&quot;lazy&quot;&#xa;(no library needed)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="620" y="650" width="210" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="dec2" value="20-50 posts&#xa;content-visibility: auto&#xa;(CSS only, zero JS)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#fb8c00;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="850" y="650" width="210" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="dec3" value="50+ posts (infinite scroll)&#xa;Full virtualization&#xa;(@tanstack/react-virtual)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#8e24aa;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1080" y="650" width="230" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-dec1" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="dec-title" target="dec1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-dec2" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="dec-title" target="dec2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-dec3" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="dec-title" target="dec3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Additional strategies -->
+        <mxCell id="strat-title" value="Additional Scroll Strategies" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f0ff;strokeColor=#356ebf;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="700" y="770" width="340" height="45" as="geometry" />
+        </mxCell>
+
+        <mxCell id="strat1" value="Scroll Position Restoration&#xa;(save firstVisiblePostId to&#xa; sessionStorage + scrollToIndex)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#356ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="580" y="850" width="230" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="strat2" value="New Posts Banner&#xa;(buffer new posts from SSE,&#xa; never auto-prepend mid-scroll)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#fb8c00;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="840" y="850" width="220" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="strat3" value="Pull to Refresh (Mobile)&#xa;(touch handler when scrollY=0,&#xa; threshold: 80px)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#43a047;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1090" y="850" width="210" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-strat1" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="strat-title" target="strat1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-strat2" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="strat-title" target="strat2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-strat3" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="strat-title" target="strat3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+  <diagram name="Performance and Optimization" id="social-feed-perf-opt">
+    <mxGraphModel dx="2200" dy="1600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1400" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="po-title" value="Social Feed — Performance, Caching, and Cross-Cutting Concerns" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontStyle=1;fontSize=20;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="300" y="20" width="700" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== PERFORMANCE OPTIMIZATION ==================== -->
+        <mxCell id="perf-title" value="Performance Optimization" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="480" y="80" width="380" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- Network -->
+        <mxCell id="net" value="Network Performance" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1e88e5;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="60" y="200" width="260" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-perf-net" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#43a047;strokeWidth=2;" edge="1" parent="1" source="perf-title" target="net">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Rendering -->
+        <mxCell id="rend" value="Rendering Performance" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#fb8c00;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="380" y="200" width="260" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-perf-rend" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#43a047;strokeWidth=2;" edge="1" parent="1" source="perf-title" target="rend">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- JS -->
+        <mxCell id="jsperf" value="JS Performance" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#8e24aa;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="700" y="200" width="260" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-perf-js" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#43a047;strokeWidth=2;" edge="1" parent="1" source="perf-title" target="jsperf">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Media -->
+        <mxCell id="mediaperf" value="Media Strategy" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#e53935;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="1020" y="200" width="260" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-perf-media" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#43a047;strokeWidth=2;" edge="1" parent="1" source="perf-title" target="mediaperf">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Network details -->
+        <mxCell id="n1" value="Brotli / Gzip compression" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1e88e5;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="30" y="280" width="220" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="n2" value="HTTP/2 multiplexing" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1e88e5;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="30" y="325" width="220" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="n3" value="CDN for all static assets + media" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1e88e5;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="30" y="370" width="220" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="n4" value="Bundle splitting (vendor vs app)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1e88e5;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="30" y="415" width="220" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-n1" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#1e88e5;" edge="1" parent="1" source="net" target="n1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="edge-n2" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#1e88e5;" edge="1" parent="1" source="net" target="n2"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="edge-n3" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#1e88e5;" edge="1" parent="1" source="net" target="n3"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="edge-n4" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#1e88e5;" edge="1" parent="1" source="net" target="n4"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+        <!-- Rendering details -->
+        <mxCell id="r1" value="SSR for first 10 posts (fast FCP)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#fb8c00;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="350" y="280" width="230" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="r2" value="Virtualized feed list (constant DOM)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#fb8c00;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="350" y="325" width="230" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="r3" value="React.memo on PostCard" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#fb8c00;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="350" y="370" width="230" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="r4" value="Selective hydration (React 18+)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#fb8c00;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="350" y="415" width="230" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-r1" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#fb8c00;" edge="1" parent="1" source="rend" target="r1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="edge-r2" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#fb8c00;" edge="1" parent="1" source="rend" target="r2"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="edge-r3" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#fb8c00;" edge="1" parent="1" source="rend" target="r3"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="edge-r4" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#fb8c00;" edge="1" parent="1" source="rend" target="r4"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+        <!-- JS details -->
+        <mxCell id="j1" value="Code splitting by route + feature" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#8e24aa;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="670" y="280" width="230" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="j2" value="Debounce like/unlike (500ms)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#8e24aa;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="670" y="325" width="230" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="j3" value="rAF for scroll-linked UI updates" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#8e24aa;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="670" y="370" width="230" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="j4" value="AbortController for stale fetches" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#8e24aa;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="670" y="415" width="230" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-j1" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#8e24aa;" edge="1" parent="1" source="jsperf" target="j1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="edge-j2" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#8e24aa;" edge="1" parent="1" source="jsperf" target="j2"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="edge-j3" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#8e24aa;" edge="1" parent="1" source="jsperf" target="j3"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="edge-j4" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#8e24aa;" edge="1" parent="1" source="jsperf" target="j4"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+        <!-- Media details -->
+        <mxCell id="m1" value="Images: loading=&quot;lazy&quot; (below fold)&#xa;loading=&quot;eager&quot; (first 3 posts)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e53935;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="990" y="280" width="250" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="m2" value="Videos: preload=&quot;none&quot; until visible&#xa;IntersectionObserver play/pause" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e53935;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="990" y="335" width="250" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="m3" value="WebP/AVIF via CDN + srcset&#xa;(480w, 1080w, 150w thumb)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e53935;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="990" y="390" width="250" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="m4" value="Blur-up placeholders (LQIP)&#xa;+ aspect-ratio for CLS prevention" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e53935;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="990" y="445" width="250" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-m1" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#e53935;" edge="1" parent="1" source="mediaperf" target="m1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="edge-m2" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#e53935;" edge="1" parent="1" source="mediaperf" target="m2"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="edge-m3" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#e53935;" edge="1" parent="1" source="mediaperf" target="m3"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="edge-m4" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#e53935;" edge="1" parent="1" source="mediaperf" target="m4"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+        <!-- ==================== CACHING STRATEGY ==================== -->
+        <mxCell id="cache-title" value="Caching Strategy" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f0ff;strokeColor=#356ebf;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="480" y="540" width="380" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="c1" value="React Query in-memory cache&#xa;(staleTime: 2min, refetchOnFocus)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="650" width="250" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="c2" value="Browser HTTP cache + CDN&#xa;(images/videos: max-age 1yr,&#xa; immutable with hash)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1e88e5;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="350" y="650" width="240" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="c3" value="sessionStorage&#xa;(scroll position: 30min TTL)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#fb8c00;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="630" y="650" width="220" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="c4" value="localStorage&#xa;(draft posts, user prefs)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#8e24aa;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="890" y="650" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="c5" value="IndexedDB via Service Worker&#xa;(offline feed cache — PWA)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#e53935;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1130" y="650" width="220" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-c1" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="cache-title" target="c1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="edge-c2" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="cache-title" target="c2"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="edge-c3" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="cache-title" target="c3"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="edge-c4" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="cache-title" target="c4"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="edge-c5" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="cache-title" target="c5"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+        <!-- ==================== CROSS-CUTTING CONCERNS ==================== -->
+        <mxCell id="cc-title" value="Cross-Cutting Concerns" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f0ff;strokeColor=#356ebf;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="480" y="780" width="380" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="cc-sec" value="Security" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#e53935;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="60" y="900" width="260" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="cc-a11y" value="Accessibility (A11y)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="380" y="900" width="260" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="cc-obs" value="Observability" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1e88e5;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="700" y="900" width="260" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="cc-err" value="Error Handling" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#8e24aa;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="1020" y="900" width="260" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-cc-sec" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="cc-title" target="cc-sec"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="edge-cc-a11y" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="cc-title" target="cc-a11y"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="edge-cc-obs" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="cc-title" target="cc-obs"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="edge-cc-err" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="cc-title" target="cc-err"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+        <!-- Security details -->
+        <mxCell id="s1" value="XSS: DOMPurify for UGC" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e53935;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="30" y="975" width="190" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="s2" value="CSRF tokens on all POST" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e53935;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="30" y="1020" width="190" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="s3" value="HTTP-only cookie auth" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e53935;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="30" y="1065" width="190" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="s4" value="CSP: restrict img/media src" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e53935;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="30" y="1110" width="190" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-s1" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#e53935;" edge="1" parent="1" source="cc-sec" target="s1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="edge-s2" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#e53935;" edge="1" parent="1" source="cc-sec" target="s2"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="edge-s3" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#e53935;" edge="1" parent="1" source="cc-sec" target="s3"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="edge-s4" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#e53935;" edge="1" parent="1" source="cc-sec" target="s4"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+        <!-- A11y details -->
+        <mxCell id="a1" value="Semantic: article, header, button" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#43a047;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="350" y="975" width="210" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="a2" value="Keyboard: Tab, Enter, Space, Skip" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#43a047;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="350" y="1020" width="210" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="a3" value="aria-live=&quot;polite&quot; for banner" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#43a047;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="350" y="1065" width="210" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="a4" value="prefers-reduced-motion support" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#43a047;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="350" y="1110" width="210" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-a1" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#43a047;" edge="1" parent="1" source="cc-a11y" target="a1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="edge-a2" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#43a047;" edge="1" parent="1" source="cc-a11y" target="a2"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="edge-a3" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#43a047;" edge="1" parent="1" source="cc-a11y" target="a3"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="edge-a4" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#43a047;" edge="1" parent="1" source="cc-a11y" target="a4"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+        <!-- Observability details -->
+        <mxCell id="o1" value="Post impressions (IntersectionObserver)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1e88e5;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="670" y="975" width="240" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="o2" value="Core Web Vitals (FCP, LCP, CLS, TTI)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1e88e5;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="670" y="1020" width="240" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="o3" value="Scroll depth + time on post" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1e88e5;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="670" y="1065" width="240" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="o4" value="Feature flags for gradual rollout" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1e88e5;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="670" y="1110" width="240" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-o1" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#1e88e5;" edge="1" parent="1" source="cc-obs" target="o1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="edge-o2" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#1e88e5;" edge="1" parent="1" source="cc-obs" target="o2"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="edge-o3" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#1e88e5;" edge="1" parent="1" source="cc-obs" target="o3"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="edge-o4" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#1e88e5;" edge="1" parent="1" source="cc-obs" target="o4"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+        <!-- Error handling details -->
+        <mxCell id="e1" value="Error Boundary per PostCard" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#8e24aa;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="990" y="975" width="230" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" value="Optimistic rollback on API failure" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#8e24aa;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="990" y="1020" width="230" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" value="SSE auto-reconnect + polling fallback" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#8e24aa;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="990" y="1065" width="230" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" value="Offline queue (likes/comments replay)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#8e24aa;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="990" y="1110" width="230" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-e1" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#8e24aa;" edge="1" parent="1" source="cc-err" target="e1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="edge-e2" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#8e24aa;" edge="1" parent="1" source="cc-err" target="e2"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="edge-e3" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#8e24aa;" edge="1" parent="1" source="cc-err" target="e3"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="edge-e4" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#8e24aa;" edge="1" parent="1" source="cc-err" target="e4"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

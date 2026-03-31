@@ -1,0 +1,291 @@
+<mxfile host="app.diagrams.net" agent="GitHub Copilot" version="28.2.8">
+  <diagram name="Cache Architecture" id="caching-strategy-architecture">
+    <mxGraphModel dx="2200" dy="1400" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="2400" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="title" value="Frontend Caching Strategy — Multi-Layer Architecture" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontStyle=1;fontSize=20;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="350" y="20" width="700" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== REQUEST FLOW ==================== -->
+        <mxCell id="component" value="UI Component&#xa;useQuery(['products', { page: 1 }])" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f0ff;strokeColor=#356ebf;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="480" y="80" width="380" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== L1: IN-MEMORY ==================== -->
+        <mxCell id="l1" value="L1: In-Memory Cache (React Query / SWR)&#xa;Speed: &lt; 1ms  |  Persistence: Session only  |  Size: ~100MB" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="340" y="210" width="560" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-comp-l1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="component" target="l1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l1-hit" value="HIT → Return instantly" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontStyle=2;fontSize=11;fontColor=#43a047;" vertex="1" parent="1">
+          <mxGeometry x="920" y="225" width="160" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="l1-miss" value="MISS ↓" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontStyle=2;fontSize=11;fontColor=#e53935;" vertex="1" parent="1">
+          <mxGeometry x="590" y="280" width="60" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- L1 details -->
+        <mxCell id="l1d1" value="staleTime: 2min" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#43a047;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="100" y="215" width="130" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="l1d2" value="gcTime: 10min" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#43a047;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="100" y="255" width="130" height="35" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== L2: SERVICE WORKER ==================== -->
+        <mxCell id="l2" value="L2: Service Worker Cache (Workbox / Cache API)&#xa;Speed: &lt; 10ms  |  Persistence: Persistent  |  Size: ~60% disk" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#fb8c00;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="340" y="330" width="560" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-l1-l2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="l1" target="l2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-hit" value="HIT → Return from disk cache" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontStyle=2;fontSize=11;fontColor=#fb8c00;" vertex="1" parent="1">
+          <mxGeometry x="920" y="345" width="200" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-miss" value="MISS ↓" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontStyle=2;fontSize=11;fontColor=#e53935;" vertex="1" parent="1">
+          <mxGeometry x="590" y="400" width="60" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- L2 strategies -->
+        <mxCell id="l2s1" value="CacheFirst&#xa;(static assets)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#fb8c00;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="60" y="330" width="120" height="42" as="geometry" />
+        </mxCell>
+        <mxCell id="l2s2" value="StaleWhileRevalidate&#xa;(API data)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#fb8c00;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="190" y="330" width="140" height="42" as="geometry" />
+        </mxCell>
+        <mxCell id="l2s3" value="NetworkFirst&#xa;(user data)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#fb8c00;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="130" y="378" width="120" height="42" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== L3: BROWSER STORAGE ==================== -->
+        <mxCell id="l3" value="L3: Browser Storage (IndexedDB / localStorage / sessionStorage)&#xa;Speed: &lt; 50ms  |  Persistence: Persistent  |  Size: GB (IDB) / 5-10MB (LS)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#8e24aa;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="340" y="450" width="560" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-l2-l3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="l2" target="l3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- L3 stores -->
+        <mxCell id="l3s1" value="IndexedDB&#xa;(offline data, structured)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#8e24aa;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="60" y="450" width="150" height="42" as="geometry" />
+        </mxCell>
+        <mxCell id="l3s2" value="localStorage&#xa;(preferences, theme)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#8e24aa;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="220" y="450" width="115" height="42" as="geometry" />
+        </mxCell>
+        <mxCell id="l3s3" value="sessionStorage&#xa;(temp form state)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#8e24aa;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="140" y="498" width="120" height="42" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== L4: HTTP CACHE ==================== -->
+        <mxCell id="l4" value="L4: HTTP Cache (Browser Managed)&#xa;Speed: &lt; 5ms  |  Controlled by: Cache-Control, ETag, Last-Modified" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1e88e5;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="340" y="570" width="560" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-l3-l4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="l3" target="l4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- L4 directives -->
+        <mxCell id="l4d1" value="immutable + max-age=1yr&#xa;(hashed static assets)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1e88e5;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="60" y="570" width="180" height="42" as="geometry" />
+        </mxCell>
+        <mxCell id="l4d2" value="no-cache + ETag&#xa;(API, HTML)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1e88e5;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="60" y="618" width="140" height="42" as="geometry" />
+        </mxCell>
+        <mxCell id="l4d3" value="no-store&#xa;(auth, PII)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1e88e5;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="210" y="618" width="120" height="42" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== L5: CDN ==================== -->
+        <mxCell id="l5" value="L5: CDN Edge Cache (Cloudfront / Akamai / Fastly)&#xa;Speed: 5-50ms  |  Nearest PoP  |  s-maxage for CDN control" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#e53935;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="340" y="690" width="560" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-l4-l5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="l4" target="l5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== ORIGIN ==================== -->
+        <mxCell id="origin" value="Origin Server (API Backend)&#xa;Last resort — full network round trip" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e0e0e0;strokeColor=#616161;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="420" y="810" width="400" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-l5-origin" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="l5" target="origin">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Response flows back -->
+        <mxCell id="response-note" value="Response flows back ↑&#xa;Each layer caches on the way up" style="shape=note;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#b7a500;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="920" y="710" width="210" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== INVALIDATION PATTERNS ==================== -->
+        <mxCell id="inv-title" value="Cache Invalidation Patterns" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f0ff;strokeColor=#356ebf;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="400" y="930" width="440" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="inv-ttl" value="1. TTL-Based&#xa;staleTime: 2min, maxAgeSeconds: 300&#xa;Data expires automatically" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontSize=12;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="80" y="1060" width="280" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-inv-ttl" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="inv-title" target="inv-ttl">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="inv-mutation" value="2. Mutation-Based&#xa;invalidateQueries(['cart']) on addToCart&#xa;Immediate, precise" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#fb8c00;fontSize=12;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="420" y="1060" width="280" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-inv-mutation" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="inv-title" target="inv-mutation">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="inv-push" value="3. Server Push&#xa;WebSocket / SSE → invalidateQueries&#xa;Cross-device, real-time" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#e53935;fontSize=12;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="760" y="1060" width="280" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-inv-push" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="inv-title" target="inv-push">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Cross-tab -->
+        <mxCell id="inv-cross" value="+ Cross-Tab Sync&#xa;BroadcastChannel API&#xa;postMessage invalidation events" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#8e24aa;fontSize=12;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="1080" y="1060" width="250" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-inv-cross" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="inv-title" target="inv-cross">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== DATA TYPE STRATEGY ==================== -->
+        <mxCell id="dt-title" value="Cache Strategy by Data Type" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="400" y="1200" width="440" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="dt-static" value="JS / CSS / Fonts&#xa;CacheFirst + immutable&#xa;max-age: 1 year" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1e88e5;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="60" y="1330" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-dt-static" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#43a047;strokeWidth=2;" edge="1" parent="1" source="dt-title" target="dt-static">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="dt-api" value="API: Products, Feed&#xa;StaleWhileRevalidate&#xa;staleTime: 2-5 min" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="290" y="1330" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-dt-api" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#43a047;strokeWidth=2;" edge="1" parent="1" source="dt-title" target="dt-api">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="dt-user" value="API: User Profile&#xa;NetworkFirst&#xa;staleTime: 5-10 min" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#fb8c00;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="520" y="1330" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-dt-user" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#43a047;strokeWidth=2;" edge="1" parent="1" source="dt-title" target="dt-user">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="dt-stock" value="API: Stock, Prices&#xa;NetworkOnly / 0 staleTime&#xa;Always fetch fresh" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#e53935;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="750" y="1330" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-dt-stock" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#43a047;strokeWidth=2;" edge="1" parent="1" source="dt-title" target="dt-stock">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="dt-prefs" value="Preferences, Flags&#xa;localStorage&#xa;Persistent, instant boot" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#8e24aa;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="980" y="1330" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-dt-prefs" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#43a047;strokeWidth=2;" edge="1" parent="1" source="dt-title" target="dt-prefs">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== PREFETCHING STRATEGIES ==================== -->
+        <mxCell id="pf-title" value="Cache Warming and Prefetching" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#fb8c00;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="400" y="1460" width="440" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="pf-hover" value="Prefetch on Hover&#xa;queryClient.prefetchQuery()&#xa;onMouseEnter / onFocus" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#fb8c00;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="120" y="1590" width="230" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-pf-hover" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#fb8c00;strokeWidth=2;" edge="1" parent="1" source="pf-title" target="pf-hover">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="pf-viewport" value="Prefetch on Viewport&#xa;IntersectionObserver&#xa;rootMargin: 200px" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#fb8c00;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="400" y="1590" width="230" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-pf-viewport" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#fb8c00;strokeWidth=2;" edge="1" parent="1" source="pf-title" target="pf-viewport">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="pf-idle" value="Idle-Time Warming&#xa;requestIdleCallback()&#xa;Preload likely-next data" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#fb8c00;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="680" y="1590" width="230" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-pf-idle" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#fb8c00;strokeWidth=2;" edge="1" parent="1" source="pf-title" target="pf-idle">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="pf-sw" value="SW Precache&#xa;precacheAndRoute()&#xa;App shell cached at install" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#fb8c00;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="960" y="1590" width="230" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-pf-sw" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#fb8c00;strokeWidth=2;" edge="1" parent="1" source="pf-title" target="pf-sw">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== PERFORMANCE IMPACT ==================== -->
+        <mxCell id="perf-title" value="Performance Impact" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f0ff;strokeColor=#356ebf;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="400" y="1720" width="440" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="perf-cold" value="Cold Cache (First Visit)&#xa;HTML: 50ms (CDN)&#xa;JS/CSS: 100ms (CDN)&#xa;API: 200ms (origin)&#xa;Total: ~300ms TTI" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#e53935;fontSize=12;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="160" y="1850" width="240" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-perf-cold" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="perf-title" target="perf-cold">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="perf-warm" value="Warm Cache (Repeat Visit)&#xa;HTML: 304 check (50ms)&#xa;JS/CSS: HTTP cache (0ms)&#xa;API: React Query (&lt;1ms)&#xa;Total: ~50ms TTI (6x faster!)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontSize=12;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="460" y="1850" width="260" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-perf-warm" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="perf-title" target="perf-warm">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="perf-offline" value="Offline Mode&#xa;HTML: SW Cache (5ms)&#xa;JS/CSS: SW Cache (5ms)&#xa;API: IndexedDB (&lt;50ms)&#xa;Total: ~60ms TTI" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#fb8c00;fontSize=12;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="780" y="1850" width="240" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-perf-offline" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="perf-title" target="perf-offline">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== EVICTION ==================== -->
+        <mxCell id="ev-title" value="Cache Eviction Strategies" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#8e24aa;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="400" y="2020" width="440" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ev1" value="React Query: gcTime&#xa;GC inactive entries after 10min" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#8e24aa;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="80" y="2140" width="230" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="ev2" value="Workbox: maxEntries + maxAge&#xa;LRU eviction per cache name" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#8e24aa;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="340" y="2140" width="240" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="ev3" value="IndexedDB: Custom cleanup&#xa;Delete records &gt; 7 days old" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#8e24aa;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="610" y="2140" width="230" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="ev4" value="localStorage: LRU wrapper&#xa;Bounded max entries" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#8e24aa;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="870" y="2140" width="220" height="45" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge-ev1" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#8e24aa;" edge="1" parent="1" source="ev-title" target="ev1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-ev2" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#8e24aa;" edge="1" parent="1" source="ev-title" target="ev2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-ev3" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#8e24aa;" edge="1" parent="1" source="ev-title" target="ev3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-ev4" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#8e24aa;" edge="1" parent="1" source="ev-title" target="ev4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

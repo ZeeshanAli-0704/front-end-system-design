@@ -1,0 +1,601 @@
+<mxfile host="app.diagrams.net" agent="GitHub Copilot" version="28.2.8">
+  <diagram name="Component Architecture" id="food-delivery-component-arch">
+    <mxGraphModel dx="2200" dy="1600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1600" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="title" value="Food Delivery App — Frontend Component Architecture" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontStyle=1;fontSize=20;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="450" y="20" width="600" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== APP SHELL ==================== -->
+        <mxCell id="appShell" value="App Shell&#xa;— SPA with SSR for listing/menu pages, CSR for cart/checkout/tracking" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f0ff;strokeColor=#356ebf;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="450" y="80" width="500" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== TOP LEVEL CHILDREN ==================== -->
+
+        <!-- LocationBar -->
+        <mxCell id="locationBar" value="LocationBar&#xa;(auto-detect / manual address pick)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="30" y="220" width="260" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-app-location" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="appShell" target="locationBar">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- SearchBar -->
+        <mxCell id="searchBar" value="SearchBar&#xa;(autocomplete: dishes, restaurants, cuisines)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#fb8c00;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="330" y="220" width="280" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-app-search" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="appShell" target="searchBar">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- HomePage -->
+        <mxCell id="homePage" value="HomePage&#xa;(banners + categories + restaurant listing)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="650" y="220" width="300" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-app-home" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="appShell" target="homePage">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- CartIcon -->
+        <mxCell id="cartIcon" value="CartIcon&#xa;(header badge with count)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#e53935;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="990" y="220" width="220" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-app-cart-icon" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="appShell" target="cartIcon">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== HOME PAGE CHILDREN ==================== -->
+
+        <!-- Promo Banner Carousel -->
+        <mxCell id="promoBanner" value="PromoBannerCarousel&#xa;(hero offer banners, auto-scroll)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="30" y="370" width="250" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-home-banner" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#666666;strokeWidth=1;" edge="1" parent="1" source="homePage" target="promoBanner">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Cuisine Category Scroller -->
+        <mxCell id="cuisineScroller" value="CuisineCategoryScroller&#xa;(horizontal icon scroll: Pizza, Biryani...)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="310" y="370" width="280" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-home-cuisine" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#666666;strokeWidth=1;" edge="1" parent="1" source="homePage" target="cuisineScroller">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- FilterBar -->
+        <mxCell id="filterBar" value="FilterBar&#xa;(Veg, Rating 4+, Under 30 min, Offers, Sort)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8eaf6;strokeColor=#3f51b5;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="620" y="370" width="280" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-home-filter" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#666666;strokeWidth=1;" edge="1" parent="1" source="homePage" target="filterBar">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Restaurant List -->
+        <mxCell id="restaurantList" value="RestaurantList&#xa;(infinite scroll grid with IntersectionObserver)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f0ff;strokeColor=#356ebf;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="930" y="370" width="300" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-home-list" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#666666;strokeWidth=1;" edge="1" parent="1" source="homePage" target="restaurantList">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Note: Filter → URL sync -->
+        <mxCell id="note-filter" value="Filters sync with URL params&#xa;for shareability and back/forward nav" style="shape=note;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#b7a500;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="620" y="440" width="200" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- ListSentinel -->
+        <mxCell id="listSentinel" value="ListSentinel&#xa;(IntersectionObserver trigger)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1260" y="370" width="200" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-list-sentinel" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="restaurantList" target="listSentinel">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== RESTAURANT CARD ==================== -->
+        <mxCell id="restaurantCard" value="RestaurantCard&#xa;(image, name, cuisines, rating, delivery time, offers)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f0ff;strokeColor=#356ebf;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="930" y="500" width="300" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-list-card" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="restaurantList" target="restaurantCard">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Restaurant Card sub-components -->
+        <mxCell id="cardImage" value="RestaurantImage&#xa;(lazy + blur-up placeholder)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#356ebf;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="840" y="600" width="170" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-card-img" style="endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="restaurantCard" target="cardImage">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="offerTag" value="OfferTag&#xa;(50% OFF up to 100)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e53935;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1030" y="600" width="160" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-card-offer" style="endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="restaurantCard" target="offerTag">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ratingBadge" value="RatingBadge&#xa;(stars + count)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#43a047;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1210" y="600" width="140" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-card-rating" style="endArrow=block;strokeColor=#356ebf;" edge="1" parent="1" source="restaurantCard" target="ratingBadge">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== MENU PAGE ==================== -->
+        <mxCell id="menuLabel" value="Restaurant Menu Page" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontStyle=1;fontSize=13;fontColor=#e23744;" vertex="1" parent="1">
+          <mxGeometry x="30" y="710" width="250" height="25" as="geometry" />
+        </mxCell>
+
+        <mxCell id="menuPage" value="RestaurantMenuPage&#xa;(SSR + CSR, category nav, add-to-cart)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#e23744;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="30" y="745" width="340" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Menu sub components -->
+        <mxCell id="categoryNav" value="CategoryNav (sticky)&#xa;(scroll-spy highlights active section)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e23744;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="30" y="850" width="220" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-menu-nav" style="endArrow=block;strokeColor=#e23744;" edge="1" parent="1" source="menuPage" target="categoryNav">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="menuItemCard" value="MenuItemCard&#xa;(name, price, veg/nonveg, ADD button)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e23744;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="270" y="850" width="220" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-menu-item" style="endArrow=block;strokeColor=#e23744;" edge="1" parent="1" source="menuPage" target="menuItemCard">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="customizationModal" value="CustomizationModal&#xa;(size, toppings, extras)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e23744;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="510" y="850" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-menu-custom" style="endArrow=block;strokeColor=#e23744;" edge="1" parent="1" source="menuPage" target="customizationModal">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="stickyCartBar" value="StickyCartBar&#xa;(2 items | Rs 450 — VIEW CART)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#e53935;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="30" y="930" width="280" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-menu-sticky" style="endArrow=block;strokeColor=#e53935;" edge="1" parent="1" source="menuPage" target="stickyCartBar">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== CART + CHECKOUT ==================== -->
+        <mxCell id="checkoutLabel" value="Cart and Checkout Flow" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontStyle=1;fontSize=13;fontColor=#e53935;" vertex="1" parent="1">
+          <mxGeometry x="770" y="710" width="250" height="25" as="geometry" />
+        </mxCell>
+
+        <mxCell id="cartPage" value="CartPage&#xa;(items, coupon, bill breakdown)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#e53935;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="770" y="745" width="250" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="checkoutPage" value="CheckoutPage&#xa;(address, payment, place order)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#e53935;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="745" width="250" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge-cart-checkout" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#e53935;strokeWidth=2;" edge="1" parent="1" source="cartPage" target="checkoutPage">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Cart sub components -->
+        <mxCell id="cartItemList" value="CartItemList&#xa;(qty stepper, customizations)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e53935;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="750" y="850" width="180" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-cart-items" style="endArrow=block;strokeColor=#e53935;" edge="1" parent="1" source="cartPage" target="cartItemList">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="billDetails" value="BillDetails&#xa;(subtotal, delivery, tax, total)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e53935;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="950" y="850" width="180" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-cart-bill" style="endArrow=block;strokeColor=#e53935;" edge="1" parent="1" source="cartPage" target="billDetails">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Checkout sub components -->
+        <mxCell id="addressSelector" value="AddressSelector&#xa;(saved + new address)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e53935;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="850" width="160" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-checkout-addr" style="endArrow=block;strokeColor=#e53935;" edge="1" parent="1" source="checkoutPage" target="addressSelector">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="paymentSelector" value="PaymentSelector&#xa;(UPI, Card, Wallet, COD)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e53935;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1230" y="850" width="160" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-checkout-pay" style="endArrow=block;strokeColor=#e53935;" edge="1" parent="1" source="checkoutPage" target="paymentSelector">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== ORDER TRACKING ==================== -->
+        <mxCell id="trackingLabel" value="Order Tracking" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontStyle=1;fontSize=13;fontColor=#1565c0;" vertex="1" parent="1">
+          <mxGeometry x="770" y="950" width="200" height="25" as="geometry" />
+        </mxCell>
+
+        <mxCell id="trackingPage" value="OrderTrackingPage&#xa;(WebSocket real-time updates)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1565c0;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="770" y="985" width="280" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge-checkout-tracking" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#1565c0;strokeWidth=2;dashed=1;" edge="1" parent="1" source="checkoutPage" target="trackingPage">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="statusStepper" value="OrderStatusStepper&#xa;(Placed → Accepted → Preparing → On Way → Delivered)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1565c0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="670" y="1090" width="220" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-track-stepper" style="endArrow=block;strokeColor=#1565c0;" edge="1" parent="1" source="trackingPage" target="statusStepper">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="deliveryMap" value="DeliveryMap&#xa;(Google Maps + live rider pin)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1565c0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="910" y="1090" width="190" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-track-map" style="endArrow=block;strokeColor=#1565c0;" edge="1" parent="1" source="trackingPage" target="deliveryMap">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="riderInfo" value="RiderInfo&#xa;(name, photo, call button)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1565c0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1120" y="1090" width="170" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-track-rider" style="endArrow=block;strokeColor=#1565c0;" edge="1" parent="1" source="trackingPage" target="riderInfo">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- WebSocket note -->
+        <mxCell id="note-ws" value="WebSocket: wss://api/orders/:id/track&#xa;→ status changes, rider location, ETA&#xa;→ fallback to polling on disconnect" style="shape=note;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#b7a500;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="985" width="250" height="60" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+  <diagram name="Data Flow and API" id="food-delivery-data-flow">
+    <mxGraphModel dx="2200" dy="1600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1400" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="df-title" value="Food Delivery App — Data Flow and API Design" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontStyle=1;fontSize=20;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="400" y="20" width="600" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== USER FLOW ==================== -->
+        <mxCell id="flow-title" value="Complete Order Flow" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f0ff;strokeColor=#356ebf;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="500" y="80" width="360" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Step 1: Location -->
+        <mxCell id="step1" value="1. Detect Location&#xa;Geolocation API / Saved Address / Manual" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="60" y="180" width="260" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Step 2: Fetch Restaurants -->
+        <mxCell id="step2" value="2. Fetch Restaurants (SSR + CSR)&#xa;GET /api/restaurants?lat=...&amp;lng=...&amp;limit=20" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f0ff;strokeColor=#356ebf;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="370" y="180" width="320" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-s1-s2" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#43a047;strokeWidth=2;" edge="1" parent="1" source="step1" target="step2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Step 3: Apply Filters -->
+        <mxCell id="step3" value="3. Apply Filters&#xa;URL params update → refetch" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8eaf6;strokeColor=#3f51b5;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="740" y="180" width="240" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-s2-s3" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="step2" target="step3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Step 4: Infinite Scroll -->
+        <mxCell id="step4" value="4. Infinite Scroll&#xa;Sentinel enters viewport → fetch next page" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1030" y="180" width="260" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-s3-s4" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#3f51b5;strokeWidth=2;" edge="1" parent="1" source="step3" target="step4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Step 5: Open Menu -->
+        <mxCell id="step5" value="5. Open Restaurant Menu&#xa;GET /api/restaurants/:id/menu&#xa;Category nav + scroll spy" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#e23744;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="60" y="320" width="280" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-s2-s5" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="step2" target="step5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Step 6: Add to Cart -->
+        <mxCell id="step6" value="6. Add to Cart&#xa;Zustand store + localStorage persist&#xa;Single-restaurant constraint" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#e53935;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="390" y="320" width="280" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-s5-s6" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#e23744;strokeWidth=2;" edge="1" parent="1" source="step5" target="step6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Step 7: Cart Page -->
+        <mxCell id="step7" value="7. View Cart&#xa;Item breakdown + coupon + bill details" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#e53935;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="720" y="320" width="260" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-s6-s7" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#e53935;strokeWidth=2;" edge="1" parent="1" source="step6" target="step7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Step 8: Checkout -->
+        <mxCell id="step8" value="8. Checkout&#xa;Address + Payment + Place Order&#xa;POST /api/orders" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#e53935;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1030" y="320" width="260" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-s7-s8" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#e53935;strokeWidth=2;" edge="1" parent="1" source="step7" target="step8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Step 9: Order Tracking -->
+        <mxCell id="step9" value="9. Real-Time Order Tracking&#xa;WebSocket: wss://api/orders/:id/track&#xa;Status + Rider Location + ETA" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1565c0;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="500" y="460" width="360" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-s8-s9" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#1565c0;strokeWidth=2;" edge="1" parent="1" source="step8" target="step9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== STATE MANAGEMENT LAYER ==================== -->
+        <mxCell id="state-title" value="State Management Layer" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="500" y="600" width="360" height="40" as="geometry" />
+        </mxCell>
+
+        <mxCell id="reactQuery" value="React Query&#xa;(server state: restaurants, menus, orders)&#xa;stale-while-revalidate, bg refetch" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f0ff;strokeColor=#356ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="60" y="680" width="280" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="zustandCart" value="Zustand + localStorage&#xa;(cart: items, restaurant lock, coupon)&#xa;persists across page refresh" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#e53935;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="380" y="680" width="280" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="urlParams" value="URL Search Params&#xa;(filters: cuisine, rating, sort)&#xa;shareable, back/forward friendly" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8eaf6;strokeColor=#3f51b5;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="700" y="680" width="280" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="locationCtx" value="React Context&#xa;(location: coordinates, address)&#xa;consumed by all API calls" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1020" y="680" width="280" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== API LAYER ==================== -->
+        <mxCell id="api-title" value="Backend API Layer" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="500" y="820" width="360" height="40" as="geometry" />
+        </mxCell>
+
+        <mxCell id="restApi" value="REST APIs&#xa;/api/restaurants&#xa;/api/restaurants/:id/menu&#xa;/api/orders&#xa;/api/search/suggest" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;align=left;spacingLeft=10;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="200" y="900" width="240" height="100" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wsApi" value="WebSocket&#xa;wss://api/orders/:id/track&#xa;→ STATUS_CHANGE&#xa;→ RIDER_LOCATION&#xa;→ ETA_UPDATE" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1565c0;align=left;spacingLeft=10;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="500" y="900" width="240" height="100" as="geometry" />
+        </mxCell>
+
+        <mxCell id="cdnLayer" value="CDN (Cloudfront)&#xa;Restaurant images&#xa;Food item images&#xa;Banner assets&#xa;JS/CSS bundles" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#fb8c00;align=left;spacingLeft=10;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="800" y="900" width="200" height="100" as="geometry" />
+        </mxCell>
+
+        <mxCell id="externalSDK" value="External SDKs&#xa;Google Maps (tracking map)&#xa;Razorpay/Stripe (payments)&#xa;Google Places (autocomplete)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#e53935;align=left;spacingLeft=10;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="900" width="240" height="100" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+  <diagram name="Order Tracking State Machine" id="food-delivery-order-tracking">
+    <mxGraphModel dx="1600" dy="1200" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="ot-title" value="Order Tracking — Status State Machine" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontStyle=1;fontSize=20;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="350" y="20" width="500" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- PLACED -->
+        <mxCell id="placed" value="PLACED&#xa;Order submitted&#xa;Awaiting restaurant" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="80" y="120" width="180" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- ACCEPTED -->
+        <mxCell id="accepted" value="ACCEPTED&#xa;Restaurant confirmed&#xa;Preparing soon" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f0ff;strokeColor=#356ebf;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="340" y="120" width="180" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-placed-accepted" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#43a047;strokeWidth=2;" edge="1" parent="1" source="placed" target="accepted">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- PREPARING -->
+        <mxCell id="preparing" value="PREPARING&#xa;Kitchen cooking&#xa;ETA updates stream" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#fb8c00;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="600" y="120" width="180" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-accepted-preparing" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#356ebf;strokeWidth=2;" edge="1" parent="1" source="accepted" target="preparing">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- PICKED_UP -->
+        <mxCell id="pickedUp" value="PICKED UP&#xa;Rider collected order&#xa;Rider assigned" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8eaf6;strokeColor=#3f51b5;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="860" y="120" width="180" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-preparing-pickup" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#fb8c00;strokeWidth=2;" edge="1" parent="1" source="preparing" target="pickedUp">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- OUT_FOR_DELIVERY -->
+        <mxCell id="outForDelivery" value="OUT FOR DELIVERY&#xa;Live map tracking&#xa;Rider location every 3-5s" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1565c0;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="470" y="300" width="240" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-pickup-delivery" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#3f51b5;strokeWidth=2;" edge="1" parent="1" source="pickedUp" target="outForDelivery">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- DELIVERED -->
+        <mxCell id="delivered" value="DELIVERED&#xa;Order complete&#xa;Rate and review prompt" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#2e7d32;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="470" y="460" width="240" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-delivery-delivered" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#1565c0;strokeWidth=2;" edge="1" parent="1" source="outForDelivery" target="delivered">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- CANCELLED -->
+        <mxCell id="cancelled" value="CANCELLED&#xa;By user, restaurant, or system&#xa;Refund initiated" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffebee;strokeColor=#c62828;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="300" width="220" height="80" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge-placed-cancel" style="endArrow=block;strokeColor=#c62828;strokeWidth=1;dashed=1;" edge="1" parent="1" source="placed" target="cancelled">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-accepted-cancel" style="endArrow=block;strokeColor=#c62828;strokeWidth=1;dashed=1;" edge="1" parent="1" source="accepted" target="cancelled">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-preparing-cancel" style="endArrow=block;strokeColor=#c62828;strokeWidth=1;dashed=1;" edge="1" parent="1" source="preparing" target="cancelled">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== COMMUNICATION CHANNELS ==================== -->
+        <mxCell id="comm-title" value="Communication Channels" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontStyle=1;fontSize=15;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="80" y="580" width="300" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- WebSocket -->
+        <mxCell id="wsBox" value="WebSocket (Primary)&#xa;wss://api/orders/:id/track&#xa;&#xa;Messages:&#xa;• STATUS_CHANGE → update stepper&#xa;• RIDER_ASSIGNED → show rider info&#xa;• RIDER_LOCATION → animate map marker&#xa;• ETA_UPDATE → update countdown" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1565c0;align=left;spacingLeft=10;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="80" y="630" width="350" height="160" as="geometry" />
+        </mxCell>
+
+        <!-- Polling Fallback -->
+        <mxCell id="pollBox" value="Polling Fallback&#xa;(when WebSocket disconnects)&#xa;&#xa;GET /api/orders/:id/status every 10s&#xa;&#xa;Reconnect strategy:&#xa;• 3 attempts with exponential backoff&#xa;• After 3 fails → switch to polling&#xa;• Retry WebSocket every 30s in background" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#fb8c00;align=left;spacingLeft=10;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="480" y="630" width="350" height="160" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge-ws-poll" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#c62828;strokeWidth=1;dashed=1;" edge="1" parent="1" source="wsBox" target="pollBox">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-ws-poll-label" value="on disconnect" style="text;html=1;strokeColor=none;fillColor=none;fontSize=10;fontColor=#c62828;" vertex="1" parent="1">
+          <mxGeometry x="420" y="690" width="70" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- Map Integration -->
+        <mxCell id="mapBox" value="Google Maps Integration&#xa;&#xa;• Restaurant pin (static)&#xa;• Delivery address pin (static)&#xa;• Rider pin (animated, updates every 3-5s)&#xa;• Smooth marker interpolation (1s ease-out)&#xa;• Pan map to follow rider" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;align=left;spacingLeft=10;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="880" y="630" width="300" height="160" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+  <diagram name="Cart State Machine" id="food-delivery-cart-state">
+    <mxGraphModel dx="1400" dy="1000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="800" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="cs-title" value="Cart Management — State Machine" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontStyle=1;fontSize=20;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="350" y="20" width="400" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- EMPTY -->
+        <mxCell id="cartEmpty" value="EMPTY CART&#xa;No items, no restaurant lock" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="450" y="100" width="220" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- ACTIVE -->
+        <mxCell id="cartActive" value="ACTIVE CART&#xa;Items from Restaurant A&#xa;restaurantId locked" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="450" y="260" width="220" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-empty-active" value="add item" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#43a047;strokeWidth=2;fontSize=11;" edge="1" parent="1" source="cartEmpty" target="cartActive">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Self-loop: add item same restaurant -->
+        <mxCell id="edge-active-self" value="add item&#xa;(same restaurant)" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#43a047;strokeWidth=1;fontSize=10;curved=1;" edge="1" parent="1" source="cartActive" target="cartActive">
+          <mxGeometry x="0.5" y="20" relative="1" as="geometry">
+            <mxPoint x="720" y="280" as="sourcePoint" />
+            <mxPoint x="720" y="320" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="730" y="280" />
+              <mxPoint x="730" y="320" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- CONFLICT -->
+        <mxCell id="cartConflict" value="CONFLICT DIALOG&#xa;&quot;Replace cart with items&#xa;from Restaurant B?&quot;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#fb8c00;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="100" y="260" width="240" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-active-conflict" value="add item&#xa;(different restaurant)" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#fb8c00;strokeWidth=2;fontSize=10;" edge="1" parent="1" source="cartActive" target="cartConflict">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Conflict → Active (Yes) -->
+        <mxCell id="edge-conflict-replace" value="Yes: clear + add new" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#e53935;strokeWidth=1;fontSize=10;" edge="1" parent="1" source="cartConflict" target="cartActive">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="220" y="220" />
+              <mxPoint x="560" y="220" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Conflict → Active (No) -->
+        <mxCell id="edge-conflict-cancel" value="No: keep cart" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#666666;strokeWidth=1;fontSize=10;" edge="1" parent="1" source="cartConflict" target="cartActive">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="340" y="370" />
+              <mxPoint x="450" y="370" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- CHECKOUT -->
+        <mxCell id="cartCheckout" value="CHECKOUT&#xa;Address + Payment + Place Order&#xa;POST /api/orders" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#e53935;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="450" y="440" width="220" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-active-checkout" value="view cart → checkout" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#e53935;strokeWidth=2;fontSize=11;" edge="1" parent="1" source="cartActive" target="cartCheckout">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ORDER PLACED -->
+        <mxCell id="orderPlaced" value="ORDER PLACED&#xa;Cart cleared&#xa;→ Order Tracking" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1565c0;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="450" y="600" width="220" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-checkout-placed" value="order confirmed" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#1565c0;strokeWidth=2;fontSize=11;" edge="1" parent="1" source="cartCheckout" target="orderPlaced">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Return to EMPTY -->
+        <mxCell id="edge-placed-empty" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#666666;strokeWidth=1;dashed=1;fontSize=10;" edge="1" parent="1" source="orderPlaced" target="cartEmpty">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="800" y="640" />
+              <mxPoint x="800" y="135" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-placed-empty-label" value="cart resets to empty" style="text;html=1;strokeColor=none;fillColor=none;fontSize=10;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="800" y="380" width="120" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- Remove all items → EMPTY -->
+        <mxCell id="edge-active-empty" value="remove all items" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#666666;strokeWidth=1;dashed=1;fontSize=10;" edge="1" parent="1" source="cartActive" target="cartEmpty">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="900" y="300" />
+              <mxPoint x="900" y="135" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Storage note -->
+        <mxCell id="note-storage" value="Storage: Zustand + localStorage&#xa;Cart persists across page refresh&#xa;Cleared only on order placement or explicit clear" style="shape=note;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#b7a500;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="80" y="480" width="280" height="70" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -38,6 +38,9 @@
 | 1 | [Facebook News Feed](./Case_Studies/Facebook/Frontend_System_Design_Facebook_News_Feed.md) | Facebook News Feed Design, Components, API, Data Model |
 | 2 | [Pinterest](./Case_Studies/Pinterest/Frontend_System_Design_Pinterest.md) | Pinterest Design, Components, API, Data Model |
 | 3 | [Typeahead / Autocomplete](./Case_Studies/Typeahead) | Autocomplete backend and frontend design, LLD, HLD, UI usage |
+| 4 | [Search Results Page](./Case_Studies/Search) | Search Results Page (Google / Amazon style) — polymorphic result cards, faceted filtering, URL state sync, pagination, query highlighting |
+| 5 | [Excalidraw (Collaborative Whiteboard)](./Case_Studies/Excalidraw/Frontend_System_Design_Excalidraw.md) | Excalidraw Design — Canvas 2D rendering engine, IndexedDB local-first storage, Rough.js hand-drawn style, CRDT collaboration, undo/redo, E2E encryption |
+| 6 | [Google Docs (Collaborative Document Editor)](./Case_Studies/GoogleDocs/Frontend_System_Design_Google_Docs.md) | Google Docs Design — Rich text editor engine, Operational Transformation (OT) deep dive, CRDTs vs OT, real-time cursor presence, document model, collaborative undo/redo |
 
 [⬆ Back to Top](#top)
 
