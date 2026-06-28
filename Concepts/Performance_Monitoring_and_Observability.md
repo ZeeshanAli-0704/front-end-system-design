@@ -320,6 +320,8 @@ Any task > 50ms is a "Long Task" that blocks interactions
 - DevTools → **Performance Monitor** (real-time) → Watch "JS heap size" and "DOM Nodes" over time
 - Chrome Task Manager (`Shift+Esc`) → Check if your tab's memory keeps growing
 
+<img src="images/memory-debugging-how-to-find.svg" alt="Memory Debugging Methods: Heap Snapshots, Performance Monitor, Task Manager" width="100%" />
+
 **Common causes:**
 | Cause | What Happens | Fix |
 |---|---|---|

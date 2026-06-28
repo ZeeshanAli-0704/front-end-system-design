@@ -1,0 +1,260 @@
+<svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrowblue" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
+      <polygon points="0,0 10,5 0,10" fill="#3498DB"/>
+    </marker>
+    <marker id="arrowred" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
+      <polygon points="0,0 10,5 0,10" fill="#E74C3C"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="600" y="35" font-size="26" font-weight="bold" text-anchor="middle" fill="#2C3E50">
+    Memory Debugging: How to Find Leaks
+  </text>
+
+  <!-- Section 1: Memory Panel with Heap Snapshots -->
+  <g id="section1">
+    <rect x="30" y="70" width="350" height="700" fill="#F8F9FA" stroke="#BDC3C7" stroke-width="2" rx="8"/>
+    
+    <text x="205" y="100" font-size="14" font-weight="bold" fill="#2C3E50">
+      Method 1: Heap Snapshots
+    </text>
+    <text x="40" y="125" font-size="11" fill="#555">DevTools → Memory Panel</text>
+
+    <!-- Step indicators -->
+    <circle cx="55" cy="155" r="20" fill="#3498DB"/>
+    <text x="55" y="162" font-size="11" font-weight="bold" text-anchor="middle" fill="#fff">1</text>
+    <text x="85" y="162" font-size="10" fill="#2C3E50">Take snapshot</text>
+
+    <line x1="65" y1="180" x2="65" y2="210" stroke="#BDC3C7" stroke-width="2"/>
+
+    <circle cx="55" cy="230" r="20" fill="#3498DB"/>
+    <text x="55" y="237" font-size="11" font-weight="bold" text-anchor="middle" fill="#fff">2</text>
+    <text x="85" y="237" font-size="10" fill="#2C3E50">User interaction</text>
+
+    <line x1="65" y1="255" x2="65" y2="285" stroke="#BDC3C7" stroke-width="2"/>
+
+    <circle cx="55" cy="305" r="20" fill="#3498DB"/>
+    <text x="55" y="312" font-size="11" font-weight="bold" text-anchor="middle" fill="#fff">3</text>
+    <text x="85" y="312" font-size="10" fill="#2C3E50">Take another snapshot</text>
+
+    <!-- Memory comparison box -->
+    <rect x="45" y="350" width="310" height="150" fill="#fff" stroke="#3498DB" stroke-width="2" rx="5"/>
+    
+    <text x="200" y="370" font-size="11" font-weight="bold" text-anchor="middle" fill="#3498DB">
+      Comparison Results
+    </text>
+
+    <line x1="50" y1="380" x2="350" y2="380" stroke="#ECF0F1" stroke-width="1"/>
+
+    <text x="55" y="400" font-size="9" fill="#2C3E50" font-weight="bold">Object Type</text>
+    <text x="150" y="400" font-size="9" fill="#2C3E50" font-weight="bold">Before</text>
+    <text x="220" y="400" font-size="9" fill="#2C3E50" font-weight="bold">After</text>
+    <text x="290" y="400" font-size="9" fill="#2C3E50" font-weight="bold">Retained</text>
+
+    <line x1="50" y1="408" x2="350" y2="408" stroke="#ECF0F1" stroke-width="1"/>
+
+    <text x="55" y="425" font-size="9" fill="#555">Listeners</text>
+    <text x="155" y="425" font-size="9" fill="#555">45</text>
+    <text x="225" y="425" font-size="9" fill="#555">125</text>
+    <circle cx="300" cy="420" r="5" fill="#E74C3C"/>
+
+    <text x="55" y="445" font-size="9" fill="#555">DOM Nodes</text>
+    <text x="155" y="445" font-size="9" fill="#555">234</text>
+    <text x="225" y="445" font-size="9" fill="#555">1890</text>
+    <circle cx="300" cy="440" r="5" fill="#E74C3C"/>
+
+    <text x="55" y="465" font-size="9" fill="#555">Detached DOM</text>
+    <text x="155" y="465" font-size="9" fill="#555">0</text>
+    <text x="225" y="465" font-size="9" fill="#555">523</text>
+    <circle cx="300" cy="460" r="5" fill="#E74C3C"/>
+
+    <!-- Alert -->
+    <rect x="45" y="520" width="310" height="60" fill="#FADBD8" stroke="#E74C3C" stroke-width="2" rx="4"/>
+    <text x="200" y="540" font-size="10" font-weight="bold" text-anchor="middle" fill="#C0392B">
+      [ALERT] Memory Growth Detected!
+    </text>
+    <text x="200" y="558" font-size="9" text-anchor="middle" fill="#922B21">
+      523 detached DOM nodes not released
+    </text>
+    <text x="200" y="573" font-size="8" text-anchor="middle" fill="#922B21">
+      Root cause: Missing removeEventListener() calls
+    </text>
+
+    <!-- Action -->
+    <text x="55" y="610" font-size="10" font-weight="bold" fill="#2C3E50">Next: Click detached nodes</text>
+    <text x="55" y="628" font-size="9" fill="#555">to find retaining references</text>
+    <text x="55" y="643" font-size="9" fill="#555">in source code</text>
+  </g>
+
+  <!-- Section 2: Performance Monitor Real-time -->
+  <g id="section2">
+    <rect x="415" y="70" width="350" height="700" fill="#F8F9FA" stroke="#BDC3C7" stroke-width="2" rx="8"/>
+    
+    <text x="590" y="100" font-size="14" font-weight="bold" fill="#2C3E50">
+      Method 2: Performance Monitor
+    </text>
+    <text x="425" y="125" font-size="11" fill="#555">DevTools → More tools → Performance</text>
+    <text x="425" y="140" font-size="11" fill="#555">Monitor (real-time tracking)</text>
+
+    <!-- Chart title -->
+    <text x="590" y="165" font-size="11" font-weight="bold" text-anchor="middle" fill="#2C3E50">
+      JS Heap Size Over Time
+    </text>
+
+    <!-- Y-axis -->
+    <line x1="440" y1="180" x2="440" y2="340" stroke="#2C3E50" stroke-width="2"/>
+    <!-- Y-axis labels -->
+    <text x="435" y="345" font-size="9" text-anchor="end" fill="#666">0 MB</text>
+    <text x="435" y="285" font-size="9" text-anchor="end" fill="#666">50 MB</text>
+    <text x="435" y="225" font-size="9" text-anchor="end" fill="#666">100 MB</text>
+    <text x="435" y="165" font-size="9" text-anchor="end" fill="#666">150 MB</text>
+
+    <!-- X-axis -->
+    <line x1="440" y1="340" x2="700" y2="340" stroke="#2C3E50" stroke-width="2"/>
+    <!-- X-axis labels -->
+    <text x="440" y="360" font-size="9" text-anchor="middle" fill="#666">0s</text>
+    <text x="520" y="360" font-size="9" text-anchor="middle" fill="#666">20s</text>
+    <text x="600" y="360" font-size="9" text-anchor="middle" fill="#666">40s</text>
+    <text x="680" y="360" font-size="9" text-anchor="middle" fill="#666">60s</text>
+
+    <!-- Good pattern (line going flat) -->
+    <polyline points="440,300 480,290 520,285 560,280 600,280 640,282 680,282" 
+              fill="none" stroke="#27AE60" stroke-width="3" stroke-linecap="round"/>
+    <text x="450" y="375" font-size="9" fill="#27AE60" font-weight="bold">[OK] Stable</text>
+
+    <!-- Bad pattern (line going up) -->
+    <polyline points="440,310 460,305 480,298 500,285 520,270 540,250 560,220 580,180 600,140 620,100 640,70 660,50 680,35" 
+              fill="none" stroke="#E74C3C" stroke-width="3" stroke-linecap="round"/>
+    <text x="620" y="65" font-size="9" fill="#E74C3C" font-weight="bold">[LEAK]</text>
+
+    <!-- Metrics box -->
+    <rect x="425" y="390" width="320" height="180" fill="#fff" stroke="#BDC3C7" stroke-width="1" rx="4"/>
+
+    <text x="585" y="410" font-size="11" font-weight="bold" text-anchor="middle" fill="#2C3E50">
+      Watch These Metrics
+    </text>
+
+    <line x1="430" y1="418" x2="745" y2="418" stroke="#ECF0F1" stroke-width="1"/>
+
+    <!-- Metric 1 -->
+    <rect x="430" y="428" width="315" height="35" fill="#F8F9FA" rx="3"/>
+    <circle cx="450" cy="445" r="4" fill="#E74C3C"/>
+    <text x="465" y="442" font-size="10" font-weight="bold" fill="#2C3E50">JS heap size</text>
+    <text x="465" y="456" font-size="9" fill="#555">Should stay stable or drop after GC</text>
+
+    <!-- Metric 2 -->
+    <rect x="430" y="475" width="315" height="35" fill="#fff" rx="3"/>
+    <circle cx="450" cy="492" r="4" fill="#E74C3C"/>
+    <text x="465" y="489" font-size="10" font-weight="bold" fill="#2C3E50">DOM Nodes count</text>
+    <text x="465" y="503" font-size="9" fill="#555">Growing = more elements added = memory leak</text>
+
+    <!-- Metric 3 -->
+    <rect x="430" y="522" width="315" height="35" fill="#F8F9FA" rx="3"/>
+    <circle cx="450" cy="539" r="4" fill="#27AE60"/>
+    <text x="465" y="536" font-size="10" font-weight="bold" fill="#2C3E50">Event listeners</text>
+    <text x="465" y="550" font-size="9" fill="#555">Clean up with removeEventListener()</text>
+
+    <!-- Action -->
+    <text x="435" y="600" font-size="10" font-weight="bold" fill="#2C3E50">If graphs climb continuously:</text>
+    <text x="435" y="618" font-size="9" fill="#555">1. Check event handlers</text>
+    <text x="435" y="633" font-size="9" fill="#555">2. Check timers/intervals</text>
+    <text x="435" y="648" font-size="9" fill="#555">3. Check circular references</text>
+    <text x="435" y="663" font-size="9" fill="#555">4. Use heap snapshot to pinpoint</text>
+  </g>
+
+  <!-- Section 3: Chrome Task Manager -->
+  <g id="section3">
+    <rect x="800" y="70" width="350" height="700" fill="#F8F9FA" stroke="#BDC3C7" stroke-width="2" rx="8"/>
+    
+    <text x="975" y="100" font-size="14" font-weight="bold" fill="#2C3E50">
+      Method 3: Chrome Task Manager
+    </text>
+    <text x="810" y="125" font-size="11" fill="#555">Chrome → Shift+Esc</text>
+
+    <!-- Task Manager Table -->
+    <rect x="810" y="150" width="330" height="240" fill="#fff" stroke="#BDC3C7" stroke-width="1" rx="4"/>
+
+    <line x1="810" y1="150" x2="1140" y2="150" stroke="#2C3E50" stroke-width="2"/>
+    <line x1="810" y1="175" x2="1140" y2="175" stroke="#BDC3C7" stroke-width="1"/>
+
+    <!-- Header -->
+    <text x="820" y="168" font-size="10" font-weight="bold" fill="#2C3E50">Tab / Process</text>
+    <text x="930" y="168" font-size="10" font-weight="bold" fill="#2C3E50">Memory</text>
+    <text x="1040" y="168" font-size="10" font-weight="bold" fill="#2C3E50">Trend</text>
+
+    <!-- Row 1: Good tab -->
+    <line x1="810" y1="195" x2="1140" y2="195" stroke="#ECF0F1" stroke-width="1"/>
+    <text x="820" y="208" font-size="9" fill="#555">Gmail tab</text>
+    <text x="930" y="208" font-size="9" fill="#555">42 MB</text>
+    <text x="1050" y="208" font-size="9" fill="#27AE60" font-weight="bold">[STABLE]</text>
+
+    <!-- Row 2: Growing tab - BAD -->
+    <rect x="810" y="215" width="330" height="20" fill="#FADBD8" rx="2"/>
+    <line x1="810" y1="235" x2="1140" y2="235" stroke="#E74C3C" stroke-width="1"/>
+    <text x="820" y="228" font-size="9" fill="#922B21" font-weight="bold">My App tab</text>
+    <text x="930" y="228" font-size="9" fill="#922B21" font-weight="bold">340 MB</text>
+    <text x="1050" y="228" font-size="9" fill="#E74C3C" font-weight="bold">[GROWING]</text>
+
+    <!-- Row 3: Normal tab -->
+    <text x="820" y="255" font-size="9" fill="#555">Facebook tab</text>
+    <text x="930" y="255" font-size="9" fill="#555">85 MB</text>
+    <text x="1050" y="255" font-size="9" fill="#27AE60" font-weight="bold">[STABLE]</text>
+
+    <!-- Row 4: GPU Process -->
+    <line x1="810" y1="270" x2="1140" y2="270" stroke="#ECF0F1" stroke-width="1"/>
+    <text x="820" y="283" font-size="9" fill="#555">GPU Process</text>
+    <text x="930" y="283" font-size="9" fill="#555">128 MB</text>
+    <text x="1050" y="283" font-size="9" fill="#27AE60" font-weight="bold">[OK]</text>
+
+    <!-- Alert box -->
+    <rect x="810" y="310" width="330" height="100" fill="#FADBD8" stroke="#E74C3C" stroke-width="2" rx="5"/>
+    <text x="975" y="330" font-size="10" font-weight="bold" text-anchor="middle" fill="#C0392B">
+      [LEAK ALERT]
+    </text>
+    <text x="975" y="348" font-size="9" text-anchor="middle" fill="#922B21">
+      "My App tab" memory grew from
+    </text>
+    <text x="975" y="363" font-size="9" text-anchor="middle" fill="#922B21">
+      120 MB → 340 MB in 5 minutes
+    </text>
+    <text x="975" y="380" font-size="8" text-anchor="middle" fill="#922B21">
+      (consistent growth = memory leak)
+    </text>
+    <text x="975" y="395" font-size="8" text-anchor="middle" fill="#922B21">
+      Normal tabs stay relatively stable
+    </text>
+
+    <!-- Quick check -->
+    <rect x="810" y="430" width="330" height="80" fill="#E8F4F8" stroke="#3498DB" stroke-width="1" rx="4"/>
+    <text x="975" y="450" font-size="10" font-weight="bold" text-anchor="middle" fill="#2C3E50">
+      Quick Check Steps:
+    </text>
+    <text x="820" y="468" font-size="9" fill="#2C3E50">1. Open Task Manager (Shift+Esc)</text>
+    <text x="820" y="483" font-size="9" fill="#2C3E50">2. Find your tab in the list</text>
+    <text x="820" y="498" font-size="9" fill="#2C3E50">3. Watch Memory column for 2 minutes</text>
+    <text x="820" y="513" font-size="9" fill="#2C3E50">4. If it keeps climbing = LEAK!</text>
+
+    <!-- Comparison -->
+    <text x="810" y="540" font-size="10" font-weight="bold" fill="#2C3E50">When to use each method:</text>
+
+    <circle cx="825" cy="560" r="4" fill="#3498DB"/>
+    <text x="840" y="565" font-size="9" fill="#555">Task Manager: Quick detection</text>
+
+    <circle cx="825" cy="580" r="4" fill="#3498DB"/>
+    <text x="840" y="585" font-size="9" fill="#555">Monitor: Track over time</text>
+
+    <circle cx="825" cy="600" r="4" fill="#3498DB"/>
+    <text x="840" y="605" font-size="9" fill="#555">Snapshots: Find root cause</text>
+
+    <circle cx="825" cy="620" r="4" fill="#E74C3C"/>
+    <text x="840" y="625" font-size="9" fill="#555" font-weight="bold">Use all 3 for confirmation!</text>
+  </g>
+
+  <!-- Bottom: Key takeaway -->
+  <rect x="30" y="750" width="1140" height="30" fill="#E8F4F8" stroke="#3498DB" stroke-width="2" rx="4"/>
+  <text x="600" y="771" font-size="11" font-weight="bold" text-anchor="middle" fill="#2C3E50">
+    [KEY] Memory leaks show as: constantly growing heap size + detached DOM nodes + unreleased listeners. Cross-check all 3 methods!
+  </text>
+</svg>
