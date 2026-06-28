@@ -462,7 +462,7 @@ The Performance panel is the **most powerful** tool for diagnosing bottlenecks:
 
 ![Flame Chart Example](images/flame-chart-example.svg)
 
-![Long Tasks and FPS Analysis](images/long-tasks-fps-analysis.svg)
+<img src="images/long-tasks-fps-analysis.svg" alt="Long Tasks and FPS Analysis" width="100%" />
 
 ### How to Use the Network Panel Effectively
 
