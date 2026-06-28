@@ -124,7 +124,7 @@ Google evaluates Core Web Vitals at the **75th percentile** of all page visits. 
 | Third-party scripts | Ad/analytics scripts competing for main thread | Load async, defer, or move to Web Workers |
 | No yielding in long handlers | Single handler runs 300ms without breaks | Yield to browser between chunks of work |
 
-![INP Interaction Timeline](inp-interaction-timeline.svg)
+![INP Interaction Timeline](images/inp-interaction-timeline.svg)
 
 ---
 
@@ -460,9 +460,9 @@ The Performance panel is the **most powerful** tool for diagnosing bottlenecks:
 | Many narrow purple + yellow alternating | Layout thrashing | Batch reads before writes |
 | Large red-cornered blocks | Long Tasks blocking interactions | Yield to browser between chunks |
 
-![Flame Chart Example](flame-chart-example.svg)
+![Flame Chart Example](images/flame-chart-example.svg)
 
-![Long Tasks and FPS Analysis](long-tasks-fps-analysis.svg)
+![Long Tasks and FPS Analysis](images/long-tasks-fps-analysis.svg)
 
 ### How to Use the Network Panel Effectively
 
@@ -804,7 +804,7 @@ Sprint 6:   PR adds 15 KB    ← ❌ BUILD FAILS — exceeds 200 KB
 | **Total page** | Total page weight | ≤ 500 KB | Lighthouse CI |
 | **Lighthouse** | Performance score | ≥ 90 | Lighthouse CI assertion |
 
-![Performance Budget Breakdown](performance-budget.svg)
+![Performance Budget Breakdown](images/performance-budget.svg)
 
 ### How to Enforce Performance Budgets
 
