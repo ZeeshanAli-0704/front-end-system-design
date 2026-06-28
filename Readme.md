@@ -49,6 +49,7 @@
 | 12 | [Uber Ride Hailing](./Case_Studies/Uber/Frontend_System_Design_Ride_Hailing.md) | Uber Design — Map centered booking interface, place autocomplete, ride type selection, driver matching state machine, real time ride tracking with live map, ETA countdown |
 | 13 | [Zomato Food Delivery](./Case_Studies/Zomato/Frontend_System_Design_Food_Delivery.md) | Zomato Design — Restaurant listing with filters, multi faceted filtering with URL sync, menu page with sticky cart, cart management across restaurants, real time order tracking with map |
 | 14 | [Caching Strategy](./Case_Studies/Caching/Frontend_System_Design_Caching_Strategy.md) | Caching Design — Multi layer cache architecture, HTTP cache and Cache Control headers, Service Worker cache with Workbox, in memory API cache, IndexedDB, cache invalidation patterns, TTL management |
+| 15 | [WebSocket Architecture](./Case_Studies/WebSocket/Frontend_System_Design_WebSocket_Architecture.md) | WebSocket Architecture Design — connection lifecycle management, channel subscription model, heartbeat and liveness detection, reconnection with backoff and jitter, offline queue and replay, event ordering and dedupe |
 
 [⬆ Back to Top](#top)
 
