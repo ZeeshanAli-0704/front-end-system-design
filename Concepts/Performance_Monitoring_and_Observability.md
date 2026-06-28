@@ -124,7 +124,7 @@ Google evaluates Core Web Vitals at the **75th percentile** of all page visits. 
 | Third-party scripts | Ad/analytics scripts competing for main thread | Load async, defer, or move to Web Workers |
 | No yielding in long handlers | Single handler runs 300ms without breaks | Yield to browser between chunks of work |
 
-![INP Interaction Timeline](images/inp-interaction-timeline.svg)
+<img src="images/inp-interaction-timeline.svg" alt="INP Interaction Timeline" width="100%" />
 
 ---
 
@@ -248,7 +248,7 @@ Step 3: Why is it slow?
 - Check **Size** column — large uncompressed assets are a red flag
 - Filter by "JS" or "CSS" — check if too many files are being loaded
 
-![Chrome DevTools Network panel cheat sheet](images/devtools-network-how-to-find.svg)
+<img src="images/devtools-network-how-to-find.svg" alt="Chrome DevTools Network panel cheat sheet" width="100%" />
 
 **Signs in the waterfall:**
 | Pattern | What It Means |
@@ -267,15 +267,15 @@ Step 3: Why is it slow?
 - DevTools → **Performance panel** → Record → Look for long "Parse HTML" → "Recalculate Style" → "Layout" before first paint
 - DevTools → **Coverage tab** (`Ctrl+Shift+P` → "Show Coverage") — shows what percentage of each CSS/JS file is actually used on this page
 
-![Render-blocking resources investigation cheat sheet](images/render-blocking-how-to-find.svg)
+<img src="images/render-blocking-how-to-find.svg" alt="Render-blocking resources investigation cheat sheet" width="100%" />
 
 **Mini real-world case (timing view):**
 
-![Mini real case of render-blocking before FCP](images/render-blocking-mini-real-case.svg)
+<img src="images/render-blocking-mini-real-case.svg" alt="Mini real case of render-blocking before FCP" width="100%" />
 
 **Advanced real-app view (network + CPU + paint milestones):**
 
-![Advanced real app waterfall and critical path](images/real-app-waterfall-critical-path.svg)
+<img src="images/real-app-waterfall-critical-path.svg" alt="Advanced real app waterfall and critical path" width="100%" />
 
 **Key insight:** A CSS file is render-blocking by default. A `<script>` tag without `async`/`defer` is parser-blocking. Both delay first paint.
 
@@ -460,7 +460,7 @@ The Performance panel is the **most powerful** tool for diagnosing bottlenecks:
 | Many narrow purple + yellow alternating | Layout thrashing | Batch reads before writes |
 | Large red-cornered blocks | Long Tasks blocking interactions | Yield to browser between chunks |
 
-![Flame Chart Example](images/flame-chart-example.svg)
+<img src="images/flame-chart-example.svg" alt="Flame Chart Example" width="100%" />
 
 <img src="images/long-tasks-fps-analysis.svg" alt="Long Tasks and FPS Analysis" width="100%" />
 
@@ -804,7 +804,7 @@ Sprint 6:   PR adds 15 KB    ← ❌ BUILD FAILS — exceeds 200 KB
 | **Total page** | Total page weight | ≤ 500 KB | Lighthouse CI |
 | **Lighthouse** | Performance score | ≥ 90 | Lighthouse CI assertion |
 
-![Performance Budget Breakdown](images/performance-budget.svg)
+<img src="images/performance-budget.svg" alt="Performance Budget Breakdown" width="100%" />
 
 ### How to Enforce Performance Budgets
 
