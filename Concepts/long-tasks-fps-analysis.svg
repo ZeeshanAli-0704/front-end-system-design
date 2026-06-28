@@ -1,3 +1,4 @@
+
 <svg viewBox="0 0 1100 700" xmlns="http://www.w3.org/2000/svg">
   <!-- Title -->
   <text x="550" y="40" font-size="24" font-weight="bold" text-anchor="middle" fill="#333">
@@ -166,4 +167,11 @@
   <text x="777" y="627" font-size="9" fill="#C0392B" font-family="monospace">observer = new</text>
   <text x="777" y="642" font-size="9" fill="#C0392B" font-family="monospace">PerformanceObserver(list =></text>
   <text x="777" y="657" font-size="9" fill="#C0392B" font-family="monospace">  list.getEntries()...)</text>
+  
+  <!-- Arrow markers -->
+  <defs>
+    <marker id="arrowred" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
+      <polygon points="0,0 10,5 0,10" fill="#FF4444"/>
+    </marker>
+  </defs>
 </svg>
