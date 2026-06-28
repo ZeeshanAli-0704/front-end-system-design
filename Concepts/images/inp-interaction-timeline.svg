@@ -1,4 +1,14 @@
 <svg viewBox="0 0 1200 700" xmlns="http://www.w3.org/2000/svg">
+  <!-- Arrow markers -->
+  <defs>
+    <marker id="arrowdown" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
+      <polygon points="5,0 10,10 0,10" fill="#333"/>
+    </marker>
+    <marker id="arrowright" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
+      <polygon points="0,0 10,5 0,10" fill="#333"/>
+    </marker>
+  </defs>
+  
   <!-- Title -->
   <text x="600" y="40" font-size="24" font-weight="bold" text-anchor="middle" fill="#333">
     INP (Interaction to Next Paint) - User Click to Visual Update
@@ -145,14 +155,4 @@
   <text x="570" y="620" font-size="9" text-anchor="middle" fill="#fff">Done!</text>
   
   <text x="650" y="620" font-size="11" font-weight="bold" fill="#2ECC71">✓ Total: 63ms (Good!)</text>
-  
-  <!-- Arrow markers -->
-  <defs>
-    <marker id="arrowdown" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
-      <polygon points="5,0 10,10 0,10" fill="#333"/>
-    </marker>
-    <marker id="arrowright" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
-      <polygon points="0,0 10,5 0,10" fill="#333"/>
-    </marker>
-  </defs>
 </svg>

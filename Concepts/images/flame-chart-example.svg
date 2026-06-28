@@ -1,4 +1,11 @@
 <svg viewBox="0 0 1000 600" xmlns="http://www.w3.org/2000/svg">
+  <!-- Arrow markers -->
+  <defs>
+    <marker id="arrowred" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
+      <polygon points="0,0 10,5 0,10" fill="#FF4444"/>
+    </marker>
+  </defs>
+  
   <!-- Title -->
   <text x="500" y="30" font-size="24" font-weight="bold" text-anchor="middle" fill="#333">
     Flame Chart Example: Page Render Performance
@@ -93,11 +100,4 @@
     <text x="600" y="120" font-size="14" font-weight="bold" fill="#FF6600">Total Time: 850ms</text>
     <text x="600" y="140" font-size="12" fill="#666">❌ Not 60 FPS (need &lt;16.67ms)</text>
   </g>
-  
-  <!-- Arrow markers -->
-  <defs>
-    <marker id="arrowred" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
-      <polygon points="0,0 10,5 0,10" fill="#FF4444"/>
-    </marker>
-  </defs>
 </svg>
