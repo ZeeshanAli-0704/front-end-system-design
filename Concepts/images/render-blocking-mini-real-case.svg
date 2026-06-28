@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="920" viewBox="0 0 1400 920" role="img" aria-labelledby="title desc">
+  <title id="title">Mini Real Case: Render-Blocking Before FCP</title>
+  <desc id="desc">A concrete example showing HTML, CSS, and JavaScript request timing and why the page stays white until first contentful paint.</desc>
+
+  <defs>
+    <style>
+      .bg { fill: #f8fafc; }
+      .panel { fill: #ffffff; stroke: #cbd5e1; stroke-width: 2; }
+      .title { fill: #0f172a; font: 700 34px Segoe UI, Arial, sans-serif; }
+      .subtitle { fill: #334155; font: 600 18px Segoe UI, Arial, sans-serif; }
+      .h { fill: #0f172a; font: 700 18px Segoe UI, Arial, sans-serif; }
+      .label { fill: #0f172a; font: 700 14px Segoe UI, Arial, sans-serif; }
+      .text { fill: #334155; font: 500 14px Segoe UI, Arial, sans-serif; }
+      .mono { fill: #0f172a; font: 600 13px Consolas, Menlo, monospace; }
+      .muted { fill: #64748b; font: 500 12px Segoe UI, Arial, sans-serif; }
+      .grid { stroke: #e2e8f0; stroke-width: 1; }
+      .ttfb { fill: #22c55e; }
+      .dl { fill: #60a5fa; }
+      .block { fill: #f59e0b; }
+      .fcp { stroke: #2563eb; stroke-width: 3; stroke-dasharray: 8 6; }
+      .warn { fill: #fff7ed; stroke: #ea580c; stroke-width: 2; }
+      .ok { fill: #f0fdf4; stroke: #16a34a; stroke-width: 2; }
+    </style>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="1400" height="920" />
+  <text x="50" y="56" class="title">Mini Real Case: Why page stays white before FCP</text>
+  <text x="50" y="84" class="subtitle">Scenario: Product page on 4G, cold cache. Main CSS + non-defer JS on critical path.</text>
+
+  <rect class="panel" x="50" y="120" width="1300" height="500" rx="12" />
+  <text x="70" y="154" class="h">Network-style timeline (0ms to 2600ms)</text>
+
+  <line x1="220" y1="180" x2="1270" y2="180" class="grid"/>
+  <text x="220" y="172" class="muted">0ms</text>
+  <text x="430" y="172" class="muted">500ms</text>
+  <text x="640" y="172" class="muted">1000ms</text>
+  <text x="850" y="172" class="muted">1500ms</text>
+  <text x="1060" y="172" class="muted">2000ms</text>
+  <text x="1240" y="172" class="muted">2500ms</text>
+
+  <line x1="220" y1="180" x2="220" y2="560" class="grid"/>
+  <line x1="430" y1="180" x2="430" y2="560" class="grid"/>
+  <line x1="640" y1="180" x2="640" y2="560" class="grid"/>
+  <line x1="850" y1="180" x2="850" y2="560" class="grid"/>
+  <line x1="1060" y1="180" x2="1060" y2="560" class="grid"/>
+  <line x1="1270" y1="180" x2="1270" y2="560" class="grid"/>
+
+  <text x="70" y="230" class="label">1) document (HTML)</text>
+  <rect x="220" y="215" width="180" height="24" class="ttfb" rx="4"/>
+  <rect x="400" y="215" width="70" height="24" class="dl" rx="4"/>
+  <text x="480" y="232" class="mono">TTFB 430ms, DL 170ms</text>
+
+  <text x="70" y="290" class="label">2) styles.css (220KB, blocking)</text>
+  <rect x="430" y="275" width="170" height="24" class="ttfb" rx="4"/>
+  <rect x="600" y="275" width="250" height="24" class="dl" rx="4"/>
+  <text x="860" y="292" class="mono">Starts at 500ms, done at 1500ms</text>
+
+  <text x="70" y="350" class="label">3) app.js (480KB, no defer -> parser-blocking)</text>
+  <rect x="640" y="335" width="150" height="24" class="ttfb" rx="4"/>
+  <rect x="790" y="335" width="230" height="24" class="dl" rx="4"/>
+  <text x="1030" y="352" class="mono">Done at 1900ms</text>
+
+  <text x="70" y="410" class="label">4) JS parse/execute on main thread</text>
+  <rect x="1020" y="395" width="220" height="24" class="block" rx="4"/>
+  <text x="1250" y="412" class="mono">1900-2420ms</text>
+
+  <text x="70" y="500" class="label">Page-level visual state</text>
+  <rect x="220" y="475" width="1030" height="36" class="block" rx="6"/>
+  <text x="235" y="498" class="mono">White screen gap: browser cannot paint final content yet</text>
+
+  <line x1="1236" y1="180" x2="1236" y2="560" class="fcp"/>
+  <text x="1244" y="208" class="mono">FCP ~2420ms</text>
+
+  <rect class="panel" x="50" y="650" width="1300" height="220" rx="12" />
+  <text x="70" y="684" class="h">Interpretation</text>
+
+  <rect class="warn" x="70" y="702" width="620" height="148" rx="10"/>
+  <text x="88" y="732" class="label">What is slow here?</text>
+  <text x="88" y="756" class="text">- CSS download (500ms -> 1500ms) blocks rendering.</text>
+  <text x="88" y="780" class="text">- Non-defer JS blocks parser and then executes long.</text>
+  <text x="88" y="804" class="text">- Result: long blank screen until ~2420ms.</text>
+  <text x="88" y="828" class="mono">This is why yellow gap can overlap many request downloads.</text>
+
+  <rect class="ok" x="720" y="702" width="610" height="148" rx="10"/>
+  <text x="738" y="732" class="label">How to fix this exact case</text>
+  <text x="738" y="756" class="text">- Inline critical CSS (~8KB), defer non-critical CSS.</text>
+  <text x="738" y="780" class="text">- Add defer to app.js and split route/feature chunks.</text>
+  <text x="738" y="804" class="text">- Compress + trim CSS/JS payload size.</text>
+  <text x="738" y="828" class="mono">Expected: FCP moves left from ~2420ms to near ~1200-1500ms.</text>
+</svg>

@@ -1,0 +1,114 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="940" viewBox="0 0 1400 940" role="img" aria-labelledby="title desc">
+  <title id="title">Render-Blocking Resources: How to Find Them</title>
+  <desc id="desc">Annotated diagram showing Lighthouse, DevTools Performance, and Coverage workflow to detect render-blocking CSS and parser-blocking JavaScript.</desc>
+
+  <defs>
+    <style>
+      .bg { fill: #f8fafc; }
+      .panel { fill: #ffffff; stroke: #cbd5e1; stroke-width: 2; }
+      .dark { fill: #0f172a; }
+      .h1 { fill: #0f172a; font: 700 34px Segoe UI, Arial, sans-serif; }
+      .h2 { fill: #334155; font: 600 18px Segoe UI, Arial, sans-serif; }
+      .h3 { fill: #f8fafc; font: 700 18px Segoe UI, Arial, sans-serif; }
+      .label { fill: #0f172a; font: 700 15px Segoe UI, Arial, sans-serif; }
+      .text { fill: #334155; font: 500 14px Segoe UI, Arial, sans-serif; }
+      .mono { fill: #0f172a; font: 600 13px Consolas, Menlo, monospace; }
+      .muted { fill: #64748b; font: 500 12px Segoe UI, Arial, sans-serif; }
+      .warn { fill: #fff7ed; stroke: #ea580c; stroke-width: 2; }
+      .ok { fill: #f0fdf4; stroke: #16a34a; stroke-width: 2; }
+      .info { fill: #eff6ff; stroke: #2563eb; stroke-width: 2; }
+      .accentA { fill: #dbeafe; stroke: #2563eb; stroke-width: 2; }
+      .accentB { fill: #dcfce7; stroke: #16a34a; stroke-width: 2; }
+      .accentC { fill: #fef3c7; stroke: #d97706; stroke-width: 2; }
+      .timeline { fill: #e2e8f0; }
+      .ttfb { fill: #22c55e; }
+      .gap { fill: #f59e0b; }
+      .fcp { fill: #3b82f6; }
+      .arrowA { stroke: #2563eb; stroke-width: 3; fill: none; marker-end: url(#arrowA); }
+      .arrowB { stroke: #16a34a; stroke-width: 3; fill: none; marker-end: url(#arrowB); }
+      .arrowC { stroke: #d97706; stroke-width: 3; fill: none; marker-end: url(#arrowC); }
+    </style>
+
+    <marker id="arrowA" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L10,3 L0,6 Z" fill="#2563eb" />
+    </marker>
+    <marker id="arrowB" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L10,3 L0,6 Z" fill="#16a34a" />
+    </marker>
+    <marker id="arrowC" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L10,3 L0,6 Z" fill="#d97706" />
+    </marker>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="1400" height="940" />
+  <text x="50" y="56" class="h1">Render-Blocking Resources: Fast Investigation Flow</text>
+  <text x="50" y="84" class="h2">Use Lighthouse + Performance + Coverage to explain why the page stays white before first paint.</text>
+
+  <rect class="panel" x="50" y="120" width="1300" height="150" rx="12" />
+  <text x="72" y="154" class="label">Symptom Timeline</text>
+  <text x="72" y="176" class="text">Large gap between TTFB and FCP usually means render-blocking CSS or parser-blocking JS.</text>
+
+  <rect x="72" y="202" width="1180" height="26" class="timeline" rx="6" />
+  <rect x="72" y="202" width="180" height="26" class="ttfb" rx="6" />
+  <rect x="252" y="202" width="740" height="26" class="gap" />
+  <rect x="992" y="202" width="260" height="26" class="fcp" rx="6" />
+  <text x="130" y="220" class="mono">TTFB</text>
+  <text x="540" y="220" class="mono">White Screen Gap</text>
+  <text x="1110" y="220" class="mono">FCP</text>
+
+  <rect class="accentA" x="50" y="300" width="400" height="260" rx="12" />
+  <rect class="dark" x="50" y="300" width="400" height="42" rx="12" />
+  <text x="68" y="328" class="h3">1) Lighthouse Audit</text>
+  <text x="70" y="362" class="label">Run: Performance category</text>
+  <text x="70" y="386" class="text">Check: "Eliminate render-blocking resources"</text>
+  <text x="70" y="410" class="text">Output: blocking CSS/JS URLs + potential savings</text>
+
+  <rect class="warn" x="70" y="432" width="360" height="110" rx="10" />
+  <text x="86" y="460" class="mono">Findings Example</text>
+  <text x="86" y="484" class="text">styles.css is render-blocking</text>
+  <text x="86" y="506" class="text">legacy-widget.js blocks parsing</text>
+  <text x="86" y="528" class="muted">Start with highest "potential savings" item.</text>
+
+  <rect class="accentB" x="500" y="300" width="400" height="260" rx="12" />
+  <rect class="dark" x="500" y="300" width="400" height="42" rx="12" />
+  <text x="518" y="328" class="h3">2) DevTools Performance</text>
+  <text x="520" y="362" class="label">Record page load</text>
+  <text x="520" y="386" class="text">Look before first paint for long work in:</text>
+  <text x="520" y="410" class="mono">Parse HTML -> Recalculate Style -> Layout</text>
+
+  <rect class="ok" x="520" y="432" width="360" height="110" rx="10" />
+  <text x="536" y="460" class="mono">What it tells you</text>
+  <text x="536" y="484" class="text">Main thread busy before FCP</text>
+  <text x="536" y="506" class="text">Rendering pipeline blocked by critical assets</text>
+  <text x="536" y="528" class="muted">Correlate with specific request names from Network panel.</text>
+
+  <rect class="accentC" x="950" y="300" width="400" height="260" rx="12" />
+  <rect class="dark" x="950" y="300" width="400" height="42" rx="12" />
+  <text x="968" y="328" class="h3">3) Coverage</text>
+  <text x="970" y="362" class="label">Open via Command Palette</text>
+  <text x="970" y="386" class="mono">Ctrl+Shift+P -> Show Coverage</text>
+  <text x="970" y="410" class="text">Check unused bytes in CSS/JS on first load.</text>
+
+  <rect class="info" x="970" y="432" width="360" height="110" rx="10" />
+  <text x="986" y="460" class="mono">Interpretation</text>
+  <text x="986" y="484" class="text">High unused % = candidate for splitting/pruning</text>
+  <text x="986" y="506" class="text">Move non-critical code out of initial path</text>
+  <text x="986" y="528" class="muted">Aim to keep only above-the-fold critical CSS/JS.</text>
+
+  <path class="arrowA" d="M250,560 C250,640 390,640 700,640" />
+  <path class="arrowB" d="M700,560 C700,640 840,640 1140,640" />
+  <path class="arrowC" d="M1140,560 C1140,640 970,640 700,700" />
+
+  <rect class="panel" x="50" y="690" width="1300" height="200" rx="12" />
+  <text x="72" y="724" class="label">Key Insight</text>
+  <text x="72" y="750" class="text">CSS is render-blocking by default. A script without async/defer is parser-blocking.</text>
+  <text x="72" y="776" class="text">Both delay first paint, which creates the visible white-screen gap.</text>
+
+  <rect class="warn" x="72" y="800" width="600" height="72" rx="10" />
+  <text x="88" y="828" class="mono">Blocking Pattern</text>
+  <text x="88" y="852" class="text">&lt;link rel="stylesheet" href="styles.css"&gt; + &lt;script src="app.js"&gt;</text>
+
+  <rect class="ok" x="700" y="800" width="630" height="72" rx="10" />
+  <text x="716" y="828" class="mono">Improved Pattern</text>
+  <text x="716" y="852" class="text">Inline critical CSS + defer/async non-critical JS + split bundles by route/feature</text>
+</svg>

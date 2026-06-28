@@ -1,0 +1,157 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1120" viewBox="0 0 1600 1120" role="img" aria-labelledby="title desc">
+  <title id="title">Advanced Real App Timeline: Network + Main Thread + Paint Milestones</title>
+  <desc id="desc">A complex front-end performance diagram combining request waterfall, critical dependency chain, CPU tasks, and paint milestones for a realistic e-commerce page load.</desc>
+
+  <defs>
+    <style>
+      .bg { fill: #f8fafc; }
+      .panel { fill: #ffffff; stroke: #cbd5e1; stroke-width: 2; }
+      .title { fill: #0f172a; font: 700 32px Segoe UI, Arial, sans-serif; }
+      .subtitle { fill: #334155; font: 600 17px Segoe UI, Arial, sans-serif; }
+      .h { fill: #0f172a; font: 700 18px Segoe UI, Arial, sans-serif; }
+      .label { fill: #0f172a; font: 700 14px Segoe UI, Arial, sans-serif; }
+      .text { fill: #334155; font: 500 13px Segoe UI, Arial, sans-serif; }
+      .mono { fill: #0f172a; font: 600 12px Consolas, Menlo, monospace; }
+      .muted { fill: #64748b; font: 500 12px Segoe UI, Arial, sans-serif; }
+      .grid { stroke: #e2e8f0; stroke-width: 1; }
+      .doc { fill: #22c55e; }
+      .css { fill: #14b8a6; }
+      .js { fill: #60a5fa; }
+      .font { fill: #a78bfa; }
+      .img { fill: #f59e0b; }
+      .api { fill: #fb7185; }
+      .wait { fill: #84cc16; }
+      .cpu { fill: #f97316; }
+      .layout { fill: #8b5cf6; }
+      .paint { fill: #06b6d4; }
+      .fcp { stroke: #2563eb; stroke-width: 3; stroke-dasharray: 8 6; }
+      .lcp { stroke: #0ea5e9; stroke-width: 3; stroke-dasharray: 2 6; }
+      .chip { fill: #eef2ff; stroke: #a5b4fc; stroke-width: 1.5; }
+      .note { fill: #fff7ed; stroke: #ea580c; stroke-width: 2; }
+      .good { fill: #f0fdf4; stroke: #16a34a; stroke-width: 2; }
+      .crit { stroke: #ef4444; stroke-width: 2.5; fill: none; marker-end: url(#arrCrit); }
+      .arr { stroke: #2563eb; stroke-width: 2; fill: none; marker-end: url(#arr); }
+    </style>
+    <marker id="arr" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L10,3 L0,6 Z" fill="#2563eb" />
+    </marker>
+    <marker id="arrCrit" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L10,3 L0,6 Z" fill="#ef4444" />
+    </marker>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="1600" height="1120" />
+  <text x="40" y="52" class="title">Advanced Real App Load Trace (E-commerce Home)</text>
+  <text x="40" y="80" class="subtitle">Cold start on mid-tier Android, 4G. Goal: understand what delays FCP/LCP and what to optimize first.</text>
+
+  <rect class="panel" x="30" y="110" width="1540" height="710" rx="12" />
+  <text x="50" y="145" class="h">A) Network Waterfall + Main Thread</text>
+
+  <text x="220" y="175" class="muted">0ms</text>
+  <text x="420" y="175" class="muted">500ms</text>
+  <text x="620" y="175" class="muted">1000ms</text>
+  <text x="820" y="175" class="muted">1500ms</text>
+  <text x="1020" y="175" class="muted">2000ms</text>
+  <text x="1220" y="175" class="muted">2500ms</text>
+  <text x="1420" y="175" class="muted">3000ms</text>
+
+  <line x1="220" y1="185" x2="220" y2="785" class="grid"/>
+  <line x1="420" y1="185" x2="420" y2="785" class="grid"/>
+  <line x1="620" y1="185" x2="620" y2="785" class="grid"/>
+  <line x1="820" y1="185" x2="820" y2="785" class="grid"/>
+  <line x1="1020" y1="185" x2="1020" y2="785" class="grid"/>
+  <line x1="1220" y1="185" x2="1220" y2="785" class="grid"/>
+  <line x1="1420" y1="185" x2="1420" y2="785" class="grid"/>
+
+  <text x="50" y="220" class="label">document (HTML)</text>
+  <rect x="220" y="206" width="150" height="22" class="wait" rx="4"/>
+  <rect x="370" y="206" width="55" height="22" class="doc" rx="4"/>
+  <text x="435" y="222" class="mono">TTFB 380ms</text>
+
+  <text x="50" y="260" class="label">critical.css</text>
+  <rect x="420" y="246" width="120" height="22" class="wait" rx="4"/>
+  <rect x="540" y="246" width="210" height="22" class="css" rx="4"/>
+  <text x="760" y="262" class="mono">ready 1320ms</text>
+
+  <text x="50" y="300" class="label">app-shell.js (defer)</text>
+  <rect x="450" y="286" width="130" height="22" class="wait" rx="4"/>
+  <rect x="580" y="286" width="260" height="22" class="js" rx="4"/>
+  <text x="850" y="302" class="mono">ready 1560ms</text>
+
+  <text x="50" y="340" class="label">vendor.js (legacy, non-defer)</text>
+  <rect x="600" y="326" width="100" height="22" class="wait" rx="4"/>
+  <rect x="700" y="326" width="240" height="22" class="js" rx="4"/>
+  <text x="950" y="342" class="mono">parser-blocking</text>
+
+  <text x="50" y="380" class="label">hero.avif (LCP candidate)</text>
+  <rect x="780" y="366" width="110" height="22" class="wait" rx="4"/>
+  <rect x="890" y="366" width="240" height="22" class="img" rx="4"/>
+  <text x="1140" y="382" class="mono">priority=high</text>
+
+  <text x="50" y="420" class="label">fonts.woff2</text>
+  <rect x="760" y="406" width="80" height="22" class="wait" rx="4"/>
+  <rect x="840" y="406" width="150" height="22" class="font" rx="4"/>
+  <text x="1000" y="422" class="mono">font-display: swap</text>
+
+  <text x="50" y="460" class="label">api/home-feed</text>
+  <rect x="980" y="446" width="150" height="22" class="wait" rx="4"/>
+  <rect x="1130" y="446" width="180" height="22" class="api" rx="4"/>
+  <text x="1320" y="462" class="mono">not needed for FCP</text>
+
+  <text x="50" y="520" class="h">Main thread (CPU)</text>
+  <text x="50" y="560" class="label">Parse HTML</text>
+  <rect x="425" y="546" width="70" height="20" class="cpu" rx="4"/>
+  <text x="505" y="560" class="mono">80ms</text>
+
+  <text x="50" y="595" class="label">Recalculate Style + Layout</text>
+  <rect x="760" y="581" width="180" height="20" class="layout" rx="4"/>
+  <text x="950" y="595" class="mono">180ms</text>
+
+  <text x="50" y="630" class="label">Vendor JS execute (long task)</text>
+  <rect x="940" y="616" width="250" height="20" class="cpu" rx="4"/>
+  <text x="1200" y="630" class="mono">310ms</text>
+
+  <text x="50" y="665" class="label">First Paint + Composite</text>
+  <rect x="1210" y="651" width="80" height="20" class="paint" rx="4"/>
+
+  <text x="50" y="700" class="label">Hero decode + paint (LCP)</text>
+  <rect x="1320" y="686" width="90" height="20" class="paint" rx="4"/>
+
+  <line x1="1210" y1="185" x2="1210" y2="785" class="fcp"/>
+  <text x="1218" y="205" class="mono">FCP ~2480ms</text>
+
+  <line x1="1365" y1="185" x2="1365" y2="785" class="lcp"/>
+  <text x="1373" y="205" class="mono">LCP ~2870ms</text>
+
+  <path class="crit" d="M425,217 C500,217 520,255 540,257"/>
+  <path class="crit" d="M750,257 C830,257 850,336 940,336"/>
+  <path class="crit" d="M940,336 C1040,336 1080,628 1210,628"/>
+
+  <text x="1090" y="736" class="mono" fill="#ef4444">Critical path: HTML -> CSS -> blocking JS -> style/layout -> FCP</text>
+
+  <rect class="chip" x="50" y="742" width="130" height="30" rx="8"/><text x="66" y="762" class="mono">wait/TTFB</text>
+  <rect class="chip" x="190" y="742" width="110" height="30" rx="8"/><rect x="201" y="750" width="20" height="12" class="js"/><text x="230" y="762" class="mono">JS</text>
+  <rect class="chip" x="310" y="742" width="110" height="30" rx="8"/><rect x="321" y="750" width="20" height="12" class="css"/><text x="350" y="762" class="mono">CSS</text>
+  <rect class="chip" x="430" y="742" width="120" height="30" rx="8"/><rect x="441" y="750" width="20" height="12" class="img"/><text x="470" y="762" class="mono">Image</text>
+  <rect class="chip" x="560" y="742" width="120" height="30" rx="8"/><rect x="571" y="750" width="20" height="12" class="layout"/><text x="600" y="762" class="mono">Layout</text>
+  <rect class="chip" x="690" y="742" width="120" height="30" rx="8"/><rect x="701" y="750" width="20" height="12" class="cpu"/><text x="730" y="762" class="mono">CPU task</text>
+
+  <rect class="panel" x="30" y="840" width="1540" height="250" rx="12" />
+  <text x="50" y="875" class="h">B) What to optimize first in this trace</text>
+
+  <rect class="note" x="50" y="895" width="720" height="175" rx="10"/>
+  <text x="68" y="924" class="label">Primary blockers identified</text>
+  <text x="68" y="948" class="text">1. vendor.js is parser-blocking and causes a 310ms long task before FCP.</text>
+  <text x="68" y="972" class="text">2. critical.css is large enough to push style/layout start late.</text>
+  <text x="68" y="996" class="text">3. Hero image decode overlaps late and pushes LCP.</text>
+  <text x="68" y="1020" class="text">4. API call is not on FCP path, so optimize it later for interactivity/content.</text>
+  <text x="68" y="1044" class="mono">Diagnosis: yellow blank-gap is mostly browser blocking, not pure network.</text>
+
+  <rect class="good" x="800" y="895" width="750" height="175" rx="10"/>
+  <text x="818" y="924" class="label">Expected fixes and effect</text>
+  <text x="818" y="948" class="text">1. Convert vendor.js to defer and split legacy code -> removes parser stop + shrinks long task.</text>
+  <text x="818" y="972" class="text">2. Inline minimal critical CSS (6-10KB) + async non-critical CSS.</text>
+  <text x="818" y="996" class="text">3. Keep hero preload/fetchpriority, reduce hero bytes, avoid expensive decode format.</text>
+  <text x="818" y="1020" class="text">4. Delay non-essential widgets until after first paint.</text>
+  <text x="818" y="1044" class="mono">Typical outcome: FCP shifts ~2480ms -> ~1500-1800ms, LCP improves by 500-900ms.</text>
+</svg>

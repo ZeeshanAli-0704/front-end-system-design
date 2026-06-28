@@ -1,0 +1,140 @@
+<svg viewBox="0 0 1000 600" xmlns="http://www.w3.org/2000/svg">
+  <!-- Title -->
+  <text x="500" y="40" font-size="24" font-weight="bold" text-anchor="middle" fill="#333">
+    Performance Budget: 60 FPS = 16.67ms Per Frame
+  </text>
+  
+  <!-- GOOD PERFORMANCE -->
+  <text x="250" y="80" font-size="16" font-weight="bold" fill="#2ECC71">✓ GOOD FRAME BREAKDOWN</text>
+  
+  <!-- JavaScript: 6ms -->
+  <rect x="50" y="110" width="120" height="40" fill="#FFD700" stroke="#999" stroke-width="2"/>
+  <text x="110" y="130" font-size="12" font-weight="bold" text-anchor="middle" fill="#333">JavaScript</text>
+  <text x="110" y="145" font-size="11" text-anchor="middle" fill="#666">6ms (36%)</text>
+  
+  <!-- Style/Layout: 4ms -->
+  <rect x="180" y="110" width="80" height="40" fill="#9370DB" stroke="#999" stroke-width="2"/>
+  <text x="220" y="130" font-size="12" font-weight="bold" text-anchor="middle" fill="#fff">Layout</text>
+  <text x="220" y="145" font-size="11" text-anchor="middle" fill="#eee">4ms (24%)</text>
+  
+  <!-- Paint: 3ms -->
+  <rect x="270" y="110" width="60" height="40" fill="#90EE90" stroke="#999" stroke-width="2"/>
+  <text x="300" y="130" font-size="12" font-weight="bold" text-anchor="middle" fill="#333">Paint</text>
+  <text x="300" y="145" font-size="11" text-anchor="middle" fill="#666">3ms (18%)</text>
+  
+  <!-- Composite: 2ms -->
+  <rect x="340" y="110" width="40" height="40" fill="#87CEEB" stroke="#999" stroke-width="2"/>
+  <text x="360" y="135" font-size="11" font-weight="bold" text-anchor="middle" fill="#333">Comp</text>
+  <text x="360" y="148" font-size="10" text-anchor="middle" fill="#666">2ms</text>
+  
+  <!-- Idle: 2ms -->
+  <rect x="390" y="110" width="40" height="40" fill="#E0E0E0" stroke="#999" stroke-width="2"/>
+  <text x="410" y="135" font-size="11" font-weight="bold" text-anchor="middle" fill="#333">Idle</text>
+  <text x="410" y="148" font-size="10" text-anchor="middle" fill="#666">2ms</text>
+  
+  <!-- Good label -->
+  <text x="110" y="175" font-size="13" font-weight="bold" fill="#2ECC71">SMOOTH 60 FPS ✓</text>
+  <text x="110" y="195" font-size="11" fill="#666">User perceives fluid motion</text>
+  
+  <!-- ============================================ -->
+  
+  <!-- BAD PERFORMANCE -->
+  <text x="750" y="80" font-size="16" font-weight="bold" fill="#E74C3C">✗ BAD FRAME BREAKDOWN</text>
+  
+  <!-- JavaScript: 35ms - LONG! -->
+  <rect x="550" y="110" width="210" height="40" fill="#FF6B6B" stroke="#CC0000" stroke-width="2"/>
+  <text x="655" y="130" font-size="12" font-weight="bold" text-anchor="middle" fill="#fff">JavaScript</text>
+  <text x="655" y="145" font-size="11" text-anchor="middle" fill="#fff">35ms (BLOCKED!)</text>
+  
+  <!-- Style/Layout: 20ms - LONG! -->
+  <rect x="770" y="110" width="150" height="40" fill="#FF9999" stroke="#CC0000" stroke-width="2"/>
+  <text x="845" y="130" font-size="12" font-weight="bold" text-anchor="middle" fill="#fff">Layout</text>
+  <text x="845" y="145" font-size="11" text-anchor="middle" fill="#fff">20ms (BLOCKED!)</text>
+  
+  <!-- Bad label -->
+  <text x="655" y="175" font-size="13" font-weight="bold" fill="#E74C3C">FRAMES DROPPED! ✗</text>
+  <text x="655" y="195" font-size="11" fill="#666">User sees jank and lag</text>
+  
+  <!-- ============================================ -->
+  
+  <!-- TIMELINE COMPARISON -->
+  <text x="500" y="260" font-size="14" font-weight="bold" text-anchor="middle" fill="#333">
+    Frame Execution Timeline
+  </text>
+  
+  <!-- Good timeline -->
+  <text x="100" y="300" font-size="12" fill="#333">Good (16.67ms):</text>
+  <line x1="50" y1="320" x2="400" y2="320" stroke="#ccc" stroke-width="2"/>
+  <rect x="50" y="310" width="60" height="20" fill="#FFD700" stroke="#999"/>
+  <text x="80" y="323" font-size="9" text-anchor="middle" fill="#333">6ms</text>
+  
+  <rect x="113" y="310" width="40" height="20" fill="#9370DB" stroke="#999"/>
+  <text x="133" y="323" font-size="9" text-anchor="middle" fill="#fff">4ms</text>
+  
+  <rect x="156" y="310" width="30" height="20" fill="#90EE90" stroke="#999"/>
+  <text x="171" y="323" font-size="9" text-anchor="middle" fill="#333">3ms</text>
+  
+  <rect x="189" y="310" width="20" height="20" fill="#87CEEB" stroke="#999"/>
+  <text x="199" y="323" font-size="9" text-anchor="middle" fill="#333">2ms</text>
+  
+  <rect x="212" y="310" width="20" height="20" fill="#E0E0E0" stroke="#999"/>
+  <text x="222" y="323" font-size="9" text-anchor="middle" fill="#333">2ms</text>
+  
+  <text x="400" y="323" font-size="10" fill="#2ECC71" font-weight="bold">✓ Ready for next frame!</text>
+  
+  <!-- Bad timeline -->
+  <text x="100" y="360" font-size="12" fill="#333">Bad (61ms+):</text>
+  <line x1="50" y1="380" x2="900" y2="380" stroke="#ccc" stroke-width="2"/>
+  <rect x="50" y="370" width="210" height="20" fill="#FF6B6B" stroke="#CC0000" stroke-width="2"/>
+  <text x="155" y="383" font-size="9" text-anchor="middle" fill="#fff" font-weight="bold">35ms JS</text>
+  
+  <rect x="263" y="370" width="150" height="20" fill="#FF9999" stroke="#CC0000" stroke-width="2"/>
+  <text x="338" y="383" font-size="9" text-anchor="middle" fill="#fff" font-weight="bold">20ms Layout</text>
+  
+  <text x="900" y="383" font-size="10" fill="#E74C3C" font-weight="bold">✗ FRAME MISSED!</text>
+  
+  <!-- ============================================ -->
+  
+  <!-- KEY METRICS TABLE -->
+  <text x="500" y="450" font-size="14" font-weight="bold" text-anchor="middle" fill="#333">
+    Performance Thresholds
+  </text>
+  
+  <!-- Table -->
+  <g id="metrics-table">
+    <line x1="100" y1="470" x2="900" y2="470" stroke="#333" stroke-width="2"/>
+    
+    <!-- Headers -->
+    <text x="110" y="490" font-size="11" font-weight="bold" fill="#333">Duration</text>
+    <text x="250" y="490" font-size="11" font-weight="bold" fill="#333">User Perception</text>
+    <text x="550" y="490" font-size="11" font-weight="bold" fill="#333">Impact</text>
+    <text x="800" y="490" font-size="11" font-weight="bold" fill="#333">Status</text>
+    
+    <line x1="100" y1="495" x2="900" y2="495" stroke="#999" stroke-width="1"/>
+    
+    <!-- Row 1: < 50ms -->
+    <text x="110" y="520" font-size="11" fill="#333">&lt; 50ms</text>
+    <text x="250" y="520" font-size="11" fill="#333">Instant/Smooth</text>
+    <text x="550" y="520" font-size="11" fill="#333">No frame drops</text>
+    <circle cx="810" cy="515" r="6" fill="#2ECC71"/>
+    <text x="825" y="520" font-size="11" fill="#2ECC71">GOOD</text>
+    
+    <line x1="100" y1="525" x2="900" y2="525" stroke="#eee" stroke-width="1"/>
+    
+    <!-- Row 2: 50-100ms -->
+    <text x="110" y="550" font-size="11" fill="#333">50-100ms</text>
+    <text x="250" y="550" font-size="11" fill="#333">Slight delay</text>
+    <text x="550" y="550" font-size="11" fill="#333">Occasional jank</text>
+    <circle cx="810" cy="545" r="6" fill="#F39C12"/>
+    <text x="825" y="550" font-size="11" fill="#F39C12">WARN</text>
+    
+    <line x1="100" y1="555" x2="900" y2="555" stroke="#eee" stroke-width="1"/>
+    
+    <!-- Row 3: 100-200ms -->
+    <text x="110" y="580" font-size="11" fill="#333">&gt; 100ms</text>
+    <text x="250" y="580" font-size="11" fill="#333">Noticeable lag</text>
+    <text x="550" y="580" font-size="11" fill="#333">Many dropped frames</text>
+    <circle cx="810" cy="575" r="6" fill="#E74C3C"/>
+    <text x="825" y="580" font-size="11" fill="#E74C3C">BAD</text>
+  </g>
+</svg>

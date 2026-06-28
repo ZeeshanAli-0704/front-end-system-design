@@ -146,23 +146,24 @@ async function getProfile() {
 ### How It Works (Overview)
 
 ```
-┌──────────┐         ┌──────────────┐
-│  Browser  │──POST──▶│   Server     │
-│           │ /login  │  (creates    │
-│           │◀─JSON───│   JWT)       │  No session store needed!
-│  stores   │  token  │              │
-│  token    │         └──────────────┘
+┌──────────┐          ┌──────────────┐
+│  Browser │──POST──▶ │   Server     │
+│          │ /login   │  (creates    │
+│          │◀─JSON/── │   JWT)       │  No session store needed!
+│ stores   │ Cookie   │              │
+│ token(s) │          └──────────────┘
 └──────────┘
-     │
-     │  Authorization: Bearer <token>
-     ▼
+  │
+  │  A) Authorization: Bearer <accessToken> (split-token)
+  │  B) Cookie auto-sent by browser (cookie-only)
+  ▼
 ┌──────────────┐
-│   Server     │  Verifies signature → extracts payload
+│   Server     │  Verifies JWT signature + claims
 │  (stateless) │
 └──────────────┘
 ```
 
-### JWT Auth Flow — Step by Step
+### JWT Auth Flow — Step by Step (Split-Token Pattern)
 
 ```
 ┌──────────┐                              ┌──────────────┐
@@ -178,13 +179,15 @@ async function getProfile() {
      │                                           │
      │◀─4. Response ─────────────────────────────│
      │   Body: { accessToken: "eyJ..." }         │
+     │    (in body or in cookie)                 │
      │   Set-Cookie: refreshToken=eyJ...         │
      │   (HttpOnly, Secure, SameSite)            │
      │                                           │
-     │  5. Store access token                    │
-     │     in memory (JS variable)               │
+     │  5. Split-token: keep access in memory    │
+     │     (Cookie-only: keep access in          │
+     │      HttpOnly cookie; see flow below)     │
      │                                           │
-     │──6. GET /api/profile ────────────────────▶│
+     │──6. GET /api/profile ───────────────────▶│
      │   Header: Authorization: Bearer eyJ...    │
      │                                           │
      │                          7. Verify signature (HMAC/RSA)
@@ -218,13 +221,46 @@ async function getProfile() {
      │◀─19. 200 OK { data: [...] } ─────────────│
 ```
 
-**Key points:**
-- **Step 1–4**: Login returns two tokens — a short-lived **access token** (in response body) and a long-lived **refresh token** (as HttpOnly cookie).
-- **Step 5**: Access token is stored **in memory** (JS variable) — NOT in `localStorage`. This prevents XSS from stealing it.
-- **Step 6–9**: Every API request sends the access token in the `Authorization: Bearer` header. Server verifies the signature and expiry **without** hitting a database — that's why it's **stateless**.
-- **Steps 11–19**: When the access token expires, the client **silently** refreshes using the refresh token cookie. The user never sees a login screen. This is typically done via an **Axios interceptor** or a `fetchWithAuth` wrapper.
+### JWT Auth Flow — Step by Step (Cookie-Only Pattern)
 
-> **Why two tokens?** The access token is short-lived (15 min) to limit damage if stolen. The refresh token is long-lived but stored in an HttpOnly cookie (JS can't read it) and only sent to the `/refresh` endpoint.
+```
+┌──────────┐                              ┌──────────────┐
+│  Browser  │                              │    Server     │
+└────┬─────┘                              └──────┬───────┘
+  │                                           │
+  │──1. POST /login ─────────────────────────▶│
+  │   { username, password }                  │
+  │                                           │
+  │                          2. Validate credentials
+  │                          3. Generate access + refresh JWT
+  │                                           │
+  │◀─4. Set-Cookie(access, refresh) ─────────│
+  │   HttpOnly, Secure, SameSite             │
+  │                                           │
+  │──5. GET /api/profile ───────────────────▶│
+  │   Cookie sent automatically               │
+  │                                           │
+  │                          6. Verify access JWT from cookie
+  │                                           │
+  │◀─7. Response { user: { ... } } ──────────│
+  │                                           │
+  │──8. On expiry: POST /refresh ───────────▶│
+  │   refresh cookie auto-sent                │
+  │                                           │
+  │◀─9. Set-Cookie(new access[/refresh]) ────│
+  │                                           │
+  │──10. Retry request (cookie auto-sent) ──▶│
+  │                                           │
+  │◀─11. 200 OK { data: [...] } ─────────────│
+```
+
+**Key points:**
+- JWT itself is **stateless token verification**. Token transport/storage is an architecture choice.
+- **Split-token pattern**: access token in memory + refresh token in HttpOnly cookie.
+- **Cookie-only pattern**: both access and refresh tokens in HttpOnly cookies.
+- For both patterns, keep access token short-lived and rotate refresh token.
+
+> **Why two tokens?** The access token is short-lived (for frequent API auth). The refresh token is longer-lived and used only to mint new access tokens.
 
 ### Concept
 
@@ -301,7 +337,7 @@ app.get("/profile", authMiddleware, (req, res) => {
 });
 ```
 
-### Code — Frontend (JWT with Refresh Token Rotation)
+### Code — Frontend (Split-Token JWT with Refresh Rotation)
 
 ```js
 // auth.js — token management on the client
@@ -363,10 +399,12 @@ async function fetchWithAuth(url, options = {}) {
 |---------|-----------|------------|---------------|
 | `localStorage` | ❌ JS can read it | ✅ Not sent automatically | **Avoid** — XSS can steal tokens |
 | `sessionStorage` | ❌ JS can read it | ✅ Not sent automatically | Slightly better (tab-scoped) |
-| `HttpOnly Cookie` | ✅ JS cannot read it | ❌ Sent automatically | **Best** — combine with CSRF token |
-| **In-memory variable** | ✅ Hard to steal | ✅ Not sent automatically | **Best for access token** — lost on refresh |
+| `HttpOnly Cookie` | ✅ JS cannot read it | ❌ Sent automatically | Best for cookie-only flows; add CSRF defenses |
+| **In-memory variable** | ⚠️ Not persisted; active XSS can still use runtime state | ✅ Not sent automatically | Common for split-token SPA access token |
 
-> **Best Practice**: Access token **in memory**, refresh token in **HttpOnly secure cookie**.
+> **Practical guidance**: Both are valid.  
+> - Split-token: access in memory + refresh in HttpOnly cookie.  
+> - Cookie-only: access + refresh in HttpOnly cookies.
 
 ### Pros & Cons
 
@@ -376,6 +414,18 @@ async function fetchWithAuth(url, options = {}) {
 | Works great for APIs, mobile, microservices | Larger payload than session ID |
 | Can carry claims (roles, permissions) | Must handle token refresh logic |
 | Scales horizontally easily | If secret is leaked, all tokens are compromised |
+
+### Production Security Hardening (JWT + OAuth/OIDC)
+
+- Enforce JWT claim validation on every request: `alg` allow-list, `iss`, `aud`, `exp`, and `nbf`.
+- Prefer asymmetric signing (`RS256`/`ES256`) and rotate signing keys on a fixed schedule.
+- If using OIDC, validate `id_token` via JWKS and support key rotation using `kid`.
+- Keep access tokens short-lived and rotate refresh tokens on each successful refresh.
+- Add revocation controls: token versioning, refresh-token denylist, and global logout invalidation.
+- For cookie-based auth, always set `HttpOnly + Secure + SameSite`, then add CSRF protection for unsafe methods.
+- For OAuth login, persist `state` + `nonce` server-side, validate once, then clear.
+- Use strict exact-match redirect URIs; never allow wildcard callback domains.
+- Log auth failures by category (expired, bad signature, invalid issuer/audience) without logging raw tokens.
 
 [⬆ Back to Top](#top)
 
@@ -428,28 +478,34 @@ OAuth 2.0 is a **delegation protocol** — it lets a user grant a third-party ap
 - **Step 3**: After login + consent, the Auth Server redirects back to your app's **callback URL** with a short-lived **authorization code** in the query string (`?code=abc123`).
 - **Steps 4–5**: Your **backend** exchanges the code for tokens. This is where the `client_secret` is used — it **never** leaves the server.
 - **Why the code exchange?** The access token is **never exposed to the browser**. Only the backend sees it.
+- **Stateful vs stateless note**: The OAuth code exchange itself is not a session model. If your backend then creates an app session, your app login state is **stateful** (by design).
 
 ### Code — Step 1: Redirect User to OAuth Provider
 
 ```js
-// frontend — initiate OAuth login
+// frontend — click button to start OAuth via backend
 function loginWithGoogle() {
-  const params = new URLSearchParams({
-    client_id: "YOUR_CLIENT_ID",
-    redirect_uri: "https://yourapp.com/callback",
-    response_type: "code",          // Authorization Code flow
-    scope: "openid profile email",
-    state: generateRandomState(),   // CSRF protection
-  });
-  window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?${params}`;
+  window.location.href = "/auth/google";
 }
 
-// Generate random state for CSRF mitigation
-function generateRandomState() {
+// backend — generate one-time state and redirect to provider
+app.get("/auth/google", (req, res) => {
   const state = crypto.randomUUID();
-  sessionStorage.setItem("oauth_state", state);
-  return state;
-}
+  const nonce = crypto.randomUUID();
+  req.session.oauthState = state; // server-side store
+  req.session.oauthNonce = nonce; // validate against id_token nonce claim
+
+  const params = new URLSearchParams({
+    client_id: process.env.GOOGLE_CLIENT_ID,
+    redirect_uri: "https://yourapp.com/callback",
+    response_type: "code",
+    scope: "openid profile email",
+    state,
+    nonce,
+  });
+
+  res.redirect(`https://accounts.google.com/o/oauth2/v2/auth?${params}`);
+});
 ```
 
 ### Code — Step 2: Handle Callback (Backend)
@@ -459,8 +515,13 @@ function generateRandomState() {
 app.get("/callback", async (req, res) => {
   const { code, state } = req.query;
 
-  // Verify state to prevent CSRF
-  if (state !== expectedState) return res.status(403).send("Invalid state");
+  // Verify one-time state (stored server-side when login started) to prevent CSRF/replay
+  const expectedState = req.session.oauthState;
+  if (!expectedState || state !== expectedState) {
+    return res.status(403).send("Invalid state");
+  }
+  delete req.session.oauthState; // one-time use
+  const expectedNonce = req.session.oauthNonce;
 
   // Exchange authorization code for tokens
   const tokenRes = await fetch("https://oauth2.googleapis.com/token", {
@@ -477,8 +538,10 @@ app.get("/callback", async (req, res) => {
 
   const { access_token, id_token, refresh_token } = await tokenRes.json();
 
-  // Decode id_token to get user info (or call /userinfo endpoint)
-  const userInfo = jwt.decode(id_token); // { sub, email, name, picture }
+  // IMPORTANT: validate id_token signature + claims (iss, aud, exp, nonce) before trusting it.
+  // For production, verify with provider JWKS (or call /userinfo endpoint after token validation).
+  const userInfo = validateIdToken(id_token, expectedNonce); // { sub, email, name, picture }
+  delete req.session.oauthNonce; // one-time use
 
   // Create session or issue your own JWT
   req.session.user = {
@@ -1131,7 +1194,9 @@ Each SP validates the logout_token JWT → destroys the matching session.
 ### Quick Answers for System Design Interviews
 
 **Q: Where should I store tokens on the frontend?**
-> Access token in **memory** (JS variable). Refresh token in an **HttpOnly, Secure, SameSite cookie**.
+> It depends on architecture.  
+> - **Split-token pattern**: access in memory + refresh in HttpOnly, Secure, SameSite cookie.  
+> - **Cookie-only pattern**: both access and refresh in HttpOnly, Secure, SameSite cookies (+ CSRF protection).
 
 **Q: JWT vs Session — when to pick which?**
 > **Session** for traditional server-rendered apps (simple, instant revocation).  

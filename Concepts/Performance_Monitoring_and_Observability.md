@@ -124,6 +124,8 @@ Google evaluates Core Web Vitals at the **75th percentile** of all page visits. 
 | Third-party scripts | Ad/analytics scripts competing for main thread | Load async, defer, or move to Web Workers |
 | No yielding in long handlers | Single handler runs 300ms without breaks | Yield to browser between chunks of work |
 
+![INP Interaction Timeline](inp-interaction-timeline.svg)
+
 ---
 
 ### CLS — Cumulative Layout Shift
@@ -246,6 +248,8 @@ Step 3: Why is it slow?
 - Check **Size** column — large uncompressed assets are a red flag
 - Filter by "JS" or "CSS" — check if too many files are being loaded
 
+![Chrome DevTools Network panel cheat sheet](images/devtools-network-how-to-find.svg)
+
 **Signs in the waterfall:**
 | Pattern | What It Means |
 |---|---|
@@ -262,6 +266,16 @@ Step 3: Why is it slow?
 - Lighthouse audit → "Eliminate render-blocking resources" — lists every CSS/JS file that blocks rendering
 - DevTools → **Performance panel** → Record → Look for long "Parse HTML" → "Recalculate Style" → "Layout" before first paint
 - DevTools → **Coverage tab** (`Ctrl+Shift+P` → "Show Coverage") — shows what percentage of each CSS/JS file is actually used on this page
+
+![Render-blocking resources investigation cheat sheet](images/render-blocking-how-to-find.svg)
+
+**Mini real-world case (timing view):**
+
+![Mini real case of render-blocking before FCP](images/render-blocking-mini-real-case.svg)
+
+**Advanced real-app view (network + CPU + paint milestones):**
+
+![Advanced real app waterfall and critical path](images/real-app-waterfall-critical-path.svg)
 
 **Key insight:** A CSS file is render-blocking by default. A `<script>` tag without `async`/`defer` is parser-blocking. Both delay first paint.
 
@@ -445,6 +459,10 @@ The Performance panel is the **most powerful** tool for diagnosing bottlenecks:
 | Wide green blocks | Paint/composite | Reduce painted area, promote to GPU layer |
 | Many narrow purple + yellow alternating | Layout thrashing | Batch reads before writes |
 | Large red-cornered blocks | Long Tasks blocking interactions | Yield to browser between chunks |
+
+![Flame Chart Example](flame-chart-example.svg)
+
+![Long Tasks and FPS Analysis](long-tasks-fps-analysis.svg)
 
 ### How to Use the Network Panel Effectively
 
@@ -785,6 +803,8 @@ Sprint 6:   PR adds 15 KB    ← ❌ BUILD FAILS — exceeds 200 KB
 | **Third-party** | Total third-party JS | ≤ 50 KB | Lighthouse audit |
 | **Total page** | Total page weight | ≤ 500 KB | Lighthouse CI |
 | **Lighthouse** | Performance score | ≥ 90 | Lighthouse CI assertion |
+
+![Performance Budget Breakdown](performance-budget.svg)
 
 ### How to Enforce Performance Budgets
 

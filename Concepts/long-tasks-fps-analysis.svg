@@ -1,0 +1,169 @@
+<svg viewBox="0 0 1100 700" xmlns="http://www.w3.org/2000/svg">
+  <!-- Title -->
+  <text x="550" y="40" font-size="24" font-weight="bold" text-anchor="middle" fill="#333">
+    Long Tasks Detection & Frame Analysis
+  </text>
+  
+  <!-- Section 1: Long Tasks Example -->
+  <text x="200" y="90" font-size="14" font-weight="bold" fill="#333">Long Tasks (>50ms)</text>
+  
+  <!-- Timeline -->
+  <line x1="100" y1="120" x2="700" y2="120" stroke="#333" stroke-width="2"/>
+  <text x="100" y="145" font-size="11" fill="#666">0ms</text>
+  <text x="700" y="145" font-size="11" fill="#666">300ms</text>
+  
+  <!-- Good tasks (under 50ms) -->
+  <rect x="100" y="160" width="50" height="40" fill="#2ECC71" stroke="#27AE60" stroke-width="2"/>
+  <text x="125" y="180" font-size="9" font-weight="bold" text-anchor="middle" fill="#fff">20ms</text>
+  <text x="125" y="193" font-size="8" text-anchor="middle" fill="#fff">✓ OK</text>
+  
+  <rect x="160" y="160" width="60" height="40" fill="#2ECC71" stroke="#27AE60" stroke-width="2"/>
+  <text x="190" y="180" font-size="9" font-weight="bold" text-anchor="middle" fill="#fff">30ms</text>
+  <text x="190" y="193" font-size="8" text-anchor="middle" fill="#fff">✓ OK</text>
+  
+  <!-- LONG TASK - highlight in red -->
+  <rect x="230" y="160" width="130" height="40" fill="#FF6B6B" stroke="#CC0000" stroke-width="3"/>
+  <text x="295" y="180" font-size="10" font-weight="bold" text-anchor="middle" fill="#fff">85ms</text>
+  <text x="295" y="193" font-size="8" text-anchor="middle" fill="#fff">🔴 LONG TASK!</text>
+  
+  <!-- More good tasks -->
+  <rect x="370" y="160" width="45" height="40" fill="#2ECC71" stroke="#27AE60" stroke-width="2"/>
+  <text x="392" y="180" font-size="9" font-weight="bold" text-anchor="middle" fill="#fff">25ms</text>
+  <text x="392" y="193" font-size="8" text-anchor="middle" fill="#fff">✓ OK</text>
+  
+  <!-- Another LONG TASK -->
+  <rect x="425" y="160" width="140" height="40" fill="#FF6B6B" stroke="#CC0000" stroke-width="3"/>
+  <text x="495" y="180" font-size="10" font-weight="bold" text-anchor="middle" fill="#fff">120ms</text>
+  <text x="495" y="193" font-size="8" text-anchor="middle" fill="#fff">🔴 LONG TASK!</text>
+  
+  <!-- Annotation arrows -->
+  <line x1="295" y1="210" x2="295" y2="240" stroke="#FF6B6B" stroke-width="2" marker-end="url(#arrowred)"/>
+  <text x="295" y="260" font-size="10" font-weight="bold" text-anchor="middle" fill="#E74C3C">
+    User can't interact
+  </text>
+  
+  <line x1="495" y1="210" x2="495" y2="240" stroke="#FF6B6B" stroke-width="2" marker-end="url(#arrowred)"/>
+  <text x="495" y="260" font-size="10" font-weight="bold" text-anchor="middle" fill="#E74C3C">
+    Scrolling blocked
+  </text>
+  
+  <!-- Long Task Threshold Table -->
+  <g id="threshold-table" transform="translate(50, 310)">
+    <text x="325" y="0" font-size="12" font-weight="bold" text-anchor="middle" fill="#333">
+      Long Task Threshold
+    </text>
+    
+    <line x1="0" y1="10" x2="650" y2="10" stroke="#333" stroke-width="2"/>
+    
+    <!-- Headers -->
+    <text x="50" y="30" font-size="11" font-weight="bold" fill="#333">Duration</text>
+    <text x="180" y="30" font-size="11" font-weight="bold" fill="#333">Measurement</text>
+    <text x="400" y="30" font-size="11" font-weight="bold" fill="#333">Status</text>
+    
+    <line x1="0" y1="35" x2="650" y2="35" stroke="#999" stroke-width="1"/>
+    
+    <!-- Row 1 -->
+    <text x="50" y="60" font-size="10" fill="#333">&gt; 50ms</text>
+    <text x="180" y="60" font-size="10" fill="#333">= 1 Long Task</text>
+    <circle cx="420" cy="55" r="6" fill="#E74C3C"/>
+    <text x="440" y="60" font-size="10" font-weight="bold" fill="#E74C3C">ALERT</text>
+    
+    <line x1="0" y1="65" x2="650" y2="65" stroke="#eee" stroke-width="1"/>
+    
+    <!-- Row 2 -->
+    <text x="50" y="90" font-size="10" fill="#333">50-100ms</text>
+    <text x="180" y="90" font-size="10" fill="#333">User feels lag</text>
+    <circle cx="420" cy="85" r="6" fill="#F39C12"/>
+    <text x="440" y="90" font-size="10" font-weight="bold" fill="#F39C12">WARN</text>
+    
+    <line x1="0" y1="95" x2="650" y2="95" stroke="#eee" stroke-width="1"/>
+    
+    <!-- Row 3 -->
+    <text x="50" y="120" font-size="10" fill="#333">&gt; 100ms</text>
+    <text x="180" y="120" font-size="10" fill="#333">Noticeable jank</text>
+    <circle cx="420" cy="115" r="6" fill="#CC0000"/>
+    <text x="440" y="120" font-size="10" font-weight="bold" fill="#CC0000">CRITICAL</text>
+  </g>
+  
+  <!-- Section 2: FPS Breakdown -->
+  <text x="900" y="90" font-size="14" font-weight="bold" fill="#333">FPS Impact</text>
+  
+  <!-- 60 FPS explanation -->
+  <g id="fps-60" transform="translate(750, 130)">
+    <rect x="0" y="0" width="320" height="120" fill="#f9f9f9" stroke="#999" stroke-width="1" rx="5"/>
+    
+    <text x="160" y="25" font-size="12" font-weight="bold" text-anchor="middle" fill="#333">
+      60 FPS = 16.67ms per frame
+    </text>
+    
+    <!-- 6 frames visualization -->
+    <rect x="10" y="40" width="18" height="60" fill="#2ECC71" stroke="#999" stroke-width="1"/>
+    <text x="19" y="108" font-size="8" text-anchor="middle" fill="#333">16ms</text>
+    
+    <rect x="32" y="40" width="18" height="60" fill="#2ECC71" stroke="#999" stroke-width="1"/>
+    <text x="41" y="108" font-size="8" text-anchor="middle" fill="#333">16ms</text>
+    
+    <rect x="54" y="40" width="18" height="60" fill="#2ECC71" stroke="#999" stroke-width="1"/>
+    <text x="63" y="108" font-size="8" text-anchor="middle" fill="#333">16ms</text>
+    
+    <rect x="76" y="40" width="18" height="60" fill="#2ECC71" stroke="#999" stroke-width="1"/>
+    <text x="85" y="108" font-size="8" text-anchor="middle" fill="#333">16ms</text>
+    
+    <rect x="98" y="40" width="18" height="60" fill="#2ECC71" stroke="#999" stroke-width="1"/>
+    <text x="107" y="108" font-size="8" text-anchor="middle" fill="#333">16ms</text>
+    
+    <rect x="120" y="40" width="18" height="60" fill="#2ECC71" stroke="#999" stroke-width="1"/>
+    <text x="129" y="108" font-size="8" text-anchor="middle" fill="#333">16ms</text>
+    
+    <text x="160" y="120" font-size="10" text-anchor="middle" fill="#666">✓ Smooth</text>
+  </g>
+  
+  <!-- 30 FPS with drops -->
+  <g id="fps-30" transform="translate(750, 280)">
+    <rect x="0" y="0" width="320" height="120" fill="#fff5f5" stroke="#FF6B6B" stroke-width="2" rx="5"/>
+    
+    <text x="160" y="25" font-size="12" font-weight="bold" text-anchor="middle" fill="#E74C3C">
+      30 FPS (Frame Drops) = 33.33ms per frame
+    </text>
+    
+    <!-- Frames with drops -->
+    <rect x="10" y="40" width="18" height="30" fill="#2ECC71" stroke="#999" stroke-width="1"/>
+    <text x="19" y="78" font-size="8" text-anchor="middle" fill="#333">✓</text>
+    
+    <rect x="32" y="40" width="18" height="30" fill="#2ECC71" stroke="#999" stroke-width="1"/>
+    <text x="41" y="78" font-size="8" text-anchor="middle" fill="#333">✓</text>
+    
+    <rect x="54" y="40" width="40" height="60" fill="#FF6B6B" stroke="#CC0000" stroke-width="2"/>
+    <text x="74" y="73" font-size="9" font-weight="bold" text-anchor="middle" fill="#fff">85ms</text>
+    <text x="74" y="88" font-size="8" text-anchor="middle" fill="#fff">🔴</text>
+    
+    <rect x="98" y="40" width="18" height="30" fill="#2ECC71" stroke="#999" stroke-width="1"/>
+    <text x="107" y="78" font-size="8" text-anchor="middle" fill="#333">✓</text>
+    
+    <rect x="120" y="40" width="18" height="30" fill="#2ECC71" stroke="#999" stroke-width="1"/>
+    <text x="129" y="78" font-size="8" text-anchor="middle" fill="#333">✓</text>
+    
+    <text x="160" y="120" font-size="10" text-anchor="middle" fill="#666">⚠ Noticeably laggy</text>
+  </g>
+  
+  <!-- Chrome DevTools tips -->
+  <rect x="750" y="430" width="330" height="240" fill="#E8F4F8" stroke="#3498DB" stroke-width="2" rx="5"/>
+  
+  <text x="915" y="455" font-size="12" font-weight="bold" text-anchor="middle" fill="#2C3E50">
+    🔧 How to Detect Long Tasks
+  </text>
+  
+  <text x="760" y="485" font-size="11" fill="#2C3E50" font-weight="bold">DevTools → Performance Tab:</text>
+  
+  <text x="770" y="508" font-size="10" fill="#34495E">1. Record → Interact → Stop</text>
+  <text x="770" y="528" font-size="10" fill="#34495E">2. Look for red flags in timeline</text>
+  <text x="770" y="548" font-size="10" fill="#34495E">3. Long Tasks appear as wide bars</text>
+  <text x="770" y="568" font-size="10" fill="#34495E">4. Click to see function call stack</text>
+  
+  <text x="760" y="598" font-size="11" fill="#2C3E50" font-weight="bold">Or Use Long Task API:</text>
+  
+  <rect x="770" y="610" width="300" height="45" fill="#fff" stroke="#999" stroke-width="1" rx="3"/>
+  <text x="777" y="627" font-size="9" fill="#C0392B" font-family="monospace">observer = new</text>
+  <text x="777" y="642" font-size="9" fill="#C0392B" font-family="monospace">PerformanceObserver(list =></text>
+  <text x="777" y="657" font-size="9" fill="#C0392B" font-family="monospace">  list.getEntries()...)</text>
+</svg>

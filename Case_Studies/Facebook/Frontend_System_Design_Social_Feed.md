@@ -12,6 +12,7 @@
     - [3.1 In Scope](#31-in-scope)
     - [3.2 Out of Scope](#32-out-of-scope)
     - [3.3 Assumptions](#33-assumptions)
+    - [3.4 Capacity Estimation](#34-capacity-estimation)
   - [4. High Level Frontend Architecture](#4-high-level-frontend-architecture)
     - [4.1 Overall Approach](#41-overall-approach)
     - [4.2 Major Architectural Layers](#42-major-architectural-layers)
@@ -27,6 +28,7 @@
       - [5.2.6 Lazy Loading Media in Feed Posts](#526-lazy-loading-media-in-feed-posts)
       - [5.2.7 Scroll Performance Considerations](#527-scroll-performance-considerations)
       - [5.2.8 Decision Matrix](#528-decision-matrix)
+      - [5.2.9 Comment Thread Rendering Strategy](#529-comment-thread-rendering-strategy)
     - [5.3 Reusability Strategy](#53-reusability-strategy)
     - [5.4 Module Organization](#54-module-organization)
   - [6. High Level Data Flow Explanation](#6-high-level-data-flow-explanation)
@@ -120,12 +122,16 @@
 *   **Infinite Scroll**:
     *   Fetch older posts as the user scrolls down (cursor-based pagination).
     *   No explicit "Load More" button — seamless infinite feed.
-*   **Real Time Updates**:
-    *   New posts from followed users appear as a banner ("5 new posts") without full page refresh.
-    *   Live engagement count updates on visible posts (optional, depends on scale).
-*   **Feed Freshness Indicators**:
-    *   "New posts available" banner at the top when SSE/WebSocket delivers new content.
-    *   Pull-to-refresh on mobile web to manually refetch latest feed.
+*   **New Post Notifications (Not Real-Time Feed Streaming)**:
+    *   Polling notifies the user when new posts are available ("5 new posts" banner).
+    *   **Feed itself is NOT streamed** — it is fetched via pull-based HTTP when user refreshes or taps the banner.
+    *   Server re-ranks posts based on engagement and relevance; this ranked feed is fetched on-demand.
+*   **Feed Freshness Mechanisms**:
+    *   "New posts available" banner appears when polling detects new posts from followed accounts.
+    *   Pull-to-refresh on mobile web fetches a fresh-ranked feed from the server.
+    *   Background periodic sync (optional) on PWA / app to refresh feed in the background.
+*   **Engagement Updates**:
+    *   Like/comment counts update optimistically in the UI and reconcile with server on next feed fetch (not real-time streamed).
 
 ---
 
@@ -148,7 +154,7 @@
 *   Feed rendering with infinite scroll (cursor-based pagination).
 *   Post card component design (text, image, video, link previews).
 *   Social interactions (like, comment, share) with optimistic updates.
-*   Real-time new post notifications via SSE.
+*   New post notifications via polling.
 *   State management for feed data.
 *   Performance optimization for media-heavy feeds.
 *   API design from the frontend perspective.
@@ -172,6 +178,102 @@
 *   APIs return posts pre-ranked by the backend (frontend does not sort or rank).
 *   Media (images/videos) are served from a CDN with pre-signed or public URLs.
 *   The feed is the main page of the application (not embedded in a secondary view).
+
+---
+
+### 3.4 Capacity Estimation
+
+Capacity estimation helps justify why the frontend architecture uses **cursor pagination**, **polling with a lightweight endpoint**, **CDN-backed media delivery**, and **virtualized rendering** instead of a naive "render everything and poll the full feed" approach.
+
+#### Assumed Product Scale
+
+| Metric | Assumption | Why it is reasonable |
+|--------|------------|----------------------|
+| **Daily active users (DAU)** | **100 million** | Large social feed products operate at very high daily usage; this keeps the design realistic without tying it to Facebook's exact internal numbers |
+| **Average sessions per DAU per day** | **3** | Morning, afternoon, and evening usage pattern is common for feed-centric apps |
+| **Average feed session length** | **12 minutes** | Long enough for multiple pagination requests and several polling checks |
+| **Peak traffic multiplier** | **5x average** | Consumer products typically have strong diurnal peaks |
+| **Concurrent users at peak** | **~8 million** | Roughly 8% of DAU concurrently active during peak windows |
+
+From these assumptions:
+
+*   **Feed sessions per day** = 100M users x 3 sessions = **300M sessions/day**
+*   **Average session duration** = 12 minutes = **720 seconds**
+*   **Total feed session time/day** = 300M x 720s = **216B session-seconds/day**
+*   **Estimated peak concurrency** = ~**8M users** actively browsing feeds
+
+#### Request Volume Estimation
+
+Assume the average user behavior in one feed session is:
+
+*   **1 initial feed load**
+*   **6 older-page fetches** via infinite scroll
+*   **16 polling checks** for new-post notifications (every 45 seconds across a 12-minute session)
+*   **4 interaction mutations** (likes, comments, shares)
+
+| Flow | Per session | Requests/day | Average RPS | Peak RPS (5x) |
+|------|-------------|--------------|-------------|---------------|
+| **Initial feed load** | 1 | **300M/day** | **~3.5K/s** | **~17.5K/s** |
+| **Infinite scroll page fetches** | 6 | **1.8B/day** | **~20.8K/s** | **~104K/s** |
+| **New-post polling checks** | 16 | **4.8B/day** | **~55.6K/s** | **~278K/s** |
+| **Interaction mutations** | 4 | **1.2B/day** | **~13.9K/s** | **~69.5K/s** |
+
+**Important frontend conclusion:** the **polling endpoint is the highest-request endpoint by volume**, even though each response is tiny. That is why `/api/feed/has-new-posts` should return only a **count / version token / boolean freshness signal**, not the actual feed payload.
+
+#### Bandwidth Estimation (Frontend-Facing)
+
+To keep the numbers realistic, separate **metadata/API traffic** from **media traffic**:
+
+| Payload | Assumed compressed size | Reasoning |
+|---------|-------------------------|-----------|
+| **Initial feed HTML + data payload** | **~80 KB** | SSR shell + first page of metadata for ~10 posts |
+| **Older feed page JSON** | **~35 KB** | Post metadata, author info, counts, link preview data; media bytes excluded |
+| **Polling response** | **~0.3 KB** | Count/version only |
+| **Interaction mutation request+response** | **~1 KB** | Small JSON payloads |
+
+Approximate daily transfer:
+
+| Flow | Requests/day | Avg payload | Approx traffic/day |
+|------|--------------|-------------|--------------------|
+| **Initial feed load** | 300M | 80 KB | **~24 TB/day** |
+| **Infinite scroll page fetches** | 1.8B | 35 KB | **~63 TB/day** |
+| **New-post polling checks** | 4.8B | 0.3 KB | **~1.4 TB/day** |
+| **Interaction mutations** | 1.2B | 1 KB | **~1.2 TB/day** |
+
+**Why these numbers matter:**
+
+*   Metadata/API traffic is already large even before counting images and videos.
+*   **Media traffic will dominate overall bandwidth by a huge margin**, which is why images, thumbnails, avatars, and video segments must be served from a CDN with aggressive edge caching.
+*   The polling path is acceptable only because each response is very small; polling the full ranked feed every 45 seconds would be prohibitively expensive.
+
+#### Client-Side Rendering Capacity
+
+The frontend must also estimate **how much UI it can keep active in memory** during a long feed session.
+
+Assume:
+
+*   Average expanded post card renders **~30 DOM nodes**
+*   A long session may load **70-100 posts** before the user navigates away
+*   Several posts contain media placeholders, decoded images, listeners, and derived state
+
+| Rendering approach | Posts kept mounted | Approx DOM nodes | Expected effect |
+|--------------------|--------------------|------------------|-----------------|
+| **Naive rendering** | 100 posts | **~3,000+ nodes** for posts alone, often much higher with comments/media wrappers | Noticeable memory growth; scroll jank on low-end devices |
+| **Virtualized feed** | 10-12 visible/nearby posts | **~300-400 nodes** | Stable memory, smoother scrolling, predictable paint cost |
+
+This is exactly why virtualization becomes the default recommendation once the feed can grow beyond **50+ posts per session**.
+
+#### Capacity-Driven Design Decisions
+
+| Pressure | Design response | Why |
+|----------|-----------------|-----|
+| **Very high pagination volume** | Cursor-based pagination | Prevents duplicates and keeps backend queries efficient at depth |
+| **Extremely high freshness-check volume** | Lightweight polling endpoint | Reduces network and compute cost compared with full-feed refreshes |
+| **Media dominates bandwidth** | CDN + lazy loading + responsive assets | Keeps origin load down and improves page speed |
+| **Long sessions create DOM growth** | Virtualized rendering / `content-visibility` | Prevents memory bloat and scroll degradation |
+| **Large peak concurrency** | SSR only first page, CSR for the rest | Optimizes perceived performance without rendering every page server-side |
+
+**Bottom line:** capacity estimation validates the current architecture. The product is not bottlenecked only by feed ranking or APIs; it is equally constrained by **frontend rendering cost**, **network payload size**, and the **massive request volume created by freshness checks and infinite scrolling**.
 
 ---
 
@@ -211,7 +313,7 @@
 │   User Session, UI Preferences)                          │
 ├──────────────────────────────────────────────────────────┤
 │  API and Data Access Layer                               │
-│  (REST Client, SSE Manager, Optimistic Update Queue,     │
+│  (REST Client, Polling Manager, Optimistic Update Queue,  │
 │   Request Deduplication, Retry Logic)                    │
 ├──────────────────────────────────────────────────────────┤
 │  Shared / Utility Layer                                  │
@@ -226,7 +328,7 @@
 
 *   **CDN**: Serves post images, videos, and user avatars (Cloudfront / Akamai / Fastly).
 *   **Analytics SDK**: Track impressions (post viewed), engagement events (like, comment, share), scroll depth, and session duration.
-*   **Backend Services**: Feed API (ranked posts), interaction APIs (like/comment/share), user profile service, SSE/WebSocket endpoint for real-time.
+*   **Backend Services**: Feed API (ranked posts), interaction APIs (like/comment/share), user profile service, notification check endpoint.
 *   **Media Player**: Native `<video>` with HLS/DASH for adaptive video streaming in feed.
 *   **Link Preview Service**: Backend-generated OG metadata for shared links (title, description, thumbnail).
 
@@ -321,82 +423,11 @@ Instead of listening to `scroll` events (which fire hundreds of times per second
 ##### Implementation — Step by Step
 
 ```tsx
-import { useEffect, useRef, useCallback } from 'react';
+const observer = new IntersectionObserver(([entry]) => {
+  if (entry.isIntersecting) fetchNextPage();
+}, { rootMargin: '0px 0px 500px 0px' });
 
-function FeedList() {
-  const sentinelRef = useRef<HTMLDivElement>(null);
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [cursor, setCursor] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
-
-  // Fetch next page of posts
-  const loadMore = useCallback(async () => {
-    if (isLoading || !hasMore) return;
-    setIsLoading(true);
-
-    try {
-      const response = await fetch(`/api/feed?cursor=${cursor || ''}&limit=10`);
-      const data = await response.json();
-
-      setPosts((prev) => [...prev, ...data.posts]);
-      setCursor(data.nextCursor);
-      setHasMore(data.hasMore);
-    } catch (error) {
-      // Retry logic handled in error flow section
-    } finally {
-      setIsLoading(false);
-    }
-  }, [cursor, isLoading, hasMore]);
-
-  // Set up IntersectionObserver on the sentinel
-  useEffect(() => {
-    const sentinel = sentinelRef.current;
-    if (!sentinel) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        // When sentinel is visible (or within rootMargin), load more
-        if (entry.isIntersecting) {
-          loadMore();
-        }
-      },
-      {
-        root: null,             // observe relative to the viewport
-        rootMargin: '0px 0px 500px 0px',  // fire 500px BEFORE sentinel is visible
-        threshold: 0,           // fire as soon as even 1px enters the margin
-      }
-    );
-
-    observer.observe(sentinel);
-
-    return () => observer.disconnect();
-  }, [loadMore]);
-
-  return (
-    <div className="feed-list">
-      {posts.map((post) => (
-        <PostCard key={post.id} post={post} />
-      ))}
-
-      {/* Sentinel — invisible trigger element */}
-      {hasMore && (
-        <div
-          ref={sentinelRef}
-          className="feed-sentinel"
-          style={{ height: 0, overflow: 'hidden' }}
-          aria-hidden="true"
-        />
-      )}
-
-      {/* Loading indicator */}
-      {isLoading && <FeedLoadingSkeleton />}
-
-      {/* End of feed */}
-      {!hasMore && <EndOfFeedMessage />}
-    </div>
-  );
-}
+observer.observe(feedSentinel);
 ```
 
 ##### Key Configuration Explained
@@ -484,63 +515,11 @@ Step 6: Visible items are repositioned at correct `top` offsets
 ##### Implementation with Dynamic Sizing
 
 ```tsx
-import { useRef } from 'react';
-import { useVirtualizer } from '@tanstack/react-virtual';
-
-function VirtualizedFeed({ posts }: { posts: Post[] }) {
-  const scrollRef = useRef<HTMLDivElement>(null);
-
-  const virtualizer = useVirtualizer({
-    count: posts.length,
-    getScrollElement: () => scrollRef.current,
-    // Estimate: average post height is ~400px (between text-only 120px and video 600px)
-    estimateSize: () => 400,
-    // NOT horizontal (vertical feed)
-    overscan: 3,                 // render 3 extra items above and below
-    // Enable dynamic measurement — items report their actual height
-    measureElement: (element) => element.getBoundingClientRect().height,
-  });
-
-  return (
-    <div
-      ref={scrollRef}
-      className="feed-scroll-container"
-      style={{ height: '100vh', overflow: 'auto' }}
-    >
-      {/* Spacer — total height of all items (measured + estimated) */}
-      <div
-        style={{
-          height: virtualizer.getTotalSize(),
-          width: '100%',
-          position: 'relative',
-        }}
-      >
-        {virtualizer.getVirtualItems().map((virtualItem) => {
-          const post = posts[virtualItem.index];
-
-          return (
-            <div
-              key={post.id}
-              // This ref callback lets the virtualizer measure the real height
-              ref={virtualizer.measureElement}
-              data-index={virtualItem.index}
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',
-                // Transform instead of top for GPU-accelerated positioning
-                transform: `translateY(${virtualItem.start}px)`,
-              }}
-            >
-              <PostCard post={post} />
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
+const virtualizer = useVirtualizer({
+  count: posts.length,
+  estimateSize: () => 400,
+  overscan: 3,
+});
 ```
 
 ##### How the Measurement Flow Works Internally
@@ -603,47 +582,8 @@ Without scroll restoration, the feed resets to the top. The user loses their pla
 ##### Recommended Approach for Virtualized Feeds
 
 ```tsx
-function useFeedScrollRestoration(virtualizer, posts) {
-  const STORAGE_KEY = 'feed_scroll_state';
-
-  // Save state before navigating away
-  useEffect(() => {
-    const handleBeforeNavigate = () => {
-      const scrollEl = virtualizer.scrollElement;
-      if (!scrollEl) return;
-
-      const state = {
-        scrollTop: scrollEl.scrollTop,
-        firstVisiblePostId: getFirstVisiblePostId(virtualizer, posts),
-        timestamp: Date.now(),
-      };
-      sessionStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    };
-
-    // Listen for route changes (framework-specific)
-    window.addEventListener('beforeunload', handleBeforeNavigate);
-    // Also hook into your router's navigation events
-    return () => window.removeEventListener('beforeunload', handleBeforeNavigate);
-  }, [virtualizer, posts]);
-
-  // Restore state on mount (back navigation)
-  useEffect(() => {
-    const saved = sessionStorage.getItem(STORAGE_KEY);
-    if (!saved) return;
-
-    const state = JSON.parse(saved);
-    // Only restore if navigation was recent (within 30 minutes)
-    if (Date.now() - state.timestamp > 30 * 60 * 1000) return;
-
-    // Find the post index and scroll to it
-    const index = posts.findIndex((p) => p.id === state.firstVisiblePostId);
-    if (index >= 0) {
-      virtualizer.scrollToIndex(index, { align: 'start' });
-    }
-
-    sessionStorage.removeItem(STORAGE_KEY);
-  }, [posts.length]); // trigger when posts are loaded
-}
+sessionStorage.setItem('feed_scroll_state', firstVisiblePostId);
+virtualizer.scrollToIndex(restoredIndex, { align: 'start' });
 ```
 
 **Why `firstVisiblePostId` instead of `scrollTop`?**
@@ -657,9 +597,9 @@ function useFeedScrollRestoration(virtualizer, posts) {
 
 ##### The Concept
 
-When new posts arrive via SSE/WebSocket while the user is scrolling, we do **NOT** prepend them directly to the feed. Doing so would shift the entire feed down and disrupt the user's scroll position.
+When polling detects new posts while the user is scrolling, we do **NOT** immediately fetch them into the feed. Instead, we show a banner: "5 new posts available — tap to see."
 
-Instead, we **buffer** new posts and show a banner: "5 new posts — tap to see."
+When the user taps the banner → fetch fresh-ranked feed from server → replace current posts.
 
 ```
 ┌──────────────────────────────────┐
@@ -674,72 +614,38 @@ Instead, we **buffer** new posts and show a banner: "5 new posts — tap to see.
 └──────────────────────────────────┘
 ```
 
-When the user clicks the banner → buffer is flushed → new posts are prepended to the feed → user scrolls to top to see them.
+When the user clicks the banner → fetch `/api/feed?limit=10` (server re-ranks) → replace feed.
 
 ##### Implementation
 
 ```tsx
-function FeedWithNewPostsBanner() {
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [newPostsBuffer, setNewPostsBuffer] = useState<Post[]>([]);
-
-  // SSE connection for real-time new posts
-  useEffect(() => {
-    const eventSource = new EventSource('/api/feed/stream');
-
-    eventSource.onmessage = (event) => {
-      const newPost = JSON.parse(event.data);
-      // DON'T add directly to posts — add to buffer
-      setNewPostsBuffer((prev) => [newPost, ...prev]);
-    };
-
-    return () => eventSource.close();
-  }, []);
-
-  // Flush buffer when user clicks the banner
-  const showNewPosts = useCallback(() => {
-    setPosts((prev) => [...newPostsBuffer, ...prev]);
-    setNewPostsBuffer([]);
-    // Scroll to top to show new posts
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [newPostsBuffer]);
-
-  return (
-    <div className="feed">
-      {newPostsBuffer.length > 0 && (
-        <button
-          className="new-posts-banner"
-          onClick={showNewPosts}
-          aria-live="polite"
-        >
-          ↑ {newPostsBuffer.length} new post{newPostsBuffer.length > 1 ? 's' : ''} available
-        </button>
-      )}
-
-      <div className="feed-list">
-        {posts.map((post) => (
-          <PostCard key={post.id} post={post} />
-        ))}
-      </div>
-    </div>
-  );
-}
+{newPostCount > 0 && (
+  <button onClick={refreshFeed}>
+    {newPostCount} new posts available
+  </button>
+)}
 ```
 
-##### Why Buffer Instead of Auto Prepend?
+##### Why Polling Instead of Real-Time Streaming?
 
-| Behavior | What happens | UX impact |
-|----------|-------------|-----------|
-| **Auto-prepend** | New post is added at index 0; all other posts shift down by the new post's height | User is reading post #3, which suddenly jumps down. User loses their place. Extremely jarring. |
-| **Buffer + banner** | New posts are queued; a small banner appears at the top. User controls when to see them. | User stays in flow. Taps banner when ready. This is what Facebook, Twitter, LinkedIn all do. |
+| Approach | Behavior | Trade-off |
+|----------|----------|-----------|
+| **Real-time streaming (SSE/WebSocket)** | Server pushes posts to client as they publish | High server load (persistent connections); client receives raw posts with no ranking control |
+| **Polling** | Client checks every 45s if new posts available | Slight delay (up to 45s); but server controls ranking; simple to implement |
+
+Polling is preferred because:
+- Server re-ranks feed on-demand (not streamed)
+- Client chooses when to fetch (user-controlled refresh)
+- Simpler scaling (stateless HTTP, no persistent connections)
+- Lower latency acceptable (45s delay vs instant notification trade-off)
 
 ##### Edge Cases
 
 | Scenario | Handling |
-|----------|---------|
-| **User is at the top of the feed** | Auto-prepend is acceptable here (they're not reading mid-feed). Check `window.scrollY < 100` before deciding. |
-| **100+ new posts buffered** | Cap the buffer at ~50 posts. Older buffered posts are dropped (they'll be fetched in the regular feed). Show "50+ new posts". |
-| **Banner with keyboard (a11y)** | Banner should be `aria-live="polite"` so screen readers announce it. On click, focus moves to the first new post. |
+|----------|----------|
+| **User is at the top of the feed** | Auto-refresh without banner. Check `window.scrollY < 100` before deciding. |
+| **100+ new posts detected** | Show "50+ new posts available" (cap the UI representation). Server returns ranked subset on refresh. |
+| **Banner with keyboard (a11y)** | Banner is a `<button>` with `aria-live="polite"`. On click, focus stays on banner, content refreshes below. |
 
 ---
 
@@ -757,33 +663,8 @@ On mobile, users expect to swipe down from the top of the feed to refresh it —
 **Simple custom pull-to-refresh:**
 
 ```tsx
-function usePullToRefresh(onRefresh: () => Promise<void>) {
-  const [pulling, setPulling] = useState(false);
-  const [pullDistance, setPullDistance] = useState(0);
-  const startY = useRef(0);
-
-  const handleTouchStart = (e: TouchEvent) => {
-    if (window.scrollY === 0) {
-      startY.current = e.touches[0].clientY;
-      setPulling(true);
-    }
-  };
-
-  const handleTouchMove = (e: TouchEvent) => {
-    if (!pulling) return;
-    const distance = Math.max(0, e.touches[0].clientY - startY.current);
-    setPullDistance(Math.min(distance, 150)); // cap at 150px
-  };
-
-  const handleTouchEnd = async () => {
-    if (pullDistance > 80) { // threshold: 80px to trigger refresh
-      await onRefresh();
-    }
-    setPulling(false);
-    setPullDistance(0);
-  };
-
-  return { pullDistance, pulling, handleTouchStart, handleTouchMove, handleTouchEnd };
+if (window.scrollY === 0 && pullDistance > 80) {
+  refreshFeed();
 }
 ```
 
@@ -813,24 +694,11 @@ A feed page might render 10 visible posts, each with 1-3 images or a video. With
 ##### Image Lazy Loading
 
 ```tsx
-function PostMedia({ media, postIndex }: { media: Media; postIndex: number }) {
-  if (media.type === 'image') {
-    return (
-      <img
-        src={media.url}
-        alt={media.altText || 'Post image'}
-        width={media.width}
-        height={media.height}
-        // First 3 posts are above the fold — load eagerly
-        loading={postIndex < 3 ? 'eager' : 'lazy'}
-        // Prevent layout shift by setting aspect ratio
-        style={{ aspectRatio: `${media.width} / ${media.height}` }}
-      />
-    );
-  }
-
-  // ...video handling below
-}
+<img
+  src={media.url}
+  loading={postIndex < 3 ? 'eager' : 'lazy'}
+  style={{ aspectRatio: `${media.width}/${media.height}` }}
+/>
 ```
 
 ##### Video Autoplay on Visibility
@@ -838,48 +706,8 @@ function PostMedia({ media, postIndex }: { media: Media; postIndex: number }) {
 Videos in a feed should only play when visible (saves bandwidth, CPU, battery):
 
 ```tsx
-function FeedVideoPlayer({ videoUrl, thumbnailUrl }: Props) {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        const video = videoRef.current;
-        if (!video) return;
-
-        if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
-          // More than 50% visible — start playing
-          video.play().catch(() => {}); // catch autoplay policy rejection
-        } else {
-          // Less than 50% visible — pause
-          video.pause();
-        }
-      },
-      { threshold: [0, 0.5, 1.0] }  // fire at 0%, 50%, 100% visibility
-    );
-
-    observer.observe(container);
-    return () => observer.disconnect();
-  }, []);
-
-  return (
-    <div ref={containerRef}>
-      <video
-        ref={videoRef}
-        src={videoUrl}
-        poster={thumbnailUrl}   // show thumbnail before video loads
-        muted                   // required for autoplay in most browsers
-        playsInline             // prevent fullscreen on iOS
-        loop
-        preload="none"          // don't preload video data at all
-      />
-    </div>
-  );
-}
+if (videoIsMoreThan50PercentVisible) video.play();
+else video.pause();
 ```
 
 **Why `threshold: [0, 0.5, 1.0]`?**
@@ -897,44 +725,8 @@ function FeedVideoPlayer({ videoUrl, thumbnailUrl }: Props) {
 | **Skeleton shimmer** | Grey box with animated shimmer gradient | CSS animation | When load time is noticeable |
 
 ```tsx
-// Blur-up placeholder example
-function BlurUpImage({ src, placeholder, alt, width, height }) {
-  const [loaded, setLoaded] = useState(false);
-
-  return (
-    <div style={{ position: 'relative', aspectRatio: `${width}/${height}` }}>
-      {/* Tiny blurred placeholder — always visible until real image loads */}
-      <img
-        src={placeholder}  // data:image/jpeg;base64,/9j/4AA... (tiny 16x16)
-        alt=""
-        aria-hidden="true"
-        style={{
-          width: '100%',
-          height: '100%',
-          filter: loaded ? 'none' : 'blur(20px)',
-          transition: 'filter 0.3s ease',
-          objectFit: 'cover',
-        }}
-      />
-      {/* Real image — loads on top */}
-      <img
-        src={src}
-        alt={alt}
-        loading="lazy"
-        onLoad={() => setLoaded(true)}
-        style={{
-          position: 'absolute',
-          top: 0, left: 0,
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-          opacity: loaded ? 1 : 0,
-          transition: 'opacity 0.3s ease',
-        }}
-      />
-    </div>
-  );
-}
+<img src={placeholder} aria-hidden="true" className="blur-placeholder" />
+<img src={src} alt={alt} loading="lazy" />
 ```
 
 ---
@@ -985,9 +777,47 @@ This tells the browser: "Don't render this element's contents until it's near th
 | **50+ posts** (infinite scroll) | Full virtualization with dynamic measurement | `@tanstack/react-virtual` or `react-virtuoso` | Handles variable heights; keeps DOM at O(1) |
 | **Video-heavy feed** | IntersectionObserver for play/pause | Custom hook | Only one video should play at a time |
 | **Mobile web** | Pull-to-refresh + momentum scroll | Custom touch handler or browser native | `-webkit-overflow-scrolling: touch` for iOS |
-| **New posts while scrolling** | Buffer + banner pattern | Custom with SSE | Never auto-prepend mid-scroll |
+| **New posts while scrolling** | Banner pattern | Custom polling | Never auto-prepend mid-scroll |
 | **Back navigation** | Scroll position restoration with virtualizer | `scrollToIndex` + sessionStorage | Save `firstVisiblePostId`, not `scrollTop` |
 | **Slow network** | Skeleton + blur-up placeholders | CSS skeleton + LQIP | Prevent CLS; show something immediately |
+
+---
+
+#### 5.2.9 Comment Thread Rendering Strategy
+
+The DEV post correctly highlights one important concern that is easy to miss: **comment threads can become their own mini-feed**. A single viral post may have hundreds or thousands of comments, so the frontend should avoid rendering the entire thread eagerly inside every expanded `PostCard`.
+
+##### Recommended Strategy
+
+| Comment volume | Strategy | Why |
+|----------------|----------|-----|
+| **0-5 comments** | Render inline directly | Small and simple; no extra complexity |
+| **5-30 comments** | Show first few + "View more comments" pagination | Keeps initial post height manageable |
+| **30+ comments** | Paginate or virtualize comment list inside the expanded thread | Prevents a single post from exploding DOM size |
+
+##### Practical Pattern
+
+1.  Feed payload includes only the **first 2-3 preview comments** and total `commentCount`.
+2.  When the user expands comments, fetch the full thread incrementally via `GET /api/post/:id/comments?cursor=...`.
+3.  If the thread becomes large, switch to **nested virtualization** or batched rendering for comments.
+4.  Keep the main feed scroll stable by avoiding full thread hydration on initial feed render.
+
+```tsx
+function CommentList({ previewComments, totalCount }) {
+  return (
+    <section>
+      {previewComments.map((comment) => <CommentItem key={comment.id} comment={comment} />)}
+      {totalCount > previewComments.length && <button>View more comments</button>}
+    </section>
+  );
+}
+```
+
+##### Why This Matters
+
+*   A single expanded thread should not destroy the smoothness of the entire feed.
+*   Comment pagination keeps `PostCard` height from becoming unbounded.
+*   It also aligns with the current architecture: **the feed payload stays lean**, while deeper discussion is fetched only when the user explicitly asks for it.
 
 ---
 
@@ -1024,7 +854,7 @@ src/
  │         │    └── FeedSkeleton.tsx
  │         ├── hooks/
  │         │    ├── useFeedInfiniteScroll.ts
- │         │    ├── useFeedSSE.ts
+ │         │    ├── useFeedPolling.ts
  │         │    ├── useOptimisticLike.ts
  │         │    ├── useVideoAutoplay.ts
  │         │    └── useFeedScrollRestoration.ts
@@ -1059,11 +889,17 @@ src/
      ↓
 5. Render PostCards; lazy-load images for below-the-fold posts
      ↓
-6. Establish SSE connection: GET /api/feed/stream
+6. Start polling for new-post notifications:
+   - Checks periodically (every 45s) if new posts are available
+   - Does NOT stream the feed itself
      ↓
 7. Sentinel mounts at bottom → IntersectionObserver starts watching
      ↓
-8. User scrolls → sentinel enters viewport → fetch page 2
+8. User scrolls → sentinel enters viewport → fetch page 2 (older posts)
+     ↓
+9. When user sees "5 new posts available" banner → user taps it
+     ↓
+10. Refresh feed: GET /api/feed?limit=10 (server re-ranks + returns fresh posts)
 ```
 
 ---
@@ -1096,41 +932,9 @@ User taps Like button
 **Implementation:**
 
 ```tsx
-function useOptimisticLike(postId: string) {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: () => likePost(postId),
-    // Optimistically update BEFORE the server responds
-    onMutate: async () => {
-      // Cancel any in-flight refetches so they don't overwrite our optimistic update
-      await queryClient.cancelQueries({ queryKey: ['feed'] });
-
-      // Snapshot the previous value (for rollback)
-      const previousFeed = queryClient.getQueryData(['feed']);
-
-      // Optimistically update
-      queryClient.setQueryData(['feed'], (old: FeedData) => ({
-        ...old,
-        posts: old.posts.map((post) =>
-          post.id === postId
-            ? { ...post, isLiked: true, likeCount: post.likeCount + 1 }
-            : post
-        ),
-      }));
-
-      return { previousFeed }; // context for rollback
-    },
-    // On error, rollback to the snapshot
-    onError: (err, variables, context) => {
-      queryClient.setQueryData(['feed'], context.previousFeed);
-    },
-    // After success or error, refetch to ensure server state
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['feed'] });
-    },
-  });
-}
+onMutate: () => updateLikeCount(postId, +1),
+onError: () => updateLikeCount(postId, -1),
+onSettled: () => refetchFeed(),
 ```
 
 **Comment flow — Optimistic with placeholder:**
@@ -1156,7 +960,7 @@ User types comment → taps "Post"
 *   **Feed fetch fails**: Show cached feed data (React Query stale-while-revalidate) + error banner with retry button.
 *   **Image fails to load**: Show broken-image placeholder with alt text; don't crash the entire PostCard.
 *   **Like/Comment API fails**: Rollback optimistic update; show toast "Failed to like post — tap to retry."
-*   **SSE connection drops**: Auto-reconnect with exponential backoff (EventSource does this natively). Show a subtle "Reconnecting..." indicator after 5s.
+*   **Polling fails**: Auto-retry on next interval (45s). If persistent failure, show subtle error state.
 *   **Infinite scroll fetch fails**: Show "Failed to load more posts" inline with a retry button (don't block the existing feed).
 *   **Network offline**: Show cached feed + "You're offline" banner. Queue interactions (likes, comments) and replay when online.
 
@@ -1294,7 +1098,7 @@ type PostViewModel = Post & {
 |---|---|---|
 | **Server State** | Feed posts, comments, user profiles | React Query / SWR cache (auto-managed) |
 | **Global App State** | Current user session, theme, notification count | Zustand / Redux global store |
-| **Feature State** | New posts buffer, SSE connection status | Feature-level Zustand slice or React Context |
+| **Feature State** | New posts count, polling interval | Feature-level Zustand slice or React Context |
 | **Component Local State** | Comment input text, "See More" expanded, reply drawer open | `useState` / `useReducer` |
 | **Derived / Computed State** | Relative timestamps, formatted counts, truncated content | Selectors / `useMemo` |
 
@@ -1302,7 +1106,7 @@ type PostViewModel = Post & {
 
 ### 8.2 State Ownership
 
-*   **FeedPage** owns the SSE connection and the new-posts buffer. It connects on mount and disconnects on unmount.
+*   **FeedPage** owns the polling interval for new-post checks and the new-posts banner count.
 *   **FeedList** owns the infinite scroll state (cursor, hasMore, isLoading) via React Query's `useInfiniteQuery`.
 *   **PostCard** owns its own UI state (expanded text, expanded comments) locally. Social interactions (like, comment) are mutations that update the shared React Query cache.
 *   **CommentList** manages its own pagination if a post has many comments (separate `useInfiniteQuery` for comments per post).
@@ -1334,7 +1138,7 @@ type PostViewModel = Post & {
 | API | Method | Description |
 |-----|--------|-------------|
 | `/api/feed` | **GET** | Fetch paginated feed posts (cursor-based) |
-| `/api/feed/stream` | **GET (SSE)** | Stream new posts in real-time |
+| `/api/feed/has-new-posts` | **GET** | Check if new posts are available (polling) |
 | `/api/post` | **POST** | Create a new post |
 | `/api/post/:id` | **GET** | Fetch single post with full details |
 | `/api/post/:id/like` | **POST** | Like / unlike a post |
@@ -1401,48 +1205,11 @@ CURSOR-BASED SOLUTION:
 #### Implementation with React Query
 
 ```tsx
-function useFeed() {
-  return useInfiniteQuery({
-    queryKey: ['feed'],
-    queryFn: async ({ pageParam }) => {
-      const url = pageParam
-        ? `/api/feed?cursor=${pageParam}&limit=10`
-        : `/api/feed?limit=10`;
-      const res = await fetch(url);
-      return res.json();
-    },
-    initialPageParam: null as string | null,
-    getNextPageParam: (lastPage) => lastPage.nextCursor ?? undefined,
-    staleTime: 2 * 60 * 1000,      // 2 minutes before refetch
-    refetchOnWindowFocus: true,     // refresh feed when user returns to tab
-  });
-}
-
-// Usage in FeedList
-function FeedList() {
-  const {
-    data,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-    isLoading,
-  } = useFeed();
-
-  const allPosts = data?.pages.flatMap((page) => page.posts) ?? [];
-
-  // IntersectionObserver triggers fetchNextPage() when sentinel is visible
-  // (implementation from section 5.2.1)
-
-  return (
-    <div>
-      {allPosts.map((post) => (
-        <PostCard key={post.id} post={post} />
-      ))}
-      {hasNextPage && <FeedSentinel onIntersect={fetchNextPage} />}
-      {isFetchingNextPage && <FeedLoadingSkeleton />}
-    </div>
-  );
-}
+const useFeed = () => useInfiniteQuery({
+  queryKey: ['feed'],
+  queryFn: ({ pageParam }) => fetchFeed(pageParam),
+  getNextPageParam: (lastPage) => lastPage.nextCursor,
+});
 ```
 
 #### Comparison: Cursor vs Offset vs Keyset
@@ -1461,145 +1228,49 @@ function FeedList() {
 
 ---
 
-### 9.3 Real Time Feed Updates (Deep Dive)
+### 9.3 New Post Notifications and Feed Refresh Strategy
 
-#### The Requirement
+#### The Architecture
 
-When a followed user publishes a new post, that post should appear in the viewer's feed **without requiring a manual page refresh**. Additionally, engagement counts on visible posts (likes, comments) may need live updates.
+**🔑 CRITICAL**: The feed itself is **NOT real-time streamed**. Instead:
+- **Feed ranking** is generated server-side and fetched on-demand via pull-based HTTP.
+- **New post notifications** alert the user that new posts are available (via polling).
+- **User action** (pull-to-refresh or tapping the banner) triggers a fresh feed fetch where the server re-ranks and returns updated posts.
 
-#### Three Approaches
+#### Polling Implementation
 
-##### Approach 1: Polling
+Client polls every 45 seconds to check if new posts are available:
 
 ```tsx
-// Simple interval-based polling
 useEffect(() => {
-  const interval = setInterval(async () => {
-    const res = await fetch('/api/feed/updates?since=' + lastFetchTimestamp);
-    const { newPosts } = await res.json();
-    if (newPosts.length > 0) {
-      addToBuffer(newPosts);
-    }
-  }, 30000); // every 30 seconds
-
+  const interval = setInterval(checkForNewPosts, 45000);
   return () => clearInterval(interval);
 }, []);
+
+const refreshFeed = () => fetch('/api/feed?limit=10');
 ```
 
-##### Approach 2: Server Sent Events (SSE)
-
-```tsx
-useEffect(() => {
-  const eventSource = new EventSource('/api/feed/stream');
-
-  eventSource.addEventListener('new_post', (event) => {
-    const post = JSON.parse(event.data);
-    addToBuffer(post);  // buffer, don't auto-insert
-  });
-
-  eventSource.addEventListener('engagement_update', (event) => {
-    const update = JSON.parse(event.data);
-    // update like/comment counts on visible post
-    updatePostEngagement(update.postId, update.likeCount, update.commentCount);
-  });
-
-  eventSource.onerror = () => {
-    // Browser auto-reconnects SSE. But log for monitoring.
-    console.warn('SSE connection lost, auto-reconnecting...');
-  };
-
-  return () => eventSource.close();
-}, []);
-```
-
-##### Approach 3: WebSocket
-
-```tsx
-useEffect(() => {
-  const ws = new WebSocket('wss://api.example.com/feed/ws');
-
-  ws.onmessage = (event) => {
-    const message = JSON.parse(event.data);
-    switch (message.type) {
-      case 'new_post':
-        addToBuffer(message.post);
-        break;
-      case 'engagement_update':
-        updatePostEngagement(message.postId, message.data);
-        break;
-    }
-  };
-
-  ws.onclose = () => {
-    // Manual reconnect needed (unlike SSE)
-    setTimeout(() => reconnect(), 3000);
-  };
-
-  return () => ws.close();
-}, []);
-```
-
-#### Comparison Table
-
-| Criterion | Polling | SSE | WebSocket |
-|-----------|---------|-----|-----------|
-| Direction | Client → Server (pull) | Server → Client (push) | Bidirectional |
-| Latency | High (up to polling interval) | Low (server pushes immediately) | Lowest (persistent connection) |
-| Server resource usage | Low (stateless requests) | Medium (one open connection per client) | High (persistent connection + state) |
-| Auto-reconnect | N/A | Built-in (browser auto-reconnects) | Manual (must implement reconnection logic) |
-| Browser support | Universal | All modern browsers | All modern browsers |
-| Works with HTTP/2 | Yes | Yes (multiplexed) | Separate TCP connection |
-| Proxy / CDN friendly | Yes | Yes (standard HTTP) | Can be problematic (needs upgrade) |
-| Battery impact (mobile) | Medium (wake CPU each interval) | Low (idle connection) | Low (idle connection) |
-| Complexity | Trivial | Low | Moderate |
-| **Best for** | Low-frequency updates; simple setups | Feed updates; one-way server push | Chat; collaborative editing; bidirectional |
-
-#### Recommended Strategy for Feeds
-
-**Use SSE for new post notifications.** Rationale:
-*   Feeds only need **server → client** push (new posts). The client doesn't need to push data via the real-time channel (likes/comments use REST).
-*   SSE is simpler than WebSocket — auto-reconnects, works with HTTP/2 multiplexing, and is proxy-friendly.
-*   SSE uses regular HTTP, so it works through corporate firewalls and CDNs that might block WebSocket upgrades.
-
-**Use polling as a fallback** for environments where SSE isn't supported or for engagement count updates (less time-critical).
-
-##### Backend SSE Endpoint Example
+#### Backend Endpoints
 
 ```js
-app.get('/api/feed/stream', (req, res) => {
-  res.setHeader('Content-Type', 'text/event-stream');
-  res.setHeader('Cache-Control', 'no-cache');
-  res.setHeader('Connection', 'keep-alive');
-  res.flushHeaders();
+app.get('/api/feed/has-new-posts', () => res.json({ newPostCount }));
+app.get('/api/feed', () => res.json({ posts, nextCursor, hasMore }));
+```
 
-  const userId = req.user.id;
+#### User Flow
 
-  const sendEvent = (type, data) => {
-    res.write(`event: ${type}\n`);
-    res.write(`data: ${JSON.stringify(data)}\n\n`);
-  };
-
-  // Listen for new posts relevant to this user
-  feedEmitter.on(`newPost:${userId}`, (post) => {
-    sendEvent('new_post', post);
-  });
-
-  // Listen for engagement updates on posts the user has seen
-  feedEmitter.on(`engagement:${userId}`, (update) => {
-    sendEvent('engagement_update', update);
-  });
-
-  // Heartbeat every 30s to keep connection alive
-  const heartbeat = setInterval(() => {
-    res.write(': heartbeat\n\n');
-  }, 30000);
-
-  req.on('close', () => {
-    clearInterval(heartbeat);
-    feedEmitter.off(`newPost:${userId}`);
-    feedEmitter.off(`engagement:${userId}`);
-  });
-});
+```
+1. Feed page loads → GET /api/feed (initial posts)
+   ↓
+2. Polling checks every 45s → GET /api/feed/has-new-posts
+   ↓
+3. New posts detected (count > 0) → Show banner
+   ↓
+4. User taps banner or pulls to refresh
+   ↓
+5. Fresh feed fetched → GET /api/feed (server re-ranks)
+   ↓
+6. Posts replace current feed (may be reordered based on algorithm)
 ```
 
 ---
@@ -1609,54 +1280,9 @@ app.get('/api/feed/stream', (req, res) => {
 **GET /api/feed**
 
 ```json
-// Request
-// GET /api/feed?limit=10
-
-// Response
 {
-  "posts": [
-    {
-      "id": "p_001",
-      "author": {
-        "id": "u_123",
-        "name": "Zeeshan Ali",
-        "avatarUrl": "https://cdn.example.com/avatars/u_123.jpg",
-        "profileUrl": "/user/zeeshan_ali"
-      },
-      "content": "Just published a new article on frontend system design!",
-      "media": [
-        {
-          "id": "m_001",
-          "type": "image",
-          "url": "https://cdn.example.com/posts/m_001.jpg",
-          "thumbnailUrl": "https://cdn.example.com/posts/m_001_thumb.jpg",
-          "width": 1200,
-          "height": 630,
-          "altText": "System design diagram",
-          "dominantColor": "#1a73e8"
-        }
-      ],
-      "linkPreview": null,
-      "likeCount": 342,
-      "commentCount": 28,
-      "shareCount": 15,
-      "isLiked": false,
-      "isSaved": false,
-      "comments": [
-        {
-          "id": "c_001",
-          "author": { "id": "u_456", "name": "Ali", "avatarUrl": "..." },
-          "text": "Great article!",
-          "createdAt": "2026-03-17T08:30:00Z",
-          "likeCount": 5,
-          "isLiked": false
-        }
-      ],
-      "createdAt": "2026-03-17T08:00:00Z",
-      "visibility": "public"
-    }
-  ],
-  "nextCursor": "eyJzY29yZSI6MC45NSwidHMiOiIyMDI2LTAzLTE3In0=",
+  "posts": [{ "id": "p_001", "author": { "id": "u_123", "name": "Zeeshan Ali" }, "content": "Post text..." }],
+  "nextCursor": "abc123",
   "hasMore": true
 }
 ```
@@ -1664,49 +1290,22 @@ app.get('/api/feed/stream', (req, res) => {
 **POST /api/post/:id/like**
 
 ```json
-// Request
-// POST /api/post/p_001/like
-{
-  "action": "like"   // or "unlike"
-}
-
-// Response
-{
-  "success": true,
-  "likeCount": 343
-}
+{ "action": "like" }
 ```
 
 **POST /api/post/:id/comment**
 
 ```json
-// Request
 {
   "text": "This is a great post!",
-  "parentCommentId": null   // null for top-level, ID for threaded reply
-}
-
-// Response
-{
-  "comment": {
-    "id": "c_099",
-    "author": { "id": "u_789", "name": "Sara", "avatarUrl": "..." },
-    "text": "This is a great post!",
-    "createdAt": "2026-03-17T09:00:00Z",
-    "likeCount": 0,
-    "isLiked": false
-  }
+  "parentCommentId": null
 }
 ```
 
-**SSE Event Examples**
+**Polling Response Example**
 
-```
-event: new_post
-data: {"id":"p_305","author":{"id":"u_456","name":"Ali"},"content":"New post here!","media":[],"createdAt":"2026-03-17T09:30:00Z"}
-
-event: engagement_update
-data: {"postId":"p_001","likeCount":350,"commentCount":30}
+```json
+{ "newPostCount": 3 }
 ```
 
 ---
@@ -1752,7 +1351,7 @@ data: {"postId":"p_001","likeCount":350,"commentCount":30}
 
 ### 10.3 Cache Invalidation
 
-*   **Feed data**: Invalidated on window focus (`refetchOnWindowFocus`); on pull-to-refresh; on SSE `new_post` event for the banner.
+*   **Feed data**: Invalidated on window focus (`refetchOnWindowFocus`); on pull-to-refresh; polling detects new posts.
 *   **Post engagement counts**: Updated optimistically on like/comment; background-reconciled on next feed fetch.
 *   **Comments**: Invalidated when user adds a comment; also refetched when user expands comment section.
 *   **Images / videos**: Never invalidated (URLs contain content hash — new version = new URL).
@@ -1862,7 +1461,7 @@ Far below:
 *   **Bundle optimization**: Tree-shake unused utilities; split vendor chunk (React, React Query) from app code.
 *   **Debounced and batched API calls**:
     *   If user rapidly likes/unlikes, debounce the API call (send final state after 500ms).
-    *   Engagement count updates from SSE are batched — update UI at most once per second.
+    *   Engagement count updates are batched — update UI at most once per second.
 *   **`requestAnimationFrame` for scroll-linked UI**: Any UI updates driven by scroll position (e.g., "back to top" button visibility) use `rAF` to batch to the next frame.
 *   **Memoization**: `React.memo` on `PostCard` to prevent re-renders when sibling posts change. `useMemo` for derived values (formatted counts, relative timestamps).
 *   **Abort stale fetches**: When user navigates away from the feed, cancel in-flight API requests via `AbortController`.
@@ -1882,12 +1481,12 @@ Far below:
 *   **Performance monitoring**:
     *   Track FCP, LCP, CLS, and TTI for the feed page.
     *   Track infinite scroll latency: time from sentinel intersection to new posts rendered.
-    *   Track SSE connection health: connection drops, reconnect frequency, message latency.
+    *   Track polling reliability: failed checks, retry frequency.
 *   **Feature flags**: Gate new features behind flags:
     *   New post card layout, different content types, experimental ranking signals.
     *   Gradual rollout (1% → 10% → 100%) with monitoring at each stage.
 *   **Graceful degradation**:
-    *   If SSE fails → fall back to polling every 60s.
+    *   If polling fails → retry on next interval (45s).
     *   If React Query cache is corrupted → clear cache and refetch.
     *   If a specific media type fails → show placeholder, don't crash the post.
 
@@ -1904,7 +1503,7 @@ Far below:
 | **Image carousel with 10+ images** | Virtualize the carousel (only render visible + 1 buffer image). Show "1 of 10" indicator. |
 | **Video with no sound** | Show a "No audio" indicator. Don't show volume controls. |
 | **Rapid like/unlike (double-tap)** | Debounce the API call. Only send the final state after 500ms of no changes. UI responds instantly to each tap. |
-| **SSE reconnect storm** | After SSE reconnects, server may send all missed posts at once. Buffer and batch them into the banner. |
+| **Polling miss (network blip)** | One missed polling interval (45s) is acceptable. User will see the "new posts" banner on the next check. |
 | **User follows 5000+ accounts** | Feed API handles ranking server-side; frontend just paginates. The cursor-based approach handles any volume. |
 | **Mixed content post (text + image + link)** | Render text, then image, then link preview. If both image and link have thumbnails, prefer the uploaded image. |
 | **Concurrent tab sessions** | Like in tab A should reflect in tab B on next focus. React Query's `refetchOnWindowFocus` handles this. |
@@ -1915,10 +1514,10 @@ Far below:
 |----------|----------|
 | **SSR first batch of posts** | Better FCP and SEO, but adds server load and time-to-first-byte. CSR-only would be simpler but slower perceived load. |
 | **Cursor over offset pagination** | No duplicates/missing items, but can't show "Page 3 of 50" or jump to a page. Acceptable for feeds (users never want "page 47"). |
-| **SSE over WebSocket** | Simpler, auto-reconnects, proxy-friendly. But only server → client. If we needed bidirectional real-time (like chat within feed), WebSocket would be needed. |
+| **Polling for new posts** | Simple to implement (stateless HTTP); slight 45s delay acceptable (vs instant push). Scales better than persistent connections. |
 | **Virtualization** | Constant DOM size regardless of scroll depth. But adds complexity, makes scroll position restoration harder, and requires dynamic height measurement. |
 | **Optimistic updates** | Instant UI responsiveness. But introduces rollback complexity and potential for brief inconsistency between client and server state. |
-| **Buffer new posts (banner)** | Better UX when scrolling mid-feed. But delays content freshness — user must tap to see new posts. |
+| **Banner instead of auto-insert** | Better UX when scrolling mid-feed. But delays content freshness — user must tap to see new posts. |
 | **`content-visibility: auto` vs Virtualization** | `content-visibility` is simpler (CSS-only) but less precise, browser-dependent, and can cause scrollbar jumps. Virtualization is more reliable but adds JS overhead. |
 | **Denormalized post data** | Each post is self-contained (simple reads). But if a user changes their avatar, all their cached posts show the old avatar until refetch. |
 
@@ -1929,11 +1528,28 @@ Far below:
 ### Key Architectural Decisions
 
 1.  **Cursor-based infinite scroll with IntersectionObserver** — seamless pagination without duplicates; sentinel pattern avoids scroll event overhead.
-2.  **SSE for real-time new posts** — simpler than WebSocket; auto-reconnects; new posts buffered with a "tap to see" banner.
-3.  **Optimistic updates for all interactions** — likes, comments, and shares feel instant; rollback on failure.
-4.  **Virtualized feed list** — constant DOM footprint for infinite scroll sessions; dynamic height measurement for variable post sizes.
-5.  **SSR for initial feed** — fast FCP with server-rendered first batch; CSR for all subsequent interactions.
-6.  **React Query for server state** — automatic caching, stale-while-revalidate, background refetch, and infinite query support.
+2.  **Pull-based feed with server-side ranking** — feed is fetched on-demand (not streamed). Polling notifies of new posts; user pulls to refresh for updated ranking.
+3.  **Polling for new-post notifications** — every 45s check for new posts; on-demand refresh via `/api/feed?limit=10` when user taps banner or pulls to refresh.
+4.  **Optimistic updates for all interactions** — likes, comments, and shares feel instant; rollback on failure.
+5.  **Virtualized feed list** — constant DOM footprint for infinite scroll sessions; dynamic height measurement for variable post sizes.
+6.  **SSR for initial feed** — fast FCP with server-rendered first batch; CSR for all subsequent interactions.
+7.  **React Query for server state** — automatic caching, stale-while-revalidate, background refetch, and infinite query support.
+
+### Capacity Estimation Summary
+
+| Metric | Assumption / Estimate | Why it matters |
+|--------|------------------------|----------------|
+| **DAU** | **100M** | Establishes large-scale feed traffic assumptions |
+| **Sessions per DAU/day** | **3** | Drives daily feed open volume |
+| **Feed sessions/day** | **300M** | Baseline for request estimation |
+| **Average session length** | **12 min** | Justifies repeated pagination and polling |
+| **Peak concurrency** | **~8M users** | Explains why lightweight endpoints and CDN usage matter |
+| **Initial feed loads** | **300M/day (~3.5K RPS avg)** | First paint and SSR path must stay efficient |
+| **Infinite scroll fetches** | **1.8B/day (~20.8K RPS avg)** | Cursor pagination is mandatory at this scale |
+| **Polling checks** | **4.8B/day (~55.6K RPS avg)** | Freshness endpoint must return only a tiny payload |
+| **Interaction mutations** | **1.2B/day (~13.9K RPS avg)** | Optimistic UI hides mutation latency |
+| **Metadata/API traffic** | **~89.6 TB/day** | Even without media, backend/API bandwidth is substantial |
+| **Feed rendering strategy** | **Virtualize after 50+ posts** | Keeps DOM size and scroll cost bounded |
 
 ### Possible Future Enhancements
 
@@ -1951,8 +1567,9 @@ Far below:
 
 | Endpoint | Method | Description |
 |----------|--------|-------------|
-| `/api/feed` | GET | Fetch paginated feed (cursor-based) |
-| `/api/feed/stream` | GET (SSE) | Stream new posts and engagement updates |
+| `/api/feed` | GET | Fetch paginated feed (cursor-based) with server-ranked posts |
+| `/api/notifications/feed-updates` | GET | **Notifications only** — sends count of new posts available (not the posts themselves) |
+| `/api/feed/has-new-posts` | GET | (Optional) Check if new posts available (for polling fallback) |
 | `/api/post` | POST | Create new post |
 | `/api/post/:id` | GET | Fetch single post with full details |
 | `/api/post/:id/like` | POST | Like or unlike a post |
@@ -1966,14 +1583,15 @@ Far below:
 
 | Direction | Mechanism | Trigger | Endpoint | Action |
 |-----------|-----------|---------|----------|--------|
-| Initial Load | REST (SSR + CSR) | On mount | `GET /api/feed?limit=10` | Render first 10 posts |
+| Initial Load | REST (SSR + CSR) | On mount | `GET /api/feed?limit=10` | Render first 10 ranked posts |
 | Infinite Scroll (Older Posts) | REST | Sentinel intersects viewport | `GET /api/feed?cursor=<token>` | Append next batch of posts |
-| New Post Updates | SSE | Server push | `GET /api/feed/stream` | Buffer new posts; show banner |
+| New Post Notification | Polling | Every 45s check for new posts from followed accounts | `GET /api/feed/has-new-posts` | Send count notification; client shows banner (count only, NOT posts) |
+| Refresh Feed (User Action) | REST | User taps banner or pull-to-refresh | `GET /api/feed?limit=10` | Server re-ranks and returns fresh feed (may reorder, remove posts based on algorithm) |
 | Like Post | REST + Optimistic | User taps like | `POST /api/post/:id/like` | Instant UI update; background API call |
 | Add Comment | REST + Optimistic | User submits comment | `POST /api/post/:id/comment` | Show pending comment; confirm on API success |
 | Share Post | REST | User taps share | `POST /api/post/:id/share` | Open share modal; submit on confirmation |
 | Create Post | REST + Optimistic | User publishes | `POST /api/post` | Show post at top of own feed; server distributes |
-| Refresh Feed | REST | Pull-to-refresh or window focus | `GET /api/feed?limit=10` | Replace stale data with fresh feed |
+| Background Sync | REST (optional) | PWA periodic sync or on-focus | `GET /api/feed?limit=10` | Silently refresh feed in background; notify if significant changes |
 
 ---
 
